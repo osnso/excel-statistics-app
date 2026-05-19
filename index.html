@@ -224,6 +224,1413 @@ Referer: https://...`})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("
 或输入自然语言：看看销售额和广告投入有没有关系`})]}),R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"分析类型"}),R.jsx("select",{value:p,onChange:O=>d(O.target.value),children:ol.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))})]})]}),Ta&&R.jsxs(hs,{step:4,title:"选择字段与参数",children:[R.jsxs("div",{className:"grid-two",children:[R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["数值列 ",R.jsx("span",{className:"label-hint",children:"(可用)"})]}),R.jsx("div",{className:"badge-list",children:Ea.length>0?Ea.map(O=>R.jsx("span",{className:"badge-numeric",children:O},O)):R.jsx("span",{style:{color:"var(--gray-400)",fontSize:"0.85rem"},children:"无"})})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["分类列 ",R.jsx("span",{className:"label-hint",children:"(可用)"})]}),R.jsx("div",{className:"badge-list",children:Sa.length>0?Sa.map(O=>R.jsx("span",{className:"badge-categorical",children:O},O)):R.jsx("span",{style:{color:"var(--gray-400)",fontSize:"0.85rem"},children:"无"})})]})]}),R.jsxs("div",{className:"grid-two",children:[R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"X 列"}),R.jsxs("select",{value:_,onChange:O=>m(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]}),R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"Y 列"}),R.jsxs("select",{value:k,onChange:O=>I(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]})]}),p==="twoSample"&&R.jsxs("div",{className:"grid-two",children:[R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"比较列 A"}),R.jsxs("select",{value:N,onChange:O=>y(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]}),R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"比较列 B"}),R.jsxs("select",{value:L,onChange:O=>P(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]})]}),p==="correlation"&&R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"相关列（多选）"}),R.jsx("select",{multiple:!0,size:Math.min(6,Et.length),value:me,onChange:O=>fe(bd(O)),children:Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))})]}),p==="anova"&&R.jsxs("div",{className:"grid-two",children:[R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"分组列"}),R.jsxs("select",{value:ve,onChange:O=>de(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]}),R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"目标列"}),R.jsxs("select",{value:W,onChange:O=>H(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]})]}),(p==="multipleRegression"||p==="logisticRegression")&&R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"特征列（多选）"}),R.jsx("select",{multiple:!0,size:Math.min(6,Et.length),value:j,onChange:O=>Z(bd(O)),children:Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))})]}),(p==="multipleRegression"||p==="logisticRegression")&&R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"目标列"}),R.jsxs("select",{value:W,onChange:O=>H(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]}),p==="oneSample"&&R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"单样本假设值"}),R.jsx("input",{type:"text",value:ae,onChange:O=>b(O.target.value),placeholder:"例如 0 或 10"})]}),p==="clustering"&&R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"聚类簇数"}),R.jsx("input",{type:"number",min:2,value:le,onChange:O=>ge(Number(O.target.value))})]})]}),Ta&&R.jsx("section",{className:"panel",children:R.jsxs("div",{className:"actions",children:[R.jsx("button",{className:"btn btn-primary",type:"button",onClick:E,disabled:M||K,children:M?"分析中...":"▶ 运行分析"}),R.jsx("button",{className:"btn btn-success",type:"button",onClick:S,disabled:!F||M,children:"⬇ 导出 Excel 结果"}),R.jsx("button",{className:"btn btn-outline",type:"button",onClick:I0,children:"重新上传"})]})}),R.jsxs("section",{className:"panel",children:[R.jsx("div",{className:"panel-header",style:{cursor:"default"},children:R.jsxs("h2",{children:[R.jsx("span",{className:"step-badge",children:Ta?5:2}),"分析结果"]})}),R.jsxs("div",{className:"panel-body",style:{marginTop:16},children:[F?R.jsxs(R.Fragment,{children:[R.jsxs("div",{className:"result-toolbar",children:[R.jsx("button",{className:"btn btn-outline btn-sm",onClick:()=>C(F),children:"📋 复制"}),A.enabled&&A.apiKey&&R.jsx("button",{className:"btn btn-ai btn-sm",onClick:he,disabled:K,children:K?"🤖 解读中...":"🤖 AI 解读结果"})]}),R.jsx("div",{className:"result-container",children:R.jsx("pre",{children:F})})]}):R.jsxs("div",{className:"result-placeholder",children:[R.jsx("div",{className:"placeholder-icon",children:"📋"}),R.jsx("div",{className:"placeholder-text",children:Ta?'请配置分析参数后点击"运行分析"':"请上传 Excel 文件"})]}),ut&&R.jsxs("div",{className:"ai-interpretation",children:[R.jsxs("div",{className:"ai-interp-header",children:[R.jsx("span",{children:"🤖 AI 解读"}),R.jsx("button",{className:"btn btn-outline btn-sm",onClick:()=>C(ut),children:"📋 复制"})]}),R.jsx("pre",{ref:ya,className:"ai-interp-content",children:ut})]})]})]}),R.jsxs("section",{className:"panel note",children:[R.jsx("h2",{style:{margin:0},children:"🔒 数据安全说明"}),R.jsx("p",{children:"统计分析在浏览器中本地完成。AI 功能将列名和分析结果发送到您配置的 API 地址， 原始数据不会离开您的电脑。"})]})]})}Sf.createRoot(document.getElementById("root")).render(R.jsx(Ag.StrictMode,{children:R.jsx(C6,{})}));
 </script>
   
+
+<script>
+/* --- ADV Statistical Library --- */
+window.ADV = {};
+
+// Support: Error function (Horner approximation)
+ADV.erf = function(x) {
+  var sign = x >= 0 ? 1 : -1;
+  x = Math.abs(x);
+  var a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741;
+  var a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+  var t = 1 / (1 + p * x);
+  var y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
+  return sign * y;
+};
+
+ADV.SQRT2PI = Math.sqrt(2 * Math.PI);
+
+// Lanczos approximation (g=7, coefficients from GNU Scientific Library)
+ADV.logGamma = function(z) {
+  var c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028,
+           771.32342877765313, -176.61502916214059, 12.507343278686905,
+           -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+  if (z < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * z)) - ADV.logGamma(1 - z);
+  z -= 1;
+  var x = c[0];
+  for (var i = 1; i < 9; i++) x += c[i] / (z + i);
+  var t = z + 7.5;
+  return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+};
+
+// Regularized Lower Incomplete Gamma Function P(a,x)
+ADV.lowRegIncGamma = function(a, x) {
+  if (x < a + 1) {
+    // Series expansion
+    var ap = a, sum = 1 / a, del = sum;
+    for (var n = 1; n <= 100; n++) {
+      ap += 1;
+      del *= x / ap;
+      sum += del;
+      if (Math.abs(del) < Math.abs(sum) * 1e-10) break;
+    }
+    return sum * Math.exp(-x + a * Math.log(x) - ADV.logGamma(a));
+  } else {
+    // Continued fraction
+    var b = x + 1 - a, c = 1 / 1e-30, d = 1 / b, h = d;
+    for (var n = 1; n <= 100; n++) {
+      var an = -n * (n - a);
+      b += 2;
+      d = an * d + b;
+      if (Math.abs(d) < 1e-30) d = 1e-30;
+      c = b + an / c;
+      if (Math.abs(c) < 1e-30) c = 1e-30;
+      d = 1 / d;
+      var del = d * c;
+      h *= del;
+      if (Math.abs(del - 1) < 1e-10) break;
+    }
+    return 1 - h * Math.exp(-x + a * Math.log(x) - ADV.logGamma(a));
+  }
+};
+
+// Regularized Incomplete Beta Function I_x(a,b) using continued fraction
+ADV.regIncBeta = function(a, b, x) {
+  if (x < 0 || x > 1) return NaN;
+  if (x === 0 || x === 1) return x;
+  // Use symmetry: I_x(a,b) = 1 - I_{1-x}(b,a) for x > (a+1)/(a+b+2)
+  var bt = Math.exp(ADV.logGamma(a + b) - ADV.logGamma(a) - ADV.logGamma(b) +
+           a * Math.log(x) + b * Math.log(1 - x));
+  if (x < (a + 1) / (a + b + 2)) {
+    return bt * ADV._betaCFrac(a, b, x) / a;
+  } else {
+    return 1 - bt * ADV._betaCFrac(b, a, 1 - x) / b;
+  }
+};
+
+// Modified Lentz's continued fraction for incomplete beta
+ADV._betaCFrac = function(a, b, x) {
+  var qab = a + b, qap = a + 1, qam = a - 1;
+  var c = 1, d = 1 - qab * x / qap;
+  if (Math.abs(d) < 1e-30) d = 1e-30;
+  d = 1 / d;
+  var h = d;
+  for (var m = 1; m <= 200; m++) {
+    var m2 = 2 * m;
+    // Even step
+    var aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+    d = 1 + aa * d;
+    if (Math.abs(d) < 1e-30) d = 1e-30;
+    c = 1 + aa / c;
+    if (Math.abs(c) < 1e-30) c = 1e-30;
+    d = 1 / d;
+    h *= d * c;
+    // Odd step
+    aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+    d = 1 + aa * d;
+    if (Math.abs(d) < 1e-30) d = 1e-30;
+    c = 1 + aa / c;
+    if (Math.abs(c) < 1e-30) c = 1e-30;
+    d = 1 / d;
+    var del = d * c;
+    h *= del;
+    if (Math.abs(del - 1) < 1e-10) break;
+  }
+  return h;
+};
+
+// === DISTRIBUTIONS ===
+
+ADV.normalPDF = function(x, mean, std) {
+  if (std === undefined) std = 1;
+  if (mean === undefined) mean = 0;
+  var z = (x - mean) / std;
+  return Math.exp(-0.5 * z * z) / (std * ADV.SQRT2PI);
+};
+
+ADV.normalCDF = function(x, mean, std) {
+  if (std === undefined) std = 1;
+  if (mean === undefined) mean = 0;
+  return 0.5 * (1 + ADV.erf((x - mean) / (std * Math.SQRT2)));
+};
+
+ADV.tCDF = function(t, df) {
+  if (df <= 0) return NaN;
+  var x = df / (df + t * t);
+  return 1 - 0.5 * ADV.regIncBeta(df / 2, 0.5, x);
+};
+
+ADV.fCDF = function(f, df1, df2) {
+  if (df1 <= 0 || df2 <= 0 || f < 0) return NaN;
+  var x = df1 * f / (df1 * f + df2);
+  return ADV.regIncBeta(df1 / 2, df2 / 2, x);
+};
+
+ADV.chiSquarePDF = function(x, df) {
+  if (x < 0 || df <= 0) return 0;
+  return Math.pow(x, df / 2 - 1) * Math.exp(-x / 2) /
+         (Math.pow(2, df / 2) * Math.exp(ADV.logGamma(df / 2)));
+};
+
+ADV.chiSquareCDF = function(x, df) {
+  if (x < 0 || df <= 0) return NaN;
+  return ADV.lowRegIncGamma(df / 2, x / 2);
+};
+
+// === HYPOTHESIS TESTS ===
+
+ADV.chiSquareGOF = function(observed, expected) {
+  if (!observed || !expected || observed.length !== expected.length) return null;
+  var chi2 = 0, n = observed.length;
+  for (var i = 0; i < n; i++) {
+    if (expected[i] <= 0) return null;
+    chi2 += (observed[i] - expected[i]) * (observed[i] - expected[i]) / expected[i];
+  }
+  var df = n - 1;
+  var p = 1 - ADV.chiSquareCDF(chi2, df);
+  return { chi2: chi2, df: df, p: p };
+};
+
+ADV.chiSquareContingency = function(matrix) {
+  if (!matrix || matrix.length < 2 || matrix[0].length < 2) return null;
+  var rows = matrix.length, cols = matrix[0].length;
+  var rowSums = new Array(rows).fill(0);
+  var colSums = new Array(cols).fill(0);
+  var total = 0;
+  for (var r = 0; r < rows; r++) {
+    for (var c = 0; c < cols; c++) {
+      var v = matrix[r][c];
+      rowSums[r] += v;
+      colSums[c] += v;
+      total += v;
+    }
+  }
+  var chi2 = 0;
+  for (var r2 = 0; r2 < rows; r2++) {
+    for (var c2 = 0; c2 < cols; c2++) {
+      var expected = rowSums[r2] * colSums[c2] / total;
+      if (expected > 0) {
+        chi2 += (matrix[r2][c2] - expected) * (matrix[r2][c2] - expected) / expected;
+      }
+    }
+  }
+  var df = (rows - 1) * (cols - 1);
+  var p = 1 - ADV.chiSquareCDF(chi2, df);
+  // Cramer's V
+  var cramerV = Math.sqrt(chi2 / (total * Math.min(rows - 1, cols - 1)));
+  return { chi2: chi2, df: df, p: p, cramerV: cramerV, n: total };
+};
+
+// === DESCRIPTIVE ADVANCED ===
+
+ADV.mean = function(arr) {
+  var s = 0, n = arr.length;
+  for (var i = 0; i < n; i++) s += arr[i];
+  return s / n;
+};
+
+ADV.calcCV = function(data) {
+  var n = data.length;
+  if (n < 2) return null;
+  var m = ADV.mean(data);
+  if (m === 0) return null;
+  var sq = 0;
+  for (var i = 0; i < n; i++) sq += (data[i] - m) * (data[i] - m);
+  var std = Math.sqrt(sq / (n - 1));
+  return { cv: std / m, cvPercent: (std / m) * 100, mean: m, std: std, n: n };
+};
+
+ADV.calcSkewness = function(data) {
+  var n = data.length;
+  if (n < 3) return null;
+  var m = ADV.mean(data);
+  var sq = 0, cb = 0;
+  for (var i = 0; i < n; i++) {
+    var d = data[i] - m;
+    sq += d * d;
+    cb += d * d * d;
+  }
+  var var_ = sq / (n - 1);
+  var std = Math.sqrt(var_);
+  if (std === 0) return 0;
+  var skew = (n / ((n - 1) * (n - 2))) * cb / (std * std * std);
+  return skew;
+};
+
+ADV.calcKurtosis = function(data) {
+  var n = data.length;
+  if (n < 4) return null;
+  var m = ADV.mean(data);
+  var sq = 0, fr = 0;
+  for (var i = 0; i < n; i++) {
+    var d = data[i] - m;
+    sq += d * d;
+    fr += d * d * d * d;
+  }
+  var var_ = sq / (n - 1);
+  if (var_ === 0) return 0;
+  var std = Math.sqrt(var_);
+  var kurt = (n * (n + 1) / ((n - 1) * (n - 2) * (n - 3))) * fr / (std * std * std * std);
+  var excess = kurt - 3 * (n - 1) * (n - 1) / ((n - 2) * (n - 3));
+  return { kurtosis: kurt, excessKurtosis: excess };
+};
+
+// === TIME SERIES ===
+
+ADV.tsDescriptive = function(data, dates) {
+  if (!data || data.length < 3) return null;
+  var n = data.length;
+  var m = ADV.mean(data);
+  // Trend detection: simple linear regression on index
+  var sx = 0, sy = 0, sxx = 0, sxy = 0;
+  for (var i = 0; i < n; i++) {
+    sx += i; sy += data[i]; sxx += i * i; sxy += i * data[i];
+  }
+  var slope = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+  var intercept = (sy - slope * sx) / n;
+  // Autocorrelation (lag 1)
+  var m1 = m;
+  var num = 0, den = 0;
+  for (var j = 1; j < n; j++) {
+    num += (data[j] - m1) * (data[j - 1] - m1);
+    den += (data[j - 1] - m1) * (data[j - 1] - m1);
+  }
+  var acf1 = den > 0 ? num / den : 0;
+  return {
+    n: n, mean: m, min: Math.min.apply(null, data), max: Math.max.apply(null, data),
+    slope: slope, intercept: intercept, acf1: acf1,
+    trend: slope > 0 ? '上升' : (slope < 0 ? '下降' : '平稳')
+  };
+};
+
+ADV.seasonalDecomp = function(data, period) {
+  if (!data || data.length < period * 2) return null;
+  var n = data.length;
+  // Step 1: Centered moving average (trend)
+  var trend = [];
+  for (var i = 0; i < n; i++) {
+    if (period % 2 === 0) {
+      if (i < period / 2 || i >= n - period / 2) { trend.push(NaN); continue; }
+      var s1 = 0;
+      for (var j = i - period / 2; j <= i + period / 2; j++) s1 += data[j];
+      trend.push(s1 / (period + 1));
+    } else {
+      var half = Math.floor(period / 2);
+      if (i < half || i >= n - half) { trend.push(NaN); continue; }
+      var s2 = 0;
+      for (var k = i - half; k <= i + half; k++) s2 += data[k];
+      trend.push(s2 / period);
+    }
+  }
+  // Step 2: Detrended
+  var detrend = [];
+  for (var a = 0; a < n; a++) {
+    detrend.push(isNaN(trend[a]) ? NaN : data[a] - trend[a]);
+  }
+  // Step 3: Seasonal component (average detrended per season)
+  var seasonal = new Array(n).fill(0);
+  var seasonalCount = new Array(n).fill(0);
+  for (var b = 0; b < n; b++) {
+    if (!isNaN(detrend[b])) {
+      var idx = b % period;
+      seasonal[idx] += detrend[b];
+      seasonalCount[idx]++;
+    }
+  }
+  var seasonalMean = new Array(period).fill(0);
+  for (var c = 0; c < period; c++) {
+    seasonalMean[c] = seasonalCount[c] > 0 ? seasonal[c] / seasonalCount[c] : 0;
+  }
+  // Center seasonal components
+  var sm = ADV.mean(seasonalMean);
+  for (var d = 0; d < period; d++) seasonalMean[d] -= sm;
+  // Fill seasonal array
+  var seasonalFull = [];
+  for (var e = 0; e < n; e++) {
+    seasonalFull.push(seasonalMean[e % period]);
+  }
+  // Step 4: Residual
+  var residual = [];
+  for (var f = 0; f < n; f++) {
+    residual.push(data[f] - (isNaN(trend[f]) ? 0 : trend[f]) - seasonalFull[f]);
+  }
+  return { trend: trend, seasonal: seasonalFull, residual: residual, period: period };
+};
+
+ADV.movingAverage = function(data, window) {
+  if (!data || data.length < window) return null;
+  var forecasts = [];
+  for (var i = window; i < data.length; i++) {
+    var s = 0;
+    for (var j = i - window; j < i; j++) s += data[j];
+    forecasts.push(s / window);
+  }
+  var next = 0;
+  for (var k = data.length - window; k < data.length; k++) next += data[k];
+  next /= window;
+  // Calculate errors
+  var mae = 0, rmse = 0;
+  for (var l = 0; l < forecasts.length; l++) {
+    mae += Math.abs(forecasts[l] - data[window + l]);
+    rmse += (forecasts[l] - data[window + l]) * (forecasts[l] - data[window + l]);
+  }
+  mae /= forecasts.length;
+  rmse = Math.sqrt(rmse / forecasts.length);
+  return { forecasts: forecasts, next: next, window: window, mae: mae, rmse: rmse };
+};
+
+ADV.expSmoothing = function(data, alpha) {
+  if (!data || data.length < 2) return null;
+  if (alpha === undefined) alpha = 0.3;
+  var smoothed = [data[0]];
+  for (var i = 1; i < data.length; i++) {
+    smoothed.push(alpha * data[i] + (1 - alpha) * smoothed[i - 1]);
+  }
+  var next = alpha * data[data.length - 1] + (1 - alpha) * smoothed[smoothed.length - 1];
+  // Errors (one-step-ahead)
+  var mae = 0, rmse = 0;
+  for (var j = 1; j < data.length; j++) {
+    mae += Math.abs(smoothed[j - 1] - data[j]);
+    rmse += (smoothed[j - 1] - data[j]) * (smoothed[j - 1] - data[j]);
+  }
+  mae /= (data.length - 1);
+  rmse = Math.sqrt(rmse / (data.length - 1));
+  return { smoothed: smoothed, next: next, alpha: alpha, mae: mae, rmse: rmse };
+};
+
+ADV.linearTrend = function(data) {
+  if (!data || data.length < 3) return null;
+  var n = data.length;
+  var sx = 0, sy = 0, sxx = 0, sxy = 0;
+  for (var i = 0; i < n; i++) {
+    sx += i; sy += data[i]; sxx += i * i; sxy += i * data[i];
+  }
+  var slope = (n * sxy - sx * sy) / (n * sxx - sx * sx);
+  var intercept = (sy - slope * sx) / n;
+  // Fitted values
+  var fitted = [];
+  for (var j = 0; j < n; j++) fitted.push(intercept + slope * j);
+  var next = intercept + slope * n;
+  // R-squared
+  var m = ADV.mean(data);
+  var ssRes = 0, ssTot = 0;
+  for (var k = 0; k < n; k++) {
+    ssRes += (data[k] - fitted[k]) * (data[k] - fitted[k]);
+    ssTot += (data[k] - m) * (data[k] - m);
+  }
+  var r2 = ssTot > 0 ? 1 - ssRes / ssTot : 1;
+  return { slope: slope, intercept: intercept, fitted: fitted, next: next, r2: r2, equation: 'y = ' + intercept.toFixed(4) + ' + ' + slope.toFixed(4) + 'x' };
+};
+
+// === Column utilities ===
+ADV.getNumericCols = function(headers, data) {
+  var numeric = [];
+  for (var c = 0; c < headers.length; c++) {
+    var vals = [];
+    for (var r = 0; r < data.length; r++) {
+      if (data[r][c] !== undefined && data[r][c] !== '') {
+        vals.push(data[r][c]);
+      }
+    }
+    // Check if mostly numeric (>60%)
+    var numCount = 0;
+    for (var v = 0; v < vals.length; v++) {
+      if (!isNaN(parseFloat(vals[v])) && isFinite(vals[v])) numCount++;
+    }
+    if (vals.length > 0 && numCount / vals.length > 0.6) {
+      numeric.push({ index: c, name: headers[c] });
+    }
+  }
+  return numeric;
+};
+
+ADV.getColData = function(headers, data, colIdx) {
+  var vals = [];
+  for (var r = 0; r < data.length; r++) {
+    if (data[r][colIdx] !== undefined && data[r][colIdx] !== '') {
+      var v = parseFloat(data[r][colIdx]);
+      if (!isNaN(v) && isFinite(v)) vals.push(v);
+    }
+  }
+  return vals;
+};
+
+ADV.getCatColData = function(headers, data, colIdx) {
+  var vals = [];
+  for (var r = 0; r < data.length; r++) {
+    if (data[r][colIdx] !== undefined && data[r][colIdx] !== '') {
+      vals.push(String(data[r][colIdx]).trim());
+    }
+  }
+  return vals;
+};
+
+// === Runner ===
+ADV.runAnalysis = function(category, subType, tableData, params) {
+  if (!tableData || !tableData.headers || !tableData.data || tableData.data.length === 0) {
+    return { error: '请先获取数据' };
+  }
+  var headers = tableData.headers;
+  var data = tableData.data;
+  try {
+    switch (category) {
+      case 'descriptive_advanced': return ADV._runDescriptiveAdvanced(subType, headers, data, params);
+      case 'distribution': return ADV._runDistribution(subType, headers, data, params);
+      case 'chisquare': return ADV._runChiSquare(subType, headers, data, params);
+      case 'timeseries': return ADV._runTimeSeries(subType, headers, data, params);
+      default: return { error: '未知分析类别' };
+    }
+  } catch (e) {
+    return { error: '分析出错: ' + e.message };
+  }
+};
+
+ADV._runDescriptiveAdvanced = function(subType, headers, data, params) {
+  var colIdx = parseInt(params.col);
+  var vals = ADV.getColData(headers, data, colIdx);
+  if (vals.length < 3) return { error: '数据不足（至少需要3个有效数值）' };
+
+  var result = { title: '描述性统计进阶 - ' + headers[colIdx], rows: [] };
+  // CV
+  var cv = ADV.calcCV(vals);
+  if (cv) {
+    result.rows.push({ label: '离散系数 (CV)', value: cv.cv.toFixed(4), note: cv.cvPercent.toFixed(2) + '%' });
+    result.rows.push({ label: '均值', value: cv.mean.toFixed(4), note: '' });
+    result.rows.push({ label: '标准差', value: cv.std.toFixed(4), note: '' });
+  }
+  // Skewness
+  var skew = ADV.calcSkewness(vals);
+  if (skew !== null) {
+    var skewNote = Math.abs(skew) < 0.5 ? '近似对称' : (skew > 0 ? '右偏（正偏）' : '左偏（负偏）');
+    result.rows.push({ label: '偏度 (Skewness)', value: skew.toFixed(4), note: skewNote });
+  }
+  // Kurtosis
+  var kurt = ADV.calcKurtosis(vals);
+  if (kurt !== null) {
+    var kurtNote = Math.abs(kurt.excessKurtosis) < 0.5 ? '接近正态' : (kurt.excessKurtosis > 0 ? '尖峰' : '平峰');
+    result.rows.push({ label: '峰度 (Kurtosis)', value: kurt.kurtosis.toFixed(4), note: '' });
+    result.rows.push({ label: '超额峰度 (Excess)', value: kurt.excessKurtosis.toFixed(4), note: kurtNote });
+  }
+  result.rows.push({ label: '样本量 (N)', value: vals.length.toString(), note: '' });
+  return result;
+};
+
+ADV._runDistribution = function(subType, headers, data, params) {
+  var distNames = { normal: '正态分布', t: 't分布', f: 'F分布', chisq: '卡方分布' };
+  var result = { title: distNames[subType] || '概率分布', rows: [], chart: null };
+
+  if (subType === 'normal') {
+    var colIdx = parseInt(params.col);
+    var vals = ADV.getColData(headers, data, colIdx);
+    if (vals.length < 2) return { error: '数据不足' };
+    var m = ADV.mean(vals);
+    var sq = 0;
+    for (var i = 0; i < vals.length; i++) sq += (vals[i] - m) * (vals[i] - m);
+    var s = Math.sqrt(sq / (vals.length - 1));
+
+    // Generate PDF points
+    var min = m - 4 * s, max = m + 4 * s, step = (max - min) / 50;
+    var pdfPoints = [], cdfPoints = [];
+    for (var x = min; x <= max; x += step) {
+      pdfPoints.push({ x: x, y: ADV.normalPDF(x, m, s) });
+      cdfPoints.push({ x: x, y: ADV.normalCDF(x, m, s) });
+    }
+
+    // Kolmogorov-Smirnov-like test using normal probability plot correlation
+    var sorted = vals.slice().sort(function(a,b){return a-b;});
+    var qq = [];
+    for (var j = 0; j < sorted.length; j++) {
+      var pp = (j + 0.5) / sorted.length;
+      qq.push({ observed: sorted[j], expected: m + s * Math.SQRT2 * ADV.erf(2 * pp - 1) });
+    }
+
+    result.rows.push({ label: '均值 μ', value: m.toFixed(4), note: '' });
+    result.rows.push({ label: '标准差 σ', value: s.toFixed(4), note: '' });
+    result.rows.push({ label: '样本量', value: vals.length.toString(), note: '' });
+    result.chart = { type: 'distribution', pdf: pdfPoints, cdf: cdfPoints, qq: qq, label: headers[colIdx] };
+
+  } else if (subType === 't') {
+    var colIdx = parseInt(params.col);
+    var vals = ADV.getColData(headers, data, colIdx);
+    if (vals.length < 2) return { error: '数据不足' };
+    var m = ADV.mean(vals);
+    var sq = 0;
+    for (var a = 0; a < vals.length; a++) sq += (vals[a] - m) * (vals[a] - m);
+    var se = Math.sqrt(sq / (vals.length - 1)) / Math.sqrt(vals.length);
+    var tStat = m / se;
+    var df = vals.length - 1;
+    var pVal = 2 * (1 - ADV.tCDF(Math.abs(tStat), df));
+
+    var minT = -4, maxT = 4, stepT = 0.2;
+    var tPdf = [];
+    for (var xt = minT; xt <= maxT; xt += stepT) {
+      tPdf.push({ x: xt, y: Math.exp(ADV.logGamma((df+1)/2) - ADV.logGamma(df/2)) / Math.sqrt(df*Math.PI) * Math.pow(1 + xt*xt/df, -(df+1)/2) });
+    }
+
+    result.rows.push({ label: 't 统计量', value: tStat.toFixed(4), note: '' });
+    result.rows.push({ label: '自由度 (df)', value: df.toString(), note: '' });
+    result.rows.push({ label: 'p 值（双尾）', value: pVal.toFixed(4), note: pVal < 0.05 ? '显著' : '不显著' });
+    result.chart = { type: 't', pdf: tPdf, tStat: tStat, df: df };
+
+  } else if (subType === 'f') {
+    var colIdx = parseInt(params.col);
+    var vals = ADV.getColData(headers, data, colIdx);
+    if (vals.length < 3) return { error: '数据不足' };
+    var df1 = parseInt(params.df1) || 1;
+    var df2 = parseInt(params.df2) || vals.length - 1;
+    var mf = ADV.mean(vals);
+    var varF = 0;
+    for (var b = 0; b < vals.length; b++) varF += (vals[b] - mf) * (vals[b] - mf);
+    varF /= (vals.length - 1);
+    var fStat = varF > 0 ? varF / 1 : 1;
+    var pValF = 1 - ADV.fCDF(fStat, df1, df2);
+
+    var minF = 0, maxF = 5, stepF = 0.1;
+    var fPdf = [];
+    for (var xf = minF; xf <= maxF; xf += stepF) {
+      var lnPdf = (df1/2)*Math.log(df1) + (df2/2)*Math.log(df2) + ADV.logGamma((df1+df2)/2) - ADV.logGamma(df1/2) - ADV.logGamma(df2/2) + (df1/2-1)*Math.log(xf) - ((df1+df2)/2)*Math.log(df1*xf+df2);
+      fPdf.push({ x: xf, y: Math.exp(lnPdf) });
+    }
+    result.rows.push({ label: 'F 统计量', value: fStat.toFixed(4), note: '' });
+    result.rows.push({ label: '分子自由度 (df1)', value: df1.toString(), note: '' });
+    result.rows.push({ label: '分母自由度 (df2)', value: df2.toString(), note: '' });
+    result.rows.push({ label: 'p 值', value: pValF.toFixed(4), note: pValF < 0.05 ? '显著' : '不显著' });
+    result.chart = { type: 'f', pdf: fPdf, fStat: fStat, df1: df1, df2: df2 };
+
+  } else if (subType === 'chisq') {
+    var colIdx = parseInt(params.col);
+    var vals = ADV.getColData(headers, data, colIdx);
+    if (vals.length < 2) return { error: '数据不足' };
+    var df = parseInt(params.df) || Math.max(1, vals.length - 1);
+    var chi2Stat = 0;
+    // If user provides expected variance
+    var expectedVar = parseFloat(params.expectedVar) || 1;
+    var mv = ADV.mean(vals);
+    var sv = 0;
+    for (var c = 0; c < vals.length; c++) sv += (vals[c] - mv) * (vals[c] - mv);
+    chi2Stat = sv / expectedVar;
+    var pValChi = 1 - ADV.chiSquareCDF(chi2Stat, df);
+
+    var minC = 0, maxC = Math.max(chi2Stat * 1.5, 10), stepC = maxC / 60;
+    var chiPdf = [];
+    for (var xc = 0.1; xc <= maxC; xc += stepC) {
+      chiPdf.push({ x: xc, y: ADV.chiSquarePDF(xc, df) });
+    }
+    result.rows.push({ label: '卡方统计量', value: chi2Stat.toFixed(4), note: '' });
+    result.rows.push({ label: '自由度 (df)', value: df.toString(), note: '' });
+    result.rows.push({ label: 'p 值', value: pValChi.toFixed(4), note: pValChi < 0.05 ? '显著' : '不显著' });
+    result.chart = { type: 'chisq', pdf: chiPdf, chi2: chi2Stat, df: df };
+  }
+  return result;
+};
+
+ADV._runChiSquare = function(subType, headers, data, params) {
+  if (subType === 'gof') {
+    var colIdx = parseInt(params.col);
+    var vals = ADV.getCatColData(headers, data, colIdx);
+    if (vals.length < 2) return { error: '分类数据不足' };
+    // Count frequencies
+    var freq = {};
+    for (var i = 0; i < vals.length; i++) {
+      freq[vals[i]] = (freq[vals[i]] || 0) + 1;
+    }
+    var categories = Object.keys(freq);
+    var observed = categories.map(function(k) { return freq[k]; });
+    var expected = [];
+    for (var j = 0; j < categories.length; j++) expected.push(vals.length / categories.length);
+    var test = ADV.chiSquareGOF(observed, expected);
+    if (!test) return { error: '计算失败' };
+
+    var result = { title: '卡方拟合优度检验', rows: [], extraRows: [] };
+    result.rows.push({ label: '卡方统计量', value: test.chi2.toFixed(4), note: '' });
+    result.rows.push({ label: '自由度', value: test.df.toString(), note: '' });
+    result.rows.push({ label: 'p 值', value: test.p.toFixed(4), note: test.p < 0.05 ? '拒绝均匀分布假设' : '不能拒绝均匀分布假设' });
+
+    result.extraRows = [];
+    for (var k = 0; k < categories.length; k++) {
+      result.extraRows.push({ category: categories[k], observed: observed[k], expected: expected[k].toFixed(2) });
+    }
+    return result;
+
+  } else if (subType === 'contingency') {
+    var rowCol = parseInt(params.rowCol);
+    var colCol = parseInt(params.colCol);
+    var rowVals = ADV.getCatColData(headers, data, rowCol);
+    var colVals = ADV.getCatColData(headers, data, colCol);
+    if (rowVals.length !== colVals.length || rowVals.length < 4) return { error: '数据不足或行列不匹配' };
+
+    // Build contingency table
+    var rowCats = [], colCats = [];
+    for (var r = 0; r < rowVals.length; r++) {
+      if (rowCats.indexOf(rowVals[r]) === -1) rowCats.push(rowVals[r]);
+      if (colCats.indexOf(colVals[r]) === -1) colCats.push(colVals[r]);
+    }
+    var matrix = [];
+    for (var r2 = 0; r2 < rowCats.length; r2++) {
+      matrix[r2] = new Array(colCats.length).fill(0);
+    }
+    for (var r3 = 0; r3 < rowVals.length; r3++) {
+      var ri = rowCats.indexOf(rowVals[r3]);
+      var ci = colCats.indexOf(colVals[r3]);
+      matrix[ri][ci]++;
+    }
+    var test = ADV.chiSquareContingency(matrix);
+    if (!test) return { error: '计算失败' };
+
+    var result = { title: '卡方列联分析', rows: [], extraRows: matrix, rowCats: rowCats, colCats: colCats };
+    result.rows.push({ label: '卡方统计量', value: test.chi2.toFixed(4), note: '' });
+    result.rows.push({ label: '自由度', value: test.df.toString(), note: '' });
+    result.rows.push({ label: 'p 值', value: test.p.toFixed(4), note: test.p < 0.05 ? '存在显著关联' : '无显著关联' });
+    result.rows.push({ label: "Cramer's V", value: test.cramerV.toFixed(4), note: test.cramerV > 0.3 ? '中等以上关联' : '弱关联' });
+    result.rows.push({ label: '总样本量', value: test.n.toString(), note: '' });
+    return result;
+  }
+  return { error: '未知子类型' };
+};
+
+ADV._runTimeSeries = function(subType, headers, data, params) {
+  var colIdx = parseInt(params.col);
+  var vals = ADV.getColData(headers, data, colIdx);
+  if (vals.length < 3) return { error: '数据不足（至少需要3个数据点）' };
+
+  if (subType === 'ts_descriptive') {
+    var tsd = ADV.tsDescriptive(vals);
+    if (!tsd) return { error: '计算失败' };
+    var result = { title: '时间序列描述性统计 - ' + headers[colIdx], rows: [] };
+    result.rows.push({ label: '观测数', value: tsd.n.toString(), note: '' });
+    result.rows.push({ label: '均值', value: tsd.mean.toFixed(4), note: '' });
+    result.rows.push({ label: '最小值', value: tsd.min.toFixed(4), note: '' });
+    result.rows.push({ label: '最大值', value: tsd.max.toFixed(4), note: '' });
+    result.rows.push({ label: '趋势斜率', value: tsd.slope.toFixed(4), note: tsd.trend });
+    result.rows.push({ label: '趋势截距', value: tsd.intercept.toFixed(4), note: '' });
+    result.rows.push({ label: '自相关 ACF(1)', value: tsd.acf1.toFixed(4), note: Math.abs(tsd.acf1) > 0.5 ? '强自相关' : '弱自相关' });
+    result.chart = { type: 'ts_line', data: vals, label: headers[colIdx] };
+    return result;
+
+  } else if (subType === 'ts_decomp') {
+    var period = parseInt(params.period) || 4;
+    if (vals.length < period * 2) return { error: '数据不足，需要至少 ' + (period * 2) + ' 个数据点' };
+    var decomp = ADV.seasonalDecomp(vals, period);
+    if (!decomp) return { error: '分解失败，请检查数据或调整周期' };
+    var result = { title: '时间序列分解 (周期=' + period + ')', rows: [], chart: { type: 'ts_decomp', data: vals, trend: decomp.trend, seasonal: decomp.seasonal, residual: decomp.residual, period: period } };
+    result.rows.push({ label: '周期长度', value: period.toString(), note: '' });
+    result.rows.push({ label: '数据长度', value: vals.length.toString(), note: '' });
+    // Compute seasonal strength
+    var varOrig = 0, mOrig = ADV.mean(vals);
+    for (var i = 0; i < vals.length; i++) varOrig += (vals[i] - mOrig) * (vals[i] - mOrig);
+    result.rows.push({ label: '季节成分', value: '已提取', note: '共 ' + period + ' 个季节因子' });
+    return result;
+
+  } else if (subType === 'ts_ma') {
+    var window = parseInt(params.window) || 3;
+    if (window < 2 || window >= vals.length) return { error: '窗口大小应在 2~' + (vals.length - 1) + ' 之间' };
+    var ma = ADV.movingAverage(vals, window);
+    if (!ma) return { error: '计算失败' };
+    var result = { title: '移动平均预测 (窗口=' + window + ')', rows: [], chart: { type: 'ts_forecast', data: vals, forecasts: ma.forecasts, label: headers[colIdx], window: window } };
+    result.rows.push({ label: '窗口大小', value: window.toString(), note: '' });
+    result.rows.push({ label: '下一期预测值', value: ma.next.toFixed(4), note: '' });
+    result.rows.push({ label: 'MAE', value: ma.mae.toFixed(4), note: '' });
+    result.rows.push({ label: 'RMSE', value: ma.rmse.toFixed(4), note: '' });
+    return result;
+
+  } else if (subType === 'ts_exp') {
+    var alpha = parseFloat(params.alpha) || 0.3;
+    if (alpha <= 0 || alpha > 1) return { error: '平滑系数 α 应在 (0, 1] 之间' };
+    var exp = ADV.expSmoothing(vals, alpha);
+    if (!exp) return { error: '计算失败' };
+    var result = { title: '指数平滑预测 (α=' + alpha + ')', rows: [], chart: { type: 'ts_forecast', data: vals, forecasts: exp.smoothed, label: headers[colIdx], alpha: alpha } };
+    result.rows.push({ label: '平滑系数 α', value: alpha.toFixed(2), note: '' });
+    result.rows.push({ label: '下一期预测值', value: exp.next.toFixed(4), note: '' });
+    result.rows.push({ label: 'MAE', value: exp.mae.toFixed(4), note: '' });
+    result.rows.push({ label: 'RMSE', value: exp.rmse.toFixed(4), note: '' });
+    return result;
+
+  } else if (subType === 'ts_trend') {
+    var lt = ADV.linearTrend(vals);
+    if (!lt) return { error: '计算失败' };
+    var result = { title: '线性趋势预测', rows: [], chart: { type: 'ts_forecast', data: vals, forecasts: lt.fitted, label: headers[colIdx], trend: true } };
+    result.rows.push({ label: '回归方程', value: lt.equation, note: '' });
+    result.rows.push({ label: '斜率', value: lt.slope.toFixed(4), note: '' });
+    result.rows.push({ label: '截距', value: lt.intercept.toFixed(4), note: '' });
+    result.rows.push({ label: 'R²', value: lt.r2.toFixed(4), note: lt.r2 > 0.8 ? '拟合良好' : '拟合一般' });
+    result.rows.push({ label: '下一期预测值', value: lt.next.toFixed(4), note: '' });
+    return result;
+  }
+  return { error: '未知时间序列分析类型' };
+};
+
+/* --- END ADV Library --- */
+</script>
+
+<!-- ===== 高级统计分析 UI ===== -->
+<style>
+.adv-section {
+  background: #fff;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: var(--radius, 12px);
+  padding: 24px;
+  margin: 20px 0;
+  box-shadow: var(--shadow, 0 1px 3px rgba(0,0,0,.08));
+}
+.adv-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+}
+.adv-header h2 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #1f2937; }
+.adv-tabs {
+  display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap;
+  background: #f3f4f6; padding: 4px; border-radius: 10px;
+}
+.adv-tab {
+  flex: 1; min-width: 100px;
+  padding: 8px 14px; text-align: center; cursor: pointer;
+  border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+  color: #6b7280; background: transparent; border: none;
+  transition: all 0.2s; font-family: inherit;
+}
+.adv-tab:hover { color: #4f46e5; background: rgba(79,70,229,0.06); }
+.adv-tab.active { color: #fff; background: linear-gradient(135deg,#4f46e5,#7c3aed); box-shadow: 0 2px 8px rgba(79,70,229,0.25); }
+.adv-controls { margin-bottom: 16px; }
+.adv-controls .form-row { margin-bottom: 12px; }
+.adv-subtypes { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.adv-subtype-btn { padding: 6px 14px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; cursor: pointer; font-size: 0.82rem; font-weight: 500; color: #374151; transition: all 0.2s; font-family: inherit; }
+.adv-subtype-btn:hover { border-color: #4f46e5; color: #4f46e5; background: #eef2ff; }
+.adv-subtype-btn.active { border-color: #4f46e5; background: #4f46e5; color: #fff; }
+.adv-params { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px; padding: 16px; background: #f9fafb; border-radius: 10px; border: 1px solid #e5e7eb; }
+.adv-param-group { display: flex; flex-direction: column; gap: 4px; }
+.adv-param-group label { font-size: 0.82rem; font-weight: 600; color: #374151; }
+.adv-param-group select, .adv-param-group input { padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.85rem; font-family: inherit; background: #fff; }
+.adv-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+.adv-actions .btn { padding: 8px 18px; font-size: 0.85rem; }
+.adv-status { font-size: 0.82rem; color: #6b7280; }
+.adv-status.ok { color: #059669; }
+.adv-result { margin-top: 16px; }
+.adv-result-empty { text-align: center; padding: 40px; background: #f9fafb; border: 1px dashed #d1d5db; border-radius: 10px; color: #9ca3af; font-size: 0.9rem; }
+.adv-result-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 16px; }
+.adv-result-table th { background: #f3f4f6; padding: 10px 14px; text-align: left; font-weight: 600; color: #374151; border-bottom: 2px solid #e5e7eb; }
+.adv-result-table td { padding: 8px 14px; border-bottom: 1px solid #f3f4f6; }
+.adv-result-table tr:hover td { background: #eef2ff; }
+.adv-result-table .label { font-weight: 500; color: #1f2937; }
+.adv-result-table .value { font-family: 'JetBrains Mono', Consolas, monospace; text-align: right; }
+.adv-result-table .note { color: #6b7280; font-size: 0.8rem; }
+.adv-section .adv-extra-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 12px; }
+.adv-section .adv-extra-table th { background: #f9fafb; padding: 6px 10px; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; text-align: left; }
+.adv-section .adv-extra-table td { padding: 5px 10px; border-bottom: 1px solid #f3f4f6; }
+.adv-chart-container { margin-top: 16px; padding: 16px; background: #fafafa; border: 1px solid #e5e7eb; border-radius: 10px; position: relative; }
+.adv-chart-container canvas { width: 100% !important; max-height: 300px; }
+.adv-error { padding: 12px 16px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #dc2626; font-size: 0.85rem; margin-top: 12px; }
+@media (max-width: 600px) {
+  .adv-tab { min-width: 70px; font-size: 0.78rem; padding: 6px 10px; }
+  .adv-params { grid-template-columns: 1fr; }
+  .adv-section { padding: 16px; }
+}
+</style>
+
+<div class="adv-section" id="advSection">
+  <div class="adv-header">
+    <span style="font-size:1.4rem">📈</span>
+    <h2>高级统计分析</h2>
+  </div>
+
+  <!-- Category Tabs -->
+  <div class="adv-tabs" id="advTabs">
+    <button class="adv-tab active" data-cat="descriptive_advanced">描述性统计进阶</button>
+    <button class="adv-tab" data-cat="distribution">概率分布</button>
+    <button class="adv-tab" data-cat="chisquare">卡方检验</button>
+    <button class="adv-tab" data-cat="timeseries">时间序列分析</button>
+  </div>
+
+  <!-- Sub-type buttons -->
+  <div class="adv-subtypes" id="advSubtypes"></div>
+
+  <!-- Parameters -->
+  <div class="adv-params" id="advParams" style="display:none"></div>
+
+  <!-- Actions -->
+  <div class="adv-actions">
+    <button class="btn btn-primary" id="advRunBtn">▶ 运行分析</button>
+    <button class="btn btn-outline btn-sm" id="advFetchBtn">📋 从表格获取数据</button>
+    <button class="btn btn-outline btn-sm" id="advCopyBtn" style="display:none">📑 复制结果</button>
+    <span class="adv-status" id="advStatus"></span>
+  </div>
+
+  <div class="adv-result" id="advResult">
+    <div class="adv-result-empty">请先上传数据 → 点击"从表格获取数据" → 选择分析类型 → 运行</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  if (window.__ADV_UI_INIT) return;
+  window.__ADV_UI_INIT = true;
+
+  var CURRENT_DATA = null; // { headers: [...], data: [[...], ...] }
+  var CURRENT_CAT = 'descriptive_advanced';
+  var CURRENT_SUB = 'cv_skew_kurt';
+  var CURRENT_RESULT = null;
+
+  // Category -> sub-types mapping
+  var SUB_TYPES = {
+    descriptive_advanced: [
+      { id: 'cv_skew_kurt', label: '离散系数与分布形态', params: ['col'] }
+    ],
+    distribution: [
+      { id: 'normal', label: '正态分布', params: ['col'] },
+      { id: 't', label: 't 分布', params: ['col'] },
+      { id: 'f', label: 'F 分布', params: ['col', 'df1', 'df2'] },
+      { id: 'chisq', label: '卡方分布', params: ['col', 'df', 'expectedVar'] }
+    ],
+    chisquare: [
+      { id: 'gof', label: '拟合优度检验', params: ['col'] },
+      { id: 'contingency', label: '列联分析', params: ['rowCol', 'colCol'] }
+    ],
+    timeseries: [
+      { id: 'ts_descriptive', label: '描述性统计', params: ['col'] },
+      { id: 'ts_decomp', label: '季节分解', params: ['col', 'period'] },
+      { id: 'ts_ma', label: '移动平均预测', params: ['col', 'window'] },
+      { id: 'ts_exp', label: '指数平滑预测', params: ['col', 'alpha'] },
+      { id: 'ts_trend', label: '线性趋势预测', params: ['col'] }
+    ]
+  };
+
+  // Parameter definitions
+  var PARAM_DEFS = {
+    col: { label: '数据列', type: 'select' },
+    rowCol: { label: '行变量列', type: 'select' },
+    colCol: { label: '列变量列', type: 'select' },
+    period: { label: '季节周期', type: 'number', default: '4', hint: '例如：季度数据=4，月度数据=12' },
+    window: { label: '移动窗口', type: 'number', default: '3', hint: '用于计算平均值的期数' },
+    alpha: { label: '平滑系数 α', type: 'number', default: '0.3', hint: '0~1，越大越依赖近期数据' },
+    df1: { label: '分子自由度 df1', type: 'number', default: '1' },
+    df2: { label: '分母自由度 df2', type: 'number', default: '10' },
+    df: { label: '自由度 df', type: 'number', default: '5' },
+    expectedVar: { label: '期望方差', type: 'number', default: '1' }
+  };
+
+  function getCatLabel(cat) {
+    var labels = { descriptive_advanced: '描述性统计进阶', distribution: '概率分布', chisquare: '卡方检验', timeseries: '时间序列分析' };
+    return labels[cat] || cat;
+  }
+
+  // Render sub-type buttons
+  function renderSubtypes(cat) {
+    var container = document.getElementById('advSubtypes');
+    var subs = SUB_TYPES[cat] || [];
+    if (subs.length === 0) { container.innerHTML = ''; return; }
+    container.innerHTML = subs.map(function(s) {
+      return '<button class="adv-subtype-btn' + (s.id === CURRENT_SUB ? ' active' : '') + '" data-sub="' + s.id + '">' + s.label + '</button>';
+    }).join('');
+    // Attach events
+    var btns = container.querySelectorAll('.adv-subtype-btn');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function() {
+        container.querySelectorAll('.adv-subtype-btn').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        CURRENT_SUB = this.getAttribute('data-sub');
+        renderParams(CURRENT_CAT, CURRENT_SUB);
+      });
+    }
+    // Auto-select first sub
+    if (subs.length > 0) {
+      var activeSub = container.querySelector('.adv-subtype-btn.active');
+      if (!activeSub) {
+        var first = container.querySelector('.adv-subtype-btn');
+        if (first) { first.classList.add('active'); CURRENT_SUB = subs[0].id; }
+      }
+      renderParams(cat, CURRENT_SUB);
+    }
+  }
+
+  // Render parameter inputs
+  function renderParams(cat, sub) {
+    var container = document.getElementById('advParams');
+    var subs = SUB_TYPES[cat] || [];
+    var found = null;
+    for (var i = 0; i < subs.length; i++) {
+      if (subs[i].id === sub) { found = subs[i]; break; }
+    }
+    if (!found || !found.params || found.params.length === 0) {
+      container.style.display = 'none';
+      return;
+    }
+    container.style.display = 'grid';
+    container.innerHTML = found.params.map(function(p) {
+      var def = PARAM_DEFS[p] || { label: p, type: 'text', default: '' };
+      if (def.type === 'select') {
+        return '<div class="adv-param-group"><label>' + def.label + '</label><select id="advParam_' + p + '"><option value="">-- 先获取数据 --</option></select></div>';
+      } else {
+        return '<div class="adv-param-group"><label>' + def.label + '</label><input type="' + def.type + '" id="advParam_' + p + '" value="' + (def.default || '') + '" placeholder="' + (def.hint || '') + '"><span style="font-size:0.75rem;color:#9ca3af">' + (def.hint || '') + '</span></div>';
+      }
+    }).join('');
+    // Populate column selects if data available
+    populateColumnSelects();
+  }
+
+  function populateColumnSelects() {
+    if (!CURRENT_DATA) return;
+    var selects = document.querySelectorAll('#advParams select');
+    for (var i = 0; i < selects.length; i++) {
+      var currentVal = selects[i].value;
+      selects[i].innerHTML = '<option value="">-- 选择列 --</option>';
+      // Check which params need numeric or categorical
+      var paramId = selects[i].id.replace('advParam_', '');
+      var needsNumeric = true; // default
+      // For GOF and contingency, some selects need categorical
+      if (CURRENT_SUB === 'gof' || paramId === 'rowCol' || paramId === 'colCol') {
+        needsNumeric = false;
+      }
+      for (var c = 0; c < CURRENT_DATA.headers.length; c++) {
+        var h = CURRENT_DATA.headers[c];
+        var selected = (h === currentVal) ? ' selected' : '';
+        selects[i].innerHTML += '<option value="' + c + '"' + selected + '>' + h + '</option>';
+      }
+    }
+  }
+
+  // Extract data from table
+  function fetchFromTable() {
+    var tables = document.querySelectorAll('.table-wrapper table');
+    if (!tables.length) {
+      setStatus('未找到数据表格，请先上传数据', false);
+      return false;
+    }
+    var table = tables[0];
+    var headers = [];
+    var headerRow = table.querySelector('thead tr');
+    if (headerRow) {
+      var ths = headerRow.querySelectorAll('th');
+      for (var i = 0; i < ths.length; i++) headers.push(ths[i].textContent.trim());
+    }
+    var data = [];
+    var rows = table.querySelectorAll('tbody tr');
+    for (var r = 0; r < rows.length; r++) {
+      var cells = rows[r].querySelectorAll('td');
+      var rowData = [];
+      for (var c = 0; c < cells.length; c++) rowData.push(cells[c].textContent.trim());
+      if (rowData.length > 0) data.push(rowData);
+    }
+    if (headers.length === 0 || data.length === 0) {
+      setStatus('未能从表格中提取数据', false);
+      return false;
+    }
+    CURRENT_DATA = { headers: headers, data: data };
+    populateColumnSelects();
+    setStatus('已获取 ' + data.length + ' 行 x ' + headers.length + ' 列数据 ✓', true);
+    return true;
+  }
+
+  function setStatus(msg, ok) {
+    var el = document.getElementById('advStatus');
+    el.textContent = msg;
+    el.className = 'adv-status' + (ok ? ' ok' : '');
+  }
+
+  function getParamValues() {
+    var params = {};
+    var subs = SUB_TYPES[CURRENT_CAT] || [];
+    var found = null;
+    for (var i = 0; i < subs.length; i++) {
+      if (subs[i].id === CURRENT_SUB) { found = subs[i]; break; }
+    }
+    if (found && found.params) {
+      for (var j = 0; j < found.params.length; j++) {
+        var el = document.getElementById('advParam_' + found.params[j]);
+        if (el) params[found.params[j]] = el.value;
+      }
+    }
+    return params;
+  }
+
+  // Render results
+  function renderResult(result) {
+    var container = document.getElementById('advResult');
+    if (!result) {
+      container.innerHTML = '<div class="adv-result-empty">选择分析类型后点击"运行分析"</div>';
+      return;
+    }
+    if (result.error) {
+      container.innerHTML = '<div class="adv-error">' + result.error + '</div>';
+      return;
+    }
+
+    var html = '';
+    if (result.title) {
+      html += '<h3 style="font-size:0.95rem;font-weight:600;color:#1f2937;margin:0 0 12px">📊 ' + result.title + '</h3>';
+    }
+
+    // Main result table
+    if (result.rows && result.rows.length > 0) {
+      html += '<table class="adv-result-table"><thead><tr><th>指标</th><th style="text-align:right">值</th><th>说明</th></tr></thead><tbody>';
+      for (var i = 0; i < result.rows.length; i++) {
+        var r = result.rows[i];
+        html += '<tr><td class="label">' + r.label + '</td><td class="value">' + r.value + '</td><td class="note">' + (r.note || '') + '</td></tr>';
+      }
+      html += '</tbody></table>';
+    }
+
+    // Extra table (e.g. observed/expected for GOF, contingency matrix)
+    if (result.extraRows && Array.isArray(result.extraRows) && !Array.isArray(result.extraRows[0])) {
+      html += '<table class="adv-extra-table"><thead><tr><th>类别</th><th>观测频数</th><th>期望频数</th></tr></thead><tbody>';
+      for (var k = 0; k < result.extraRows.length; k++) {
+        html += '<tr><td>' + result.extraRows[k].category + '</td><td>' + result.extraRows[k].observed + '</td><td>' + result.extraRows[k].expected + '</td></tr>';
+      }
+      html += '</tbody></table>';
+    }
+
+    // Contingency matrix
+    if (result.rowCats && result.colCats && result.extraRows) {
+      html += '<h4 style="font-size:0.85rem;font-weight:600;margin:12px 0 8px;color:#374151">列联表</h4>';
+      html += '<table class="adv-extra-table"><thead><tr><th></th>';
+      for (var ci = 0; ci < result.colCats.length; ci++) html += '<th>' + result.colCats[ci] + '</th>';
+      html += '</tr></thead><tbody>';
+      for (var ri = 0; ri < result.rowCats.length; ri++) {
+        html += '<tr><td style="font-weight:600">' + result.rowCats[ri] + '</td>';
+        for (var cj = 0; cj < result.colCats.length; cj++) {
+          html += '<td>' + (result.extraRows[ri] ? result.extraRows[ri][cj] || 0 : 0) + '</td>';
+        }
+        html += '</tr>';
+      }
+      html += '</tbody></table>';
+    }
+
+    // Chart
+    if (result.chart) {
+      html += '<div class="adv-chart-container"><canvas id="advChart"></canvas></div>';
+    }
+
+    container.innerHTML = html;
+
+    // Draw chart if needed
+    if (result.chart) {
+      setTimeout(function() { drawChart(result.chart); }, 50);
+    }
+
+    document.getElementById('advCopyBtn').style.display = 'inline-flex';
+    CURRENT_RESULT = result;
+  }
+
+  // Simple SVG charting (no external dependencies)
+  function drawChart(chartData) {
+    var canvas = document.getElementById('advChart');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W = canvas.parentElement.clientWidth - 32;
+    var H = 260;
+    canvas.width = W * (window.devicePixelRatio || 1);
+    canvas.height = H * (window.devicePixelRatio || 1);
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+    var padding = { top: 20, right: 20, bottom: 40, left: 55 };
+    var plotW = W - padding.left - padding.right;
+    var plotH = H - padding.top - padding.bottom;
+
+    ctx.clearRect(0, 0, W, H);
+
+    if (chartData.type === 'distribution' || chartData.type === 't' || chartData.type === 'f' || chartData.type === 'chisq') {
+      // Distribution PDF plot
+      var pdf = chartData.pdf || [];
+      if (pdf.length === 0) return;
+      var xMin = pdf[0].x, xMax = pdf[pdf.length - 1].x;
+      var yMin = 0, yMax = 0;
+      for (var i = 0; i < pdf.length; i++) { if (pdf[i].y > yMax) yMax = pdf[i].y; }
+      yMax *= 1.1;
+
+      function xPos(x) { return padding.left + (x - xMin) / (xMax - xMin) * plotW; }
+      function yPos(y) { return padding.top + plotH - (y - yMin) / (yMax - yMin) * plotH; }
+
+      // Grid
+      ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 0.5;
+      for (var gx = 0; gx <= 5; gx++) {
+        var xg = padding.left + gx / 5 * plotW;
+        ctx.beginPath(); ctx.moveTo(xg, padding.top); ctx.lineTo(xg, padding.top + plotH); ctx.stroke();
+      }
+      for (var gy = 0; gy <= 4; gy++) {
+        var yg = padding.top + gy / 4 * plotH;
+        ctx.beginPath(); ctx.moveTo(padding.left, yg); ctx.lineTo(padding.left + plotW, yg); ctx.stroke();
+      }
+
+      // PDF fill
+      ctx.beginPath();
+      ctx.moveTo(xPos(pdf[0].x), yPos(0));
+      for (var p = 0; p < pdf.length; p++) ctx.lineTo(xPos(pdf[p].x), yPos(pdf[p].y));
+      ctx.lineTo(xPos(pdf[pdf.length - 1].x), yPos(0));
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(79,70,229,0.15)'; ctx.fill();
+
+      // PDF line
+      ctx.beginPath();
+      for (var q = 0; q < pdf.length; q++) {
+        q === 0 ? ctx.moveTo(xPos(pdf[q].x), yPos(pdf[q].y)) : ctx.lineTo(xPos(pdf[q].x), yPos(pdf[q].y));
+      }
+      ctx.strokeStyle = '#4f46e5'; ctx.lineWidth = 2; ctx.stroke();
+
+      // Shade tail for significance
+      if (chartData.tStat !== undefined) {
+        var critX = Math.abs(chartData.tStat);
+        var critPx = xPos(Math.max(critX, xMin));
+        ctx.fillStyle = 'rgba(239,68,68,0.2)';
+        ctx.beginPath();
+        ctx.moveTo(critPx, yPos(0));
+        for (var t1 = 0; t1 < pdf.length; t1++) {
+          if (pdf[t1].x >= critX) ctx.lineTo(xPos(pdf[t1].x), yPos(pdf[t1].y));
+        }
+        ctx.lineTo(xPos(pdf[pdf.length - 1].x), yPos(0));
+        ctx.closePath(); ctx.fill();
+
+        // Left tail
+        ctx.beginPath();
+        ctx.moveTo(xPos(pdf[0].x), yPos(0));
+        for (var t2 = 0; t2 < pdf.length; t2++) {
+          if (pdf[t2].x <= -critX) ctx.lineTo(xPos(pdf[t2].x), yPos(pdf[t2].y));
+        }
+        ctx.lineTo(xPos(-critX), yPos(0));
+        ctx.closePath(); ctx.fill();
+      }
+      if (chartData.fStat !== undefined) {
+        var fPx = xPos(chartData.fStat);
+        ctx.fillStyle = 'rgba(239,68,68,0.2)';
+        ctx.beginPath();
+        ctx.moveTo(fPx, yPos(0));
+        for (var f1 = 0; f1 < pdf.length; f1++) {
+          if (pdf[f1].x >= chartData.fStat) ctx.lineTo(xPos(pdf[f1].x), yPos(pdf[f1].y));
+        }
+        ctx.lineTo(xPos(pdf[pdf.length - 1].x), yPos(0));
+        ctx.closePath(); ctx.fill();
+      }
+      if (chartData.chi2 !== undefined) {
+        var cPx = xPos(chartData.chi2);
+        ctx.fillStyle = 'rgba(239,68,68,0.2)';
+        ctx.beginPath();
+        ctx.moveTo(cPx, yPos(0));
+        for (var c1 = 0; c1 < pdf.length; c1++) {
+          if (pdf[c1].x >= chartData.chi2) ctx.lineTo(xPos(pdf[c1].x), yPos(pdf[c1].y));
+        }
+        ctx.lineTo(xPos(pdf[pdf.length - 1].x), yPos(0));
+        ctx.closePath(); ctx.fill();
+      }
+
+      // X axis
+      ctx.strokeStyle = '#374151'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padding.left, padding.top + plotH); ctx.lineTo(padding.left + plotW, padding.top + plotH); ctx.stroke();
+      ctx.fillStyle = '#6b7280'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+      for (var lx = 0; lx <= 5; lx++) {
+        var xl = xMin + lx / 5 * (xMax - xMin);
+        ctx.fillText(xl.toFixed(1), xPos(xl), padding.top + plotH + 16);
+      }
+
+      // Y axis
+      ctx.beginPath(); ctx.moveTo(padding.left, padding.top); ctx.lineTo(padding.left, padding.top + plotH); ctx.stroke();
+      ctx.textAlign = 'right';
+      for (var ly = 0; ly <= 4; ly++) {
+        var yl = yMin + ly / 4 * (yMax - yMin);
+        ctx.fillText(yl.toFixed(2), padding.left - 6, yPos(yl) + 4);
+      }
+
+      // Label
+      ctx.fillStyle = '#374151'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+      var chartLabels = { distribution: '概率密度函数', t: 't 分布概率密度', f: 'F 分布概率密度', chisq: '卡方分布概率密度' };
+      ctx.fillText(chartLabels[chartData.type] || '概率密度', W / 2, padding.top - 6);
+
+    } else if (chartData.type === 'ts_line' || chartData.type === 'ts_forecast') {
+      // Time series line chart
+      var vals = chartData.data || [];
+      if (vals.length === 0) return;
+      var xMin2 = 0, xMax2 = Math.max(vals.length - 1, 1);
+      var yMin2 = Math.min.apply(null, vals), yMax2 = Math.max.apply(null, vals);
+      var range = yMax2 - yMin2 || 1;
+      yMin2 -= range * 0.1; yMax2 += range * 0.1;
+
+      function xP(x) { return padding.left + (x - xMin2) / (xMax2 - xMin2) * plotW; }
+      function yP(y) { return padding.top + plotH - (y - yMin2) / (yMax2 - yMin2) * plotH; }
+
+      // Grid
+      ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 0.5;
+      for (var gx2 = 0; gx2 <= 5; gx2++) {
+        var xg2 = padding.left + gx2 / 5 * plotW;
+        ctx.beginPath(); ctx.moveTo(xg2, padding.top); ctx.lineTo(xg2, padding.top + plotH); ctx.stroke();
+      }
+      for (var gy2 = 0; gy2 <= 4; gy2++) {
+        var yg2 = padding.top + gy2 / 4 * plotH;
+        ctx.beginPath(); ctx.moveTo(padding.left, yg2); ctx.lineTo(padding.left + plotW, yg2); ctx.stroke();
+      }
+
+      // Original data
+      ctx.beginPath();
+      for (var d = 0; d < vals.length; d++) {
+        d === 0 ? ctx.moveTo(xP(d), yP(vals[d])) : ctx.lineTo(xP(d), yP(vals[d]));
+      }
+      ctx.strokeStyle = '#4f46e5'; ctx.lineWidth = 2; ctx.stroke();
+
+      // Data points
+      for (var d2 = 0; d2 < vals.length; d2++) {
+        ctx.beginPath(); ctx.arc(xP(d2), yP(vals[d2]), 3, 0, Math.PI * 2); ctx.fillStyle = '#4f46e5'; ctx.fill();
+      }
+
+      // Forecasts (smoothed / fitted)
+      if (chartData.forecasts) {
+        var fData = chartData.forecasts;
+        var offset = chartData.type === 'ts_forecast' && !chartData.trend ? (chartData.window || 1) : 0;
+        ctx.setLineDash([5, 3]);
+        ctx.beginPath();
+        for (var f = 0; f < fData.length; f++) {
+          var idx = f + offset;
+          f === 0 ? ctx.moveTo(xP(idx), yP(fData[f])) : ctx.lineTo(xP(idx), yP(fData[f]));
+        }
+        ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Forecast points
+        for (var f2 = 0; f2 < fData.length; f2++) {
+          ctx.beginPath(); ctx.arc(xP(f2 + offset), yP(fData[f2]), 3, 0, Math.PI * 2); ctx.fillStyle = '#ef4444'; ctx.fill();
+        }
+      }
+
+      if (chartData.type === 'ts_forecast' && chartData.data && chartData.forecasts) {
+        // Legend
+        ctx.fillStyle = '#4f46e5'; ctx.font = '11px sans-serif'; ctx.textAlign = 'left';
+        ctx.fillRect(W - 150, padding.top, 10, 3); ctx.fillText(' 实际值', W - 136, padding.top + 5);
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(W - 75, padding.top, 10, 3); ctx.fillText(' 拟合/预测', W - 61, padding.top + 5);
+      }
+
+      // Axes
+      ctx.strokeStyle = '#374151'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padding.left, padding.top + plotH); ctx.lineTo(padding.left + plotW, padding.top + plotH); ctx.stroke();
+      ctx.fillStyle = '#6b7280'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+      for (var lx2 = 0; lx2 <= 5; lx2++) {
+        var xl2 = Math.round(xMin2 + lx2 / 5 * xMax2);
+        ctx.fillText(xl2.toString(), xP(xl2), padding.top + plotH + 16);
+      }
+      ctx.beginPath(); ctx.moveTo(padding.left, padding.top); ctx.lineTo(padding.left, padding.top + plotH); ctx.stroke();
+      ctx.textAlign = 'right';
+      for (var ly2 = 0; ly2 <= 4; ly2++) {
+        var yl2 = yMin2 + ly2 / 4 * (yMax2 - yMin2);
+        ctx.fillText(yl2.toFixed(1), padding.left - 6, yP(yl2) + 4);
+      }
+      ctx.fillStyle = '#374151'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(chartData.label || '时间序列', W / 2, padding.top - 6);
+
+    } else if (chartData.type === 'ts_decomp') {
+      // Draw original data only (simplified)
+      var dVals = chartData.data || [];
+      if (dVals.length === 0) return;
+      var xM3 = 0, xM4 = Math.max(dVals.length - 1, 1);
+      var yM3 = Math.min.apply(null, dVals), yM4 = Math.max.apply(null, dVals);
+      var r3 = yM4 - yM3 || 1;
+      yM3 -= r3 * 0.1; yM4 += r3 * 0.1;
+
+      function xP3(x) { return padding.left + (x - xM3) / (xM4 - xM3) * plotW; }
+      function yP3(y) { return padding.top + plotH - (y - yM3) / (yM4 - yM3) * plotH; }
+
+      ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 0.5;
+      for (var a = 0; a <= 5; a++) {
+        var xa = padding.left + a / 5 * plotW;
+        ctx.beginPath(); ctx.moveTo(xa, padding.top); ctx.lineTo(xa, padding.top + plotH); ctx.stroke();
+      }
+
+      ctx.beginPath();
+      for (var d3 = 0; d3 < dVals.length; d3++) {
+        d3 === 0 ? ctx.moveTo(xP3(d3), yP3(dVals[d3])) : ctx.lineTo(xP3(d3), yP3(dVals[d3]));
+      }
+      ctx.strokeStyle = '#4f46e5'; ctx.lineWidth = 2; ctx.stroke();
+
+      if (chartData.trend) {
+        ctx.setLineDash([5, 3]);
+        ctx.beginPath();
+        for (var t = 0; t < chartData.trend.length; t++) {
+          if (isNaN(chartData.trend[t])) continue;
+          t === 0 ? ctx.moveTo(xP3(t), yP3(chartData.trend[t])) : ctx.lineTo(xP3(t), yP3(chartData.trend[t]));
+        }
+        ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      ctx.fillStyle = '#6b7280'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+      for (var b = 0; b <= 5; b++) {
+        ctx.fillText(Math.round(xM3 + b / 5 * xM4).toString(), xP3(Math.round(xM3 + b / 5 * xM4)), padding.top + plotH + 16);
+      }
+      ctx.fillStyle = '#374151'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('时间序列分解 (蓝色=原始, 红色=趋势)', W / 2, padding.top - 6);
+      // Axes
+      ctx.strokeStyle = '#374151'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(padding.left, padding.top + plotH); ctx.lineTo(padding.left + plotW, padding.top + plotH); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(padding.left, padding.top); ctx.lineTo(padding.left, padding.top + plotH); ctx.stroke();
+    }
+  }
+
+  // ====== EVENT BINDING ======
+
+  // Tab switching
+  var tabs = document.getElementById('advTabs');
+  tabs.addEventListener('click', function(e) {
+    var btn = e.target.closest('.adv-tab');
+    if (!btn) return;
+    tabs.querySelectorAll('.adv-tab').forEach(function(t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    CURRENT_CAT = btn.getAttribute('data-cat');
+    CURRENT_SUB = (SUB_TYPES[CURRENT_CAT] || [])[0]?.id || '';
+    renderSubtypes(CURRENT_CAT);
+  });
+
+  // Fetch data button
+  document.getElementById('advFetchBtn').addEventListener('click', function() {
+    fetchFromTable();
+    document.getElementById('advCopyBtn').style.display = 'none';
+  });
+
+  // Run button
+  document.getElementById('advRunBtn').addEventListener('click', function() {
+    if (!CURRENT_DATA) {
+      setStatus('请先点击"从表格获取数据"', false);
+      return;
+    }
+    var params = getParamValues();
+    // Validate column params are not empty
+    var subs = SUB_TYPES[CURRENT_CAT] || [];
+    var found = null;
+    for (var i = 0; i < subs.length; i++) {
+      if (subs[i].id === CURRENT_SUB) { found = subs[i]; break; }
+    }
+    if (found && found.params) {
+      for (var j = 0; j < found.params.length; j++) {
+        if ((found.params[j] === 'col' || found.params[j] === 'rowCol' || found.params[j] === 'colCol') && (!params[found.params[j]] || params[found.params[j]] === '')) {
+          setStatus('请选择数据列', false);
+          return;
+        }
+      }
+    }
+    this.textContent = '⏳ 计算中...';
+    this.disabled = true;
+    setStatus('正在分析...', false);
+    // Use setTimeout to allow UI update
+    var self = this;
+    setTimeout(function() {
+      try {
+        var result = ADV.runAnalysis(CURRENT_CAT, CURRENT_SUB, CURRENT_DATA, params);
+        renderResult(result);
+        if (result && !result.error) {
+          setStatus('分析完成 ✓', true);
+        }
+      } catch (e) {
+        renderResult({ error: e.message });
+        setStatus('分析出错', false);
+      }
+      self.textContent = '▶ 运行分析';
+      self.disabled = false;
+    }, 50);
+  });
+
+  // Copy button
+  document.getElementById('advCopyBtn').addEventListener('click', function() {
+    if (!CURRENT_RESULT || !CURRENT_RESULT.rows) return;
+    var text = CURRENT_RESULT.title + '\n';
+    for (var i = 0; i < CURRENT_RESULT.rows.length; i++) {
+      text += CURRENT_RESULT.rows[i].label + '\t' + CURRENT_RESULT.rows[i].value + '\t' + (CURRENT_RESULT.rows[i].note || '') + '\n';
+    }
+    navigator.clipboard.writeText(text).then(function() {
+      var old = document.getElementById('advStatus').textContent;
+      setStatus('已复制到剪贴板 ✓', true);
+      setTimeout(function() { setStatus(old, true); }, 2000);
+    });
+  });
+
+  // Initialize with first category
+  renderSubtypes(CURRENT_CAT);
+})();
+</script>
+<!-- ===== End 高级统计分析 UI ===== -->
 <!-- ===== 统计学术语库 ===== -->
 <style>
 .glossary-fab {
@@ -458,7 +1865,7 @@ Referer: https://...`})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("
 
 <button class="glossary-fab" id="glossaryFab" title="统计学术语库" aria-label="打开统计学术语库">
   📚
-  <span class="badge">9</span>
+  <span class="badge">15</span>
 </button>
 
 <div class="glossary-overlay" id="glossaryOverlay">
@@ -479,7 +1886,7 @@ Referer: https://...`})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("
   if (document.getElementById('glossaryFabInit')) return;
   document.getElementById('glossaryFabInit') || true;
 
-  const ITEMS = [
+  var ITEMS = [
   {
     "id": "descriptive",
     "name": "描述性统计 (Descriptive Statistics)",
@@ -551,18 +1958,66 @@ Referer: https://...`})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("
     "principle": "聚类分析是一种无监督学习方法，将数据按相似性自动分组，使组内差异最小、组间差异最大。\n\nK-Means 算法原理：\n1. 随机选择 K 个点作为初始聚类中心\n2. 将每个数据点分配给最近的聚类中心\n3. 重新计算每个聚类的中心（均值）\n4. 重复步骤 2-3 直到收敛（中心不再明显变化）\n\nK 值的选择：\n• 肘部法则：绘制 K 值与总内距离的关系图，寻找\"拐点\"\n• 轮廓系数：衡量聚类的紧密性和分离度\n\n距离度量：最常用欧氏距离，也支持曼哈顿距离、余弦相似度等。\n\n注意：K-Means 假设聚类为球形，对异常值和量纲敏感（通常需要标准化数据）。",
     "scope": "适用于没有预定义标签的数据探索和模式发现：\n\n• 客户细分：按消费行为将客户分为不同群体\n• 图像分割：将图像像素分为不同区域\n• 市场研究：产品定位和市场细分\n• 异常检测：不落入任何聚类的点可能是异常值\n• 文档分类：按主题对文档进行自动归类\n\n注意事项：\n• 需要对数据进行标准化（消除量纲影响）\n• K 值需要事先指定（可用肘部法则辅助确定）\n• 对初始中心点的选择敏感（可多运行几次取最优）",
     "example": "根据客户的年消费额和访问频率进行客户分群：\n客户  消费额(千元)  年访问次数\n A       8           15\n B       3            5\n C       9           18\n D       4            6\n E       2            4\n F       7           14\n\n• K=2 时得到两组：\n  • 高价值组 (A, C, F)：高消费高频率\n  • 低价值组 (B, D, E)：低消费低频率\n\nExcel 操作：选择\"聚类分析\"→ 选择\"消费额、访问次数\"列 → 设置簇数 K=2 → 运行。"
+  },
+  {
+    "id": "cv_skew_kurt",
+    "name": "离散系数与分布形态 (CV, Skewness & Kurtosis)",
+    "icon": "📏",
+    "principle": "离散系数（Coefficient of Variation, CV）是衡量数据相对离散程度的指标，消除量纲影响后可在不同量级数据间比较波动性。\n\nCV = 标准差 / 均值 × 100%\n\n偏度（Skewness）衡量数据分布的不对称程度：\n• 偏度 ≈ 0：分布对称（如正态分布）\n• 偏度 > 0：右偏（正偏），右侧有长尾，均值 > 中位数\n• 偏度 < 0：左偏（负偏），左侧有长尾，均值 < 中位数\n\n峰度（Kurtosis）衡量数据分布的尖峭程度：\n• 峰度 ≈ 3（超额峰度 ≈ 0）：正态分布（常態峰）\n• 超额峰度 > 0：尖峰分布，数据集中在尾部（厚尾）\n• 超额峰度 < 0：平峰分布，数据分散\n\n样本偏度公式：g₁ = n/((n-1)(n-2)) × Σ((xᵢ-x̄)/s)³\n样本超额峰度公式：g₂ 经调整后使正态分布的超额峰度 = 0",
+    "scope": "适用于比较不同量纲或不同量级数据的波动性，以及判断数据分布形态：\n\n• 金融投资：比较不同价格水平股票的波动性（CV）\n• 质量控制：比较不同规格产品的稳定性（CV）\n• 风险管理：判断收益率分布的厚尾程度（峰度）\n• 数据预处理：决定是否需要进行正态性变换（偏度判断）\n• 学术研究：报告数据分布特征，为后续参数检验提供依据",
+    "example": "比较两只股票的价格波动（价格水平不同）：\n股票A：均值 100 元，标准差 5 元，CV = 5%\n股票B：均值 20 元，标准差 3 元，CV = 15%\n→ 股票B 的相对波动更大（尽管绝对波动更小）\n\n数据分布判断：\n偏度 = 0.8 > 0 → 分布右偏，大部分数据集中在左侧\n超额峰度 = 2.1 > 0 → 尖峰厚尾分布\n\nExcel 操作：在\"高级分析\"中选择\"描述性统计进阶\"→ \"离散系数与分布形态\"→ 选择数据列 → 运行。"
+  },
+  {
+    "id": "normal_dist",
+    "name": "正态分布 (Normal Distribution)",
+    "icon": "🔔",
+    "principle": "正态分布（高斯分布）是统计学中最重要、最基础的连续概率分布。\n\n概率密度函数 (PDF)：f(x) = 1/(σ√(2π)) × exp(-(x-μ)²/(2σ²))\n\n其中 μ 为均值（位置参数），σ 为标准差（尺度参数）。\n\n累积分布函数 (CDF)：F(x) = P(X ≤ x) = 0.5 × (1 + erf((x-μ)/(σ√2)))\n\n重要性质：\n• 68-95-99.7 法则：约 68% 的数据在 μ±σ 内，95% 在 μ±2σ 内，99.7% 在 μ±3σ 内\n• 正态分布的偏度为 0，超额峰度为 0\n• 任何正态分布都可以通过 Z = (X-μ)/σ 标准化为标准正态分布 N(0,1)\n\n中心极限定理：无论原始数据分布如何，样本均值的分布随着样本量增大趋近正态分布。这是许多统计推断方法的基础。",
+    "scope": "正态分布是许多统计方法的理论基础，广泛应用于各个领域：\n\n• 质量控制：生产过程的控制图基于正态分布假设\n• 教育评估：考试成绩通常（但并非总是）近似正态分布\n• 生物医学：许多生理指标（如身高、血压）近似正态分布\n• 金融：资产收益率的建模（但实际收益率常呈现厚尾分布）\n• 统计推断：t 检验、ANOVA、线性回归等均假设误差项正态分布\n\n注意事项：许多真实数据并不严格服从正态分布，此时可考虑数据变换或使用非参数方法。",
+    "example": "假设某班考试成绩服从正态分布，均值 μ=75，标准差 σ=10：\n• 约 68% 的学生成绩在 65~85 分之间\n• 约 95% 的学生成绩在 55~95 分之间\n• 成绩 > 95 分的学生约占 2.5%\n\nZ 变换：考了 90 分的同学，Z = (90-75)/10 = 1.5\n→ 该成绩高于约 93.3% 的学生（查标准正态分布表）\n\nExcel 操作：在\"高级分析\"中选择\"概率分布\"→ \"正态分布\"→ 选择数据列 → 运行。"
+  },
+  {
+    "id": "t_f_chisq",
+    "name": "t分布 / F分布 / χ²分布 (Sampling Distributions)",
+    "icon": "📐",
+    "principle": "t 分布、F 分布和卡方分布是统计学中三大抽样分布，是参数假设检验的理论基础。\n\nt 分布（Student's t-distribution）：\n• 用于小样本均值推断（尤其是总体标准差未知时）\n• 由自由度 df 决定形状，df 越大越接近正态分布\n• t = (x̄ - μ) / (s/√n)，其中 s 为样本标准差\n• 应用：单样本 t 检验、双样本 t 检验、回归系数检验\n\nF 分布（F-distribution）：\n• 用于比较两个方差，或评估回归模型的整体显著性\n• 由两个自由度 df₁, df₂ 决定形状\n• F = (SS₁/df₁) / (SS₂/df₂)\n• 应用：ANOVA 方差分析、回归模型 F 检验\n\n卡方分布（Chi-square distribution）：\n• 用于衡量观测值与期望值的偏离程度\n• 由自由度 df 决定形状（均值为 df，方差为 2df）\n• χ² = Σ((O-E)²/E)\n• 应用：拟合优度检验、列联分析、方差估计\n\n三者关系：t²(1, df) = F(1, df)，即 t 统计量的平方服从 F 分布。",
+    "scope": "这三种分布是参数统计推断的核心工具：\n\nt 分布：\n• 小样本（n < 30）的均值检验\n• 回归系数的显著性检验\n• 置信区间构建\n\nF 分布：\n• ANOVA 方差分析\n• 回归模型整体显著性检验\n• 方差齐性检验\n\n卡方分布：\n• 拟合优度检验（数据是否符合某种分布）\n• 列联分析（两个分类变量是否独立）\n• 方差的置信区间估计",
+    "example": "t 分布应用：\n10 名学生平均成绩 78 分，标准差 5 分。检验是否与总体均值 75 分有差异。\nt = (78-75)/(5/√10) = 1.897\ndf = 9, p = 0.09 > 0.05 → 无显著差异\n\nF 分布应用：\nANOVA 比较三组均值，F = 5.2, df₁=2, df₂=27\np = 0.012 < 0.05 → 至少有一组存在显著差异\n\n卡方分布应用：\nχ² = 4.5, df = 3, p = 0.21 > 0.05 → 不能拒绝拟合良好的假设\n\nExcel 操作：在\"高级分析\"中选择\"概率分布\"下的对应分布类型 → 选择数据列 → 运行。"
+  },
+  {
+    "id": "chisquare_tests",
+    "name": "卡方检验：拟合优度与列联分析 (Chi-Square Tests)",
+    "icon": "✅",
+    "principle": "卡方检验是一类基于卡方分布的非参数检验方法，用于分析分类数据。\n\n拟合优度检验（Goodness of Fit）：\n检验观测频数分布是否与理论分布一致。\n• 原假设 H₀：观测频数分布与理论分布一致\n• 备择假设 H₁：观测频数分布与理论分布不同\n• χ² = Σᵢ((Oᵢ - Eᵢ)² / Eᵢ)\n  • Oᵢ：第 i 类的观测频数\n  • Eᵢ：第 i 类的期望频数（根据理论分布计算）\n• 自由度 df = 类别数 - 1 - 估计参数个数\n\n列联分析（Contingency Table Analysis / Test of Independence）：\n检验两个分类变量是否相互独立。\n• 列联表：行表示一个变量的类别，列表示另一个变量的类别\n• 期望频数 Eᵢⱼ = (行合计ᵢ × 列合计ⱼ) / 总计\n• χ² = ΣᵢΣⱼ((Oᵢⱼ - Eᵢⱼ)² / Eᵢⱼ)\n• 自由度 df = (行数-1) × (列数-1)\n\nCramer's V：衡量两个分类变量关联强度的指标，取值 0~1，越大表示关联越强。\n\n注意：所有期望频数应 ≥ 5，否则应合并类别或使用 Fisher 精确检验。",
+    "scope": "广泛应用于分类数据的分析：\n\n拟合优度检验：\n• 遗传学：孟德尔遗传比例是否符合 3:1 或 9:3:3:1\n• 市场调研：产品偏好是否均匀分布\n• 质量检验：次品率是否符合预期分布\n• 人口统计：各年龄段分布是否与总体一致\n\n列联分析：\n• 医学：吸烟与肺癌是否有关联\n• 市场研究：性别与品牌偏好是否有关联\n• 社会科学：教育水平与收入水平是否有关联\n• 人力资源：培训方式与绩效评级是否有关联",
+    "example": "拟合优度检验：检验一枚骰子是否均匀。\n投掷 120 次，各点数出现次数：\n点数：  1  2  3  4  5  6\n观测： 18 22 20 19 21 20\n期望： 20 20 20 20 20 20\nχ² = 0.7, df = 5, p = 0.98 → 骰子均匀（无显著差异）\n\n列联分析：检验性别与产品偏好是否有关联。\n         A产品  B产品  合计\n男性      30     20    50\n女性      20     30    50\n合计      50     50   100\nχ² = 4.0, df = 1, p = 0.045 < 0.05 → 性别与偏好存在显著关联\nCramer's V = 0.2 → 弱关联\n\nExcel 操作：在\"高级分析\"中选择\"卡方检验\"→ 选择分类列 → 运行。"
+  },
+  {
+    "id": "timeseries_intro",
+    "name": "时间序列分析导论 (Time Series Introduction)",
+    "icon": "📈",
+    "principle": "时间序列是按时间顺序排列的数据点序列，时间序列分析旨在理解数据的内部结构和规律。\n\n时间序列的四个组成部分：\n1. 趋势成分 (Trend, T)：长期上升或下降的总体方向\n2. 季节成分 (Seasonal, S)：固定周期（如年、季、月）的规律波动\n3. 循环成分 (Cyclical, C)：非固定周期的上下波动（通常持续数年以上）\n4. 不规则成分 (Irregular/Residual, I)：随机波动，无法被模型解释\n\n加法模型：Y = T + S + C + I（各成分相互独立，波动幅度恒定）\n乘法模型：Y = T × S × C × I（各成分相互影响，波动幅度随趋势变化）\n\n关键概念：\n• 平稳性：统计性质（均值、方差）不随时间变化\n• 自相关 (ACF)：序列与其自身滞后值的相关性\n• 滞后 (Lag)：两个观测值之间的时间间隔数\n\n自相关函数 (ACF) 图是识别时间序列模式的重要工具：快速衰减表明序列平稳，缓慢衰减表明存在趋势，周期性的峰值表明存在季节性。",
+    "scope": "时间序列分析适用于所有按时间顺序收集的数据：\n\n• 经济学：GDP、CPI、失业率的季度数据\n• 金融：股票价格、汇率、利率的日度或分钟级数据\n• 零售业：月度和季度销售额、库存水平\n• 气象学：温度、降水量、风速的日度数据\n• 运营管理：每日产量、每周订单量、每月客流量\n• 能源：电力负荷、天然气消耗量的时序数据\n\n注意事项：\n• 时间序列要求等间隔（如每小时的整点读数）\n• 大多数时间序列分析方法要求数据平稳\n• 预测精度随预测时长的增加而降低",
+    "example": "某公司近 8 个季度的销售额（万元）：\nQ1=100, Q2=120, Q3=110, Q4=130,\nQ5=105, Q6=125, Q7=115, Q8=140\n\n描述性分析结果：\n• 均值 = 118.1 万元\n• 趋势斜率 ≈ 1.07（每季度平均增长 1.07 万元）\n• 一阶自相关 ACF(1) ≈ 0.52（中等自相关，存在趋势）\n\n含义：销售额呈缓慢上升趋势，且受季节性影响（Q2和Q4较高）。\n\nExcel 操作：在\"高级分析\"中选择\"时间序列分析\"→ 选择对应子类型 → 运行。"
+  },
+  {
+    "id": "timeseries_forecast",
+    "name": "时间序列预测方法 (Forecasting Methods)",
+    "icon": "🔮",
+    "principle": "时间序列预测是利用历史数据推断未来值的方法，主要分为以下三种：\n\n一、移动平均法 (Moving Average, MA)\n计算最近 k 期数据的平均值作为下一期预测值。\n• Ŷₜ₊₁ = (Yₜ + Yₜ₋₁ + ... + Yₜ₋ₖ₊₁) / k\n• 窗口 k 越大，平滑效果越强，但对变化的反应越慢\n• 适用于无趋势或趋势平缓的序列\n\n二、指数平滑法 (Exponential Smoothing, ES)\n赋予近期数据更大权重，权重随滞后长度指数衰减。\n• Sₜ = αYₜ + (1-α)Sₜ₋₁\n• Ŷₜ₊₁ = Sₜ\n• α（平滑系数）取值 0~1，α 越大越关注近期数据\n• α=0.3 是常用的默认值\n\n三、线性趋势法 (Linear Trend)\n在时间上拟合线性回归模型，用于有明确线性趋势的序列。\n• Y = β₀ + β₁t + ε\n• Ŷₜ₊₁ = β₀ + β₁(t+1)\n• 评价指标：R² 衡量拟合优度\n\n预测精度评价：\n• MAE (Mean Absolute Error)：平均绝对误差 = Σ|Ŷₜ-Yₜ|/n\n• RMSE (Root Mean Square Error)：均方根误差 = √(Σ(Ŷₜ-Yₜ)²/n)\n• RMSE 对大误差的惩罚更大",
+    "scope": "预测方法的选择取决于数据特征：\n\n移动平均法：\n• 无明显趋势和季节性的平稳序列\n• 短期预测\n• 常用于股票价格的技术分析\n\n指数平滑法：\n• 无明显趋势和季节性的序列（简单指数平滑）\n• 大数据量时计算效率高\n• 需要为 α 选择合适的值\n\n线性趋势法：\n• 具有明显线性趋势的序列\n• 中长期预测\n• 可扩展到包含季节性的 Holt-Winters 方法\n\n注意事项：\n• 预测总是存在不确定性，应提供预测区间\n• 历史模式可能在未来发生改变\n• 组合多种预测方法通常优于单一方法",
+    "example": "过去 5 天的销售量：[100, 110, 105, 115, 120]\n\n移动平均法 (k=3)：\n下一天预测 = (115+120+105)/3...，窗口 3 的预测值为 (105+115+120)/3 = 113.3\n\n指数平滑法 (α=0.3)：\nS₁ = 100\nS₂ = 0.3×110 + 0.7×100 = 103\nS₃ = 0.3×105 + 0.7×103 = 103.6\nS₄ = 0.3×115 + 0.7×103.6 = 107.0\nS₅ = 0.3×120 + 0.7×107.0 = 110.9\n下一天预测 = 110.9\n\n线性趋势法：\n拟合方程：y = 98 + 4x\n下一天预测 = 98 + 4×6 = 122\n\nExcel 操作：在\"高级分析\"中选择\"时间序列分析\"→ 选择对应预测方法 → 选择数据列 → 运行。"
   }
 ];
 
-  const fab = document.getElementById('glossaryFab');
-  const overlay = document.getElementById('glossaryOverlay');
-  const closeBtn = document.getElementById('glossaryClose');
-  const searchInput = document.getElementById('glossarySearch');
-  const list = document.getElementById('glossaryList');
+  var fab = document.getElementById('glossaryFab');
+  var overlay = document.getElementById('glossaryOverlay');
+  var closeBtn = document.getElementById('glossaryClose');
+  var searchInput = document.getElementById('glossarySearch');
+  var list = document.getElementById('glossaryList');
 
   function renderItems(filter) {
-    const q = (filter || '').toLowerCase().trim();
-    const filtered = q ? ITEMS.filter(function(item) {
+    var q = (filter || '').toLowerCase().trim();
+    var filtered = q ? ITEMS.filter(function(item) {
       return item.name.toLowerCase().includes(q) || item.principle.toLowerCase().includes(q) || item.scope.toLowerCase().includes(q);
     }) : ITEMS;
 
@@ -634,7 +2089,6 @@ Referer: https://...`})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("
     renderItems(this.value);
   });
 
-  // Keyboard shortcut: Escape to close
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && overlay.classList.contains('open')) {
       closeGlossary();

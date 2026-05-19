@@ -1,0 +1,2942 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel 自动统计分析 v5</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://unpkg.com/docx@8/build/index.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.04);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,.08), 0 4px 6px rgba(0,0,0,.04);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --transition: .2s ease;
+    }
+    [data-theme="dark"] {
+      color-scheme: dark;
+      background: #0f172a;
+      color: #e2e8f0;
+      --primary: #818cf8;
+      --primary-hover: #6366f1;
+      --primary-light: #1e1b4b;
+      --success: #34d399;
+      --success-light: #064e3b;
+      --danger: #f87171;
+      --danger-light: #7f1d1d;
+      --warning: #fbbf24;
+      --warning-light: #78350f;
+      --gray-50: #1e293b;
+      --gray-100: #334155;
+      --gray-200: #475569;
+      --gray-300: #64748b;
+      --gray-400: #94a3b8;
+      --gray-500: #cbd5e1;
+      --gray-600: #e2e8f0;
+      --gray-700: #f1f5f9;
+      --gray-800: #f8fafc;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+      --shadow: 0 1px 3px rgba(0,0,0,.4), 0 1px 2px rgba(0,0,0,.3);
+      --shadow-md: 0 4px 6px rgba(0,0,0,.4), 0 2px 4px rgba(0,0,0,.3);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,.5), 0 4px 6px rgba(0,0,0,.3);
+    }
+    [data-theme="dark"] body { background: #0f172a; color: #e2e8f0; }
+    [data-theme="dark"] .app-header { background: linear-gradient(135deg,#312e81,#4c1d95); }
+    [data-theme="dark"] .panel { background: #1e293b; border-color: #334155; }
+    [data-theme="dark"] input[type=text], [data-theme="dark"] input[type=number], [data-theme="dark"] select, [data-theme="dark"] textarea { background: #0f172a; color: #e2e8f0; border-color: #475569; }
+    [data-theme="dark"] .upload-zone { background: #1e293b; border-color: #475569; }
+    [data-theme="dark"] .table-wrapper th { background: #334155; color: #e2e8f0; }
+    [data-theme="dark"] .table-wrapper td { color: #cbd5e1; }
+    [data-theme="dark"] .table-wrapper tbody tr:nth-child(2n) { background: #1e293b; }
+    [data-theme="dark"] .table-wrapper tbody tr:hover { background: #312e81; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; }
+
+    .app-shell { max-width: 1120px; margin: 0 auto; padding: 28px 24px 48px; }
+    .app-header { text-align: center; margin-bottom: 32px; padding: 32px 24px; background: linear-gradient(135deg,#4f46e5,#7c3aed); border-radius: 20px; color: #fff; box-shadow: var(--shadow-lg); }
+    .app-header h1 { margin: 0 0 8px; font-size: 1.75rem; font-weight: 700; letter-spacing: -.02em; }
+    .app-header p { margin: 0; font-size: .95rem; opacity: .9; }
+
+    .panel { background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 24px; margin-bottom: 20px; box-shadow: var(--shadow); transition: box-shadow var(--transition); }
+    .panel:hover { box-shadow: var(--shadow-md); }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; -webkit-user-select: none; user-select: none; }
+    .panel-header h2 { margin: 0; font-size: 1.05rem; font-weight: 600; color: var(--gray-800); display: flex; align-items: center; gap: 8px; }
+    .panel-header .step-badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .75rem; font-weight: 700; flex-shrink: 0; }
+    .panel-header .collapse-icon { color: var(--gray-400); font-size: 1.2rem; transition: transform var(--transition); }
+    .panel-header .collapse-icon.collapsed { transform: rotate(-90deg); }
+    .panel-body { margin-top: 16px; overflow: hidden; transition: max-height .25s ease, opacity .2s ease; max-height: 4000px; opacity: 1; }
+    .panel-body.hidden { max-height: 0; opacity: 0; margin-top: 0; padding-top: 0; }
+
+    .upload-zone { border: 2px dashed var(--gray-300); border-radius: var(--radius); padding: 36px 24px; text-align: center; cursor: pointer; transition: all var(--transition); background: var(--gray-50); }
+    .upload-zone:hover, .upload-zone.drag-over { border-color: var(--primary); background: var(--primary-light); }
+    .upload-zone .upload-icon { font-size: 2.5rem; margin-bottom: 12px; color: var(--gray-400); line-height: 1; }
+    .upload-zone:hover .upload-icon, .upload-zone.drag-over .upload-icon { color: var(--primary); }
+    .upload-zone .upload-text { font-weight: 600; color: var(--gray-700); margin-bottom: 4px; }
+    .upload-zone .upload-hint { font-size: .85rem; color: var(--gray-400); }
+    .upload-zone input[type=file] { display: none; }
+
+    .file-info { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--success-light); border: 1px solid #a7f3d0; border-radius: var(--radius-sm); margin-bottom: 16px; }
+    .file-info .file-icon { font-size: 1.5rem; line-height: 1; }
+    .file-info .file-name { font-weight: 600; color: var(--gray-800); flex: 1; }
+    .file-info .file-size { font-size: .85rem; color: var(--gray-500); }
+    .file-info .file-remove { background: none; border: none; color: var(--gray-400); cursor: pointer; padding: 4px 8px; border-radius: 6px; font-size: 1.1rem; transition: all var(--transition); }
+    .file-info .file-remove:hover { background: var(--danger-light); color: var(--danger); }
+
+    .sheet-tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+    .sheet-tab { padding: 8px 16px; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); background: var(--gray-50); cursor: pointer; font-size: .85rem; font-weight: 500; color: var(--gray-600); transition: all var(--transition); }
+    .sheet-tab:hover { border-color: var(--primary); color: var(--primary); }
+    .sheet-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    .table-wrapper { overflow-x: auto; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); max-height: 400px; overflow-y: auto; }
+    .table-wrapper table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    .table-wrapper thead { position: sticky; top: 0; z-index: 1; }
+    .table-wrapper th { background: var(--gray-100); color: var(--gray-700); font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 2px solid var(--gray-200); white-space: nowrap; }
+    .table-wrapper td { padding: 8px 12px; border-bottom: 1px solid var(--gray-100); color: var(--gray-600); white-space: nowrap; }
+    .table-wrapper tbody tr:hover { background: var(--primary-light); }
+    .table-wrapper tbody tr:nth-child(2n) { background: var(--gray-50); }
+    .table-wrapper tbody tr:nth-child(2n):hover { background: var(--primary-light); }
+
+    .form-row { display: grid; gap: 8px; margin-bottom: 16px; }
+    .form-row label { font-weight: 600; font-size: .9rem; color: var(--gray-700); }
+    .form-row label .label-hint { font-weight: 400; color: var(--gray-400); font-size: .8rem; }
+
+    input[type=text], input[type=number], select, textarea {
+      width: 100%; padding: 10px 14px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm);
+      font-size: .9rem; font-family: inherit; background: #fff; color: var(--gray-800);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    input[type=text]:focus, input[type=number]:focus, select:focus, textarea:focus {
+      outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px #4f46e51f;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+    select[multiple] { min-height: 120px; }
+
+    .grid-two { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+    .grid-three { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+    .grid-four { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+
+    .badge-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .badge-list span { display: inline-flex; align-items: center; gap: 4px; background: var(--primary-light); color: var(--primary); padding: 4px 10px; border-radius: 9999px; font-size: .8rem; font-weight: 500; }
+    .badge-list span.badge-numeric:before { content: "#"; font-weight: 700; opacity: .6; }
+    .badge-list span.badge-categorical:before { content: "■"; font-weight: 700; opacity: .6; }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: none; border-radius: var(--radius-sm); font-size: .9rem; font-weight: 600; font-family: inherit; cursor: pointer; transition: all var(--transition); text-decoration: none; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-success:hover:not(:disabled) { background: #047857; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover:not(:disabled) { background: #b91c1c; transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-outline { background: transparent; color: var(--gray-600); border: 1px solid var(--gray-300); }
+    .btn-outline:hover:not(:disabled) { background: var(--gray-50); border-color: var(--gray-400); }
+    .btn-sm { padding: 6px 14px; font-size: .8rem; }
+    .btn-ai { background: linear-gradient(135deg,#6366f1,#8b5cf6); color: #fff; border: none; }
+    .btn-ai:hover:not(:disabled) { background: linear-gradient(135deg,#4f46e5,#7c3aed); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-ai-active { background: linear-gradient(135deg,#059669,#10b981); color: #fff; }
+    .btn-ai-active:hover:not(:disabled) { background: linear-gradient(135deg,#047857,#059669); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .result-container pre { white-space: pre-wrap; word-break: break-word; background: #1e1e2e; color: #cdd6f4; border-radius: var(--radius-sm); padding: 20px; min-height: 160px; border: 1px solid var(--gray-200); font-size: .85rem; line-height: 1.6; margin: 0; font-family: JetBrains Mono, Fira Code, Consolas, monospace; }
+    .result-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 160px; background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--radius-sm); color: var(--gray-400); gap: 8px; }
+    .result-placeholder .placeholder-icon { font-size: 2rem; opacity: .5; }
+    .result-placeholder .placeholder-text { font-size: .9rem; }
+    .result-toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .result-container { position: relative; }
+
+    .ai-config-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; justify-content: flex-end; }
+    .ai-status-ok { font-size: .8rem; color: var(--success); font-weight: 500; }
+    .ai-config-panel { border: 1px solid #c4b5fd; background: #f5f3ff; }
+    .ai-config-hint { font-size: .8rem; color: var(--gray-500); margin-top: 8px; line-height: 1.5; }
+    .ai-config-actions { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+    .label-with-action { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .label-with-action label { margin-bottom: 0; }
+    .ai-interpretation { margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--gray-200); }
+    .ai-interp-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-weight: 600; font-size: .95rem; color: var(--gray-700); }
+    .ai-interp-content { white-space: pre-wrap; word-break: break-word; background: #1e1e2e; color: #a5f3fc; border-radius: var(--radius-sm); padding: 20px; min-height: 80px; border: 1px solid var(--gray-200); font-size: .85rem; line-height: 1.7; margin: 0; font-family: JetBrains Mono, Fira Code, Consolas, monospace; }
+
+    .alert { padding: 12px 16px; border-radius: var(--radius-sm); font-size: .88rem; display: flex; align-items: center; gap: 10px; margin-top: 12px; animation: slideIn .25s ease; }
+    .alert-error { background: var(--danger-light); color: var(--danger); border: 1px solid #fecaca; }
+    .alert-success { background: var(--success-light); color: var(--success); border: 1px solid #a7f3d0; }
+    .alert-warning { background: var(--warning-light); color: var(--warning); border: 1px solid #fde68a; }
+    .alert .alert-close { margin-left: auto; background: none; border: none; cursor: pointer; color: inherit; opacity: .6; padding: 2px 6px; border-radius: 4px; font-size: 1rem; }
+    .alert .alert-close:hover { opacity: 1; }
+
+    .loading-overlay { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: #00000059; display: flex; align-items: center; justify-content: center; z-index: 1000; -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); animation: fadeIn .2s ease; }
+    .loading-card { background: #fff; border-radius: var(--radius); padding: 32px 40px; text-align: center; box-shadow: var(--shadow-lg); }
+    .spinner { width: 40px; height: 40px; border: 3px solid var(--gray-200); border-top-color: var(--primary); border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 16px; }
+    .loading-card .loading-text { font-weight: 600; color: var(--gray-700); font-size: .95rem; }
+
+    .data-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .stat-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 9999px; font-size: .82rem; color: var(--gray-600); }
+    .stat-chip strong { color: var(--gray-800); }
+
+    .note { text-align: center; border: 1px dashed var(--gray-300); background: var(--gray-50); }
+    .note p { margin-top: 8px; color: var(--gray-500); font-size: .88rem; }
+
+    .url-input-row { display: flex; gap: 8px; }
+    .url-input-row input { flex: 1; }
+    .url-input-row .btn { flex-shrink: 0; white-space: nowrap; }
+
+    /* Data Cleaning */
+    .clean-section { border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px; background: var(--gray-50); }
+    .clean-section h3 { margin: 0 0 12px; font-size: .95rem; font-weight: 600; color: var(--gray-700); }
+    .clean-missing-grid { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; font-size: .85rem; }
+    .clean-missing-grid .col-name { font-weight: 600; color: var(--gray-700); min-width: 80px; }
+    .clean-missing-grid .missing-bar { height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+    .clean-missing-grid .missing-bar-fill { height: 100%; background: var(--warning); border-radius: 4px; transition: width .3s; }
+    .clean-missing-grid .missing-count { color: var(--gray-500); min-width: 60px; text-align: right; }
+    .clean-missing-grid .missing-action { min-width: 100px; }
+    .outlier-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    .outlier-table th { background: var(--gray-100); padding: 8px 12px; text-align: left; font-weight: 600; color: var(--gray-700); border-bottom: 1px solid var(--gray-200); }
+    .outlier-table td { padding: 6px 12px; border-bottom: 1px solid var(--gray-100); color: var(--gray-600); }
+    .outlier-table .outlier-val { color: var(--danger); font-weight: 600; }
+    .filter-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+    .filter-row select, .filter-row input { width: auto; min-width: 120px; }
+
+    /* Chart Panel */
+    .chart-type-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 16px; }
+    .chart-type-tab { padding: 8px 16px; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); background: var(--gray-50); cursor: pointer; font-size: .85rem; font-weight: 500; color: var(--gray-600); transition: all var(--transition); }
+    .chart-type-tab:hover { border-color: var(--primary); color: var(--primary); }
+    .chart-type-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .chart-canvas-wrapper { position: relative; width: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; }
+    .chart-canvas-wrapper canvas { max-width: 100%; max-height: 450px; }
+    .heatmap-canvas { image-rendering: pixelated; }
+
+    /* ---- NEW: Statistical Tests Panel ---- */
+    .test-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .test-card { border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); padding: 14px; cursor: pointer; transition: all var(--transition); background: #fff; text-align: left; }
+    .test-card:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-1px); }
+    .test-card.selected { border-color: var(--primary); background: var(--primary-light); }
+    .test-card .test-name { font-weight: 700; font-size: .9rem; color: var(--gray-800); margin-bottom: 4px; }
+    .test-card .test-desc { font-size: .78rem; color: var(--gray-500); }
+    .test-card .test-badge { display: inline-block; font-size: .7rem; padding: 2px 8px; border-radius: 9999px; margin-top: 6px; font-weight: 600; }
+    .test-badge-param { background: #dbeafe; color: #1d4ed8; }
+    .test-badge-nonparam { background: #dcfce7; color: #15803d; }
+    .test-badge-categorical { background: #fef3c7; color: #92400e; }
+
+    .test-result-box { background: #1e1e2e; border-radius: var(--radius-sm); padding: 20px; margin-top: 16px; border: 1px solid var(--gray-200); }
+    .test-result-box .result-title { color: #a5f3fc; font-weight: 700; font-size: .95rem; margin-bottom: 12px; }
+    .test-result-box .result-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #374151; color: #cdd6f4; font-size: .88rem; }
+    .test-result-box .result-row:last-child { border-bottom: none; }
+    .test-result-box .result-row .key { color: #9ca3af; }
+    .test-result-box .result-row .val { font-family: monospace; color: #86efac; font-weight: 600; }
+    .test-result-box .result-row .val.sig { color: #fb7185; }
+    .test-result-box .result-row .val.nonsig { color: #94a3b8; }
+    .test-interpretation { margin-top: 16px; padding: 16px; background: var(--success-light); border-radius: var(--radius-sm); border: 1px solid #a7f3d0; }
+    .test-interpretation .interp-title { font-weight: 700; color: var(--success); margin-bottom: 8px; font-size: .9rem; }
+    .test-interpretation .interp-text { font-size: .88rem; color: var(--gray-700); line-height: 1.6; }
+    .effect-size-bar { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .effect-size-bar .bar-track { flex: 1; height: 8px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+    .effect-size-bar .bar-fill { height: 100%; border-radius: 4px; transition: width .5s; }
+
+    /* ---- NEW: Data Transformation Panel ---- */
+    .transform-section { border: 1px solid var(--gray-200); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 14px; background: var(--gray-50); }
+    .transform-section h3 { margin: 0 0 10px; font-size: .95rem; font-weight: 600; color: var(--gray-700); display: flex; align-items: center; gap: 6px; }
+    .transform-config { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 12px; }
+    .transform-config select, .transform-config input { width: auto; min-width: 120px; }
+    .transform-preview { background: #1e1e2e; border-radius: var(--radius-sm); padding: 12px; max-height: 200px; overflow: auto; }
+    .transform-preview table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+    .transform-preview th { color: #9ca3af; padding: 6px 10px; text-align: left; border-bottom: 1px solid #374151; font-weight: 600; white-space: nowrap; }
+    .transform-preview td { color: #86efac; padding: 5px 10px; border-bottom: 1px solid #1f2937; font-family: monospace; white-space: nowrap; }
+    .transform-preview .new-col { color: #a5f3fc; font-weight: 600; }
+    .transform-preview .orig-col { color: #9ca3af; }
+    .transform-history { margin-top: 12px; }
+    .transform-history-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--gray-100); border-radius: 6px; margin-bottom: 6px; font-size: .82rem; }
+    .transform-history-item .hist-label { color: var(--gray-600); font-weight: 500; }
+    .transform-history-item .hist-action { display: flex; gap: 6px; }
+    .transform-hint { font-size: .82rem; color: var(--gray-500); margin-bottom: 8px; }
+    .transform-op-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 14px; }
+    .transform-op-tab { padding: 6px 14px; border: 1px solid var(--gray-200); border-radius: var(--radius-sm); background: var(--gray-50); cursor: pointer; font-size: .82rem; font-weight: 500; color: var(--gray-600); transition: all var(--transition); }
+    .transform-op-tab:hover { border-color: var(--primary); color: var(--primary); }
+    .transform-op-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { 0% { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideIn { 0% { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 768px) {
+      .app-shell { padding: 16px 12px 32px; }
+      .app-header { padding: 24px 16px; }
+      .app-header h1 { font-size: 1.35rem; }
+      .panel { padding: 16px; }
+      .grid-two, .grid-three, .grid-four { grid-template-columns: 1fr; }
+      .upload-zone { padding: 28px 16px; }
+      .actions { flex-direction: column; }
+      .actions .btn { width: 100%; justify-content: center; }
+      .test-grid { grid-template-columns: 1fr; }
+    }
+    .dark-mode-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      transition: all 0.3s;
+    }
+    .dark-mode-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useMemo, useCallback, useEffect, useRef } = React;
+
+    /* ========== 统计工具函数 ========== */
+    function toNumber(v) {
+      if (typeof v === 'number') return Number.isFinite(v) ? v : null;
+      if (typeof v === 'string') {
+        const n = Number(v.trim().replace(/,/g, ''));
+        return Number.isFinite(n) ? n : null;
+      }
+      return null;
+    }
+
+    function mean(arr) {
+      if (!arr || arr.length === 0) return NaN;
+      let s = 0, c = 0;
+      for (let i = 0; i < arr.length; i++) { s += arr[i]; c++; }
+      return s / c;
+    }
+
+    function median(arr) {
+      const sorted = [...arr].sort((a, b) => a - b);
+      const mid = Math.floor(sorted.length / 2);
+      return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+    }
+
+    function mode(arr) {
+      const freq = {};
+      arr.forEach(v => { if (v != null) freq[v] = (freq[v] || 0) + 1; });
+      let maxFreq = 0, modeVal = arr[0];
+      for (const [k, v] of Object.entries(freq)) { if (v > maxFreq) { maxFreq = v; modeVal = Number(k) || k; } }
+      return modeVal;
+    }
+
+    function stdev(arr) {
+      if (arr.length < 2) return NaN;
+      const m = mean(arr);
+      return Math.sqrt(arr.reduce((s, v) => s + (v - m) ** 2, 0) / (arr.length - 1));
+    }
+
+    function quantile(arr, q) {
+      const sorted = [...arr].sort((a, b) => a - b);
+      const pos = (sorted.length - 1) * q;
+      const base = Math.floor(pos);
+      const rest = pos - base;
+      if (sorted[base + 1] !== undefined) return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+      return sorted[base];
+    }
+
+    function pearsonCorr(x, y) {
+      if (x.length < 2) return NaN;
+      const mx = mean(x), my = mean(y);
+      let num = 0, dx2 = 0, dy2 = 0;
+      for (let i = 0; i < x.length; i++) {
+        const dx = x[i] - mx, dy = y[i] - my;
+        num += dx * dy; dx2 += dx * dx; dy2 += dy * dy;
+      }
+      return dx2 === 0 || dy2 === 0 ? 0 : num / Math.sqrt(dx2 * dy2);
+    }
+
+    function sampleVariance(arr) {
+      if (arr.length < 2) return NaN;
+      const m = mean(arr);
+      return arr.reduce((s, v) => s + (v - m) ** 2, 0) / (arr.length - 1);
+    }
+
+    function fmt(v) { return v == null || Number.isNaN(v) ? '-' : (typeof v === 'number' ? (Math.abs(v) < 0.0001 && v !== 0 ? v.toExponential(4) : v.toFixed(4)) : String(v)); }
+
+    /* ========== 概率分布函数 ========== */
+    // t分布CDF（两尾概率）
+    function tDistCDF(t, df) {
+      if (df <= 0 || !Number.isFinite(t)) return NaN;
+      if (df === 1) return 0.5 + (1 / Math.PI) * Math.atan(t);
+      if (df === 2) return 0.5 + (t / (2 * Math.sqrt(2 + t * t)));
+      if (df === 3) {
+        const s = t / Math.sqrt(3 + t * t);
+        return 0.5 + (s + Math.atan(s)) / Math.PI;
+      }
+      // 正则化不完全Beta函数近似
+      const x = df / (df + t * t);
+      const a = df / 2, b = 0.5;
+      return 1 - 0.5 * incompleteBeta(x, a, b);
+    }
+
+    function incompleteBeta(x, a, b) {
+      // 连分数近似 (ACM Algorithm 395)
+      if (x < 0 || x > 1) return NaN;
+      if (x === 0) return 0;
+      if (x === 1) return 1;
+      const lnBeta = logGamma(a) + logGamma(b) - logGamma(a + b);
+      const front = Math.exp(Math.log(x) * a + Math.log(1 - x) * b - lnBeta) / a;
+      // Lentz迭代
+      let f = 1, c = 1, d = 0;
+      for (let n = 1; n <= 200; n++) {
+        let m = Math.floor(n / 2);
+        let numerator;
+        if (n % 2 === 0) {
+          numerator = (m * (b - m) * x) / ((a + 2 * m - 1) * (a + 2 * m));
+        } else {
+          numerator = -((a + m) * (a + b + m) * x) / ((a + 2 * m) * (a + 2 * m + 1));
+        }
+        d = 1 + numerator * d;
+        if (Math.abs(d) < 1e-30) d = 1e-30;
+        d = 1 / d;
+        c = 1 + numerator / c;
+        if (Math.abs(c) < 1e-30) c = 1e-30;
+        const delta = d * c;
+        f *= delta;
+        if (Math.abs(delta - 1) < 1e-12) break;
+      }
+      return front * (f - 1);
+    }
+
+    function logGamma(x) {
+      const c = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450055, 0.1208650973866179e-2, -0.5395239324951e-5];
+      let y = x;
+      const tmp = x + 5.5;
+      const ser = c.reduce((s, v, i) => s + v / (++y), 1);
+      return Math.sqrt(2 * Math.PI) * Math.pow(tmp, x + 0.5) * Math.exp(-tmp) * ser;
+    }
+
+    // 双尾 p 值
+    function tTwoTailP(t, df) { return 2 * (1 - tDistCDF(Math.abs(t), df)); }
+
+    // χ² 分布CDF近似
+    function chiSquareCDF(x, df) {
+      if (x <= 0) return 0;
+      if (df <= 0) return NaN;
+      // Wilson-Hilferty近似
+      const z = Math.pow(x / df, 1 / 3) - (1 - 2 / (9 * df));
+      const se = Math.sqrt(2 / (9 * df));
+      return normalCDF(z / se);
+    }
+
+    function normalCDF(z) {
+      const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
+      const sign = z < 0 ? -1 : 1;
+      z = Math.abs(z) / Math.sqrt(2);
+      const t = 1 / (1 + p * z);
+      return 0.5 * (1 + sign * (1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-z * z)));
+    }
+
+    function chiSquareTwoTailP(x, df) { return 1 - chiSquareCDF(x, df); }
+
+    // Kolmogorov-Smirnov近似（用于非参数检验）
+    function ksProb(lam) {
+      if (lam < 1) return Math.pow(Math.E, -Math.PI * Math.PI / 8) * Math.pow(lam, -2);
+      let sum = 0;
+      for (let k = 1; k <= 3; k++) {
+        sum += Math.pow(-1, k - 1) * Math.exp(-2 * k * k * lam * lam);
+      }
+      return 2 * sum;
+    }
+
+    /* ========== 分析类型定义 ========== */
+    const ANALYSIS_TYPES = [
+      { value: 'descriptive', label: '描述性统计' },
+      { value: 'oneSample', label: '单样本统计' },
+      { value: 'twoSample', label: '双样本统计' },
+      { value: 'regression', label: '回归分析' },
+      { value: 'multipleRegression', label: '多元线性回归' },
+      { value: 'logisticRegression', label: '逻辑回归' },
+      { value: 'correlation', label: '相关性分析' },
+      { value: 'anova', label: 'ANOVA 方差分析' },
+      { value: 'clustering', label: '聚类分析' },
+    ];
+
+    /* ========== 列类型检测 ========== */
+    function detectColumnTypes(data) {
+      if (!data || data.length === 0) return { numericColumns: [], categoricalColumns: [] };
+      const cols = Object.keys(data[0]);
+      const numeric = [], categorical = [];
+      cols.forEach(col => {
+        const vals = data.map(r => r[col]).filter(v => v != null && `${v}`.trim() !== '');
+        const numCount = vals.filter(v => toNumber(v) != null).length;
+        (vals.length > 0 && numCount === vals.length ? numeric : categorical).push(col);
+      });
+      return { numericColumns: numeric, categoricalColumns: categorical };
+    }
+
+    /* ========== 核心分析函数（v2原有） ========== */
+    function runAnalysis({ analysisType, data, xColumn, yColumn, compareColumnA, compareColumnB, targetColumn, featureColumns, correlationColumns, groupColumn, hypothesisValue, clusters }) {
+      if (!Array.isArray(data) || data.length === 0) return { result: '请先上传 Excel 数据并选择有效工作表。' };
+      const valid = data.filter(r => r != null);
+      switch (analysisType) {
+        case 'descriptive': {
+          if (!xColumn) return { result: '请先选择一个数值列用于描述性统计。' };
+          const vals = valid.map(r => toNumber(r[xColumn])).filter(v => v != null);
+          if (vals.length === 0) return { result: `列 ${xColumn} 未包含有效数值。` };
+          return { result: [`列：${xColumn}`, `计数：${vals.length}`, `平均值：${fmt(mean(vals))}`, `中位数：${fmt(median(vals))}`, `众数：${fmt(mode(vals))}`, `标准差：${fmt(stdev(vals))}`, `最小值：${fmt(Math.min(...vals))}`, `最大值：${fmt(Math.max(...vals))}`, `第 25 百分位：${fmt(quantile(vals, 0.25))}`, `第 75 百分位：${fmt(quantile(vals, 0.75))}`].join('\n') };
+        }
+        case 'oneSample': {
+          if (!yColumn) return { result: '请先选择一个数值列用于单样本检验。' };
+          const vals = valid.map(r => toNumber(r[yColumn])).filter(v => v != null);
+          if (vals.length < 2) return { result: '需要至少两个有效观测值。' };
+          const hVal = Number(hypothesisValue);
+          if (!Number.isFinite(hVal)) return { result: '请输入有效的假设均值。' };
+          const m = mean(vals), sd = stdev(vals), t = sd > 0 ? (m - hVal) / (sd / Math.sqrt(vals.length)) : null;
+          return { result: [`列：${yColumn}`, `假设均值：${hVal}`, `样本均值：${fmt(m)}`, `t 统计量：${t == null ? '无法计算' : fmt(t)}`, '说明：|t| 越大表示样本均值与假设值差异越明显。'].join('\n') };
+        }
+        case 'twoSample': {
+          if (!compareColumnA || !compareColumnB) return { result: '请选择两个数值列进行双样本对比。' };
+          const a = valid.map(r => toNumber(r[compareColumnA])).filter(v => v != null);
+          const b = valid.map(r => toNumber(r[compareColumnB])).filter(v => v != null);
+          if (a.length < 2 || b.length < 2) return { result: '每个组别至少需要两个有效观测值。' };
+          const ma = mean(a), mb = mean(b);
+          const sa = sampleVariance(a), sb = sampleVariance(b);
+          const se = Math.sqrt(sa / a.length + sb / b.length);
+          const t = se > 0 ? (ma - mb) / se : null;
+          return { result: [`组 A：${compareColumnA}（${a.length} 个值）`, `组 B：${compareColumnB}（${b.length} 个值）`, `A 平均值：${fmt(ma)}`, `B 平均值：${fmt(mb)}`, `t 统计量：${t == null ? '无法计算' : fmt(t)}`].join('\n') };
+        }
+        case 'regression': {
+          if (!xColumn || !yColumn) return { result: '请先选择回归分析的 X 和 Y 列。' };
+          const pts = valid.map(r => { const x = toNumber(r[xColumn]), y = toNumber(r[yColumn]); return x != null && y != null ? { x, y } : null; }).filter(p => p);
+          if (pts.length < 2) return { result: '至少需要两个有效点才能进行线性回归。' };
+          const n = pts.length, xs = pts.map(p => p.x), ys = pts.map(p => p.y);
+          const mx = mean(xs), my = mean(ys);
+          let num = 0, den = 0;
+          for (let i = 0; i < n; i++) { num += (xs[i] - mx) * (ys[i] - my); den += (xs[i] - mx) ** 2; }
+          const slope = den !== 0 ? num / den : 0, intercept = my - slope * mx;
+          return { result: [`X 列：${xColumn}`, `Y 列：${yColumn}`, `模型：y = ${fmt(slope)} x + ${fmt(intercept)}`, `样本数：${n}`].join('\n') };
+        }
+        case 'correlation': {
+          if (!Array.isArray(correlationColumns) || correlationColumns.length < 2) return { result: '请选择至少两个数值列进行相关性分析。' };
+          if (correlationColumns.length === 2) {
+            const [c1, c2] = correlationColumns;
+            const pairs = valid.map(r => { const a = toNumber(r[c1]), b = toNumber(r[c2]); return a != null && b != null ? [a, b] : null; }).filter(Boolean);
+            return { result: `Pearson 相关系数：${fmt(pearsonCorr(pairs.map(p => p[0]), pairs.map(p => p[1])))}` };
+          }
+          const cols = correlationColumns;
+          const lines = ['相关性矩阵：', ''];
+          lines.push('        ' + cols.map(c => c.padEnd(10)).join(''));
+          for (let i = 0; i < cols.length; i++) {
+            const row = [cols[i].padEnd(8)];
+            for (let j = 0; j < cols.length; j++) {
+              if (i === j) { row.push('1.0000'.padEnd(10)); continue; }
+              const pairs = valid.map(r => { const a = toNumber(r[cols[i]]), b = toNumber(r[cols[j]]); return a != null && b != null ? [a, b] : null; }).filter(Boolean);
+              const r = pairs.length > 1 ? pearsonCorr(pairs.map(p => p[0]), pairs.map(p => p[1])) : NaN;
+              row.push(fmt(r).padEnd(10));
+            }
+            lines.push(row.join(''));
+          }
+          return { result: lines.join('\n') };
+        }
+        case 'anova': {
+          if (!groupColumn || !targetColumn) return { result: '请选择分组列和目标列。' };
+          const groups = {};
+          valid.forEach(r => { const g = r[groupColumn]; if (g != null) { if (!groups[g]) groups[g] = []; const v = toNumber(r[targetColumn]); if (v != null) groups[g].push(v); } });
+          const gKeys = Object.keys(groups);
+          if (gKeys.length < 2) return { result: '分组列至少需要两个组别。' };
+          const allVals = gKeys.flatMap(k => groups[k]);
+          const grandMean = mean(allVals);
+          const totalN = allVals.length, k = gKeys.length;
+          let ssb = 0, ssw = 0;
+          gKeys.forEach(g => { ssb += groups[g].length * (mean(groups[g]) - grandMean) ** 2; ssw += groups[g].reduce((s, v) => s + (v - mean(groups[g])) ** 2, 0); });
+          const msb = ssb / (k - 1), msw = totalN - k > 0 ? ssw / (totalN - k) : 0;
+          const f = msw > 0 ? msb / msw : NaN;
+          return { result: [`ANOVA 方差分析`, `分组列：${groupColumn}（${k} 组）`, `目标列：${targetColumn}`, `SSB：${fmt(ssb)}`, `SSW：${fmt(ssw)}`, `F 统计量：${fmt(f)}`, `组均值：${gKeys.map(g => `${g}=${fmt(mean(groups[g]))}`).join(', ')}`].join('\n') };
+        }
+        case 'multipleRegression': {
+          if (!Array.isArray(featureColumns) || featureColumns.length === 0 || !targetColumn) return { result: '请选择目标列和特征列。' };
+          const rows = valid.map(r => { const y = toNumber(r[targetColumn]); const xs = featureColumns.map(c => toNumber(r[c])); return y != null && xs.every(x => x != null) ? { y, xs } : null; }).filter(Boolean);
+          if (rows.length < featureColumns.length + 1) return { result: '样本数不足。' };
+          const n = rows.length, p = featureColumns.length;
+          const X = rows.map(r => [1, ...r.xs]);
+          const Y = rows.map(r => r.y);
+          const XtX = Array.from({ length: p + 1 }, (_, i) => Array.from({ length: p + 1 }, (_, j) => X.reduce((s, row) => s + row[i] * row[j], 0)));
+          const XtY = Array.from({ length: p + 1 }, (_, i) => X.reduce((s, row, idx) => s + row[i] * Y[idx], 0));
+          const aug = XtX.map((row, i) => [...row, XtY[i]]);
+          for (let i = 0; i <= p; i++) {
+            let maxRow = i;
+            for (let k = i + 1; k <= p; k++) if (Math.abs(aug[k][i]) > Math.abs(aug[maxRow][i])) maxRow = k;
+            [aug[i], aug[maxRow]] = [aug[maxRow], aug[i]];
+            if (Math.abs(aug[i][i]) < 1e-12) return { result: '矩阵不可逆，特征列可能存在完全共线性。' };
+            for (let k = i + 1; k <= p; k++) { const f = aug[k][i] / aug[i][i]; for (let j = i; j <= p + 1; j++) aug[k][j] -= f * aug[i][j]; }
+          }
+          const beta = Array(p + 1);
+          for (let i = p; i >= 0; i--) { beta[i] = aug[i][p + 1]; for (let j = i + 1; j <= p; j++) beta[i] -= aug[i][j] * beta[j]; beta[i] /= aug[i][i]; }
+          const yMean = mean(Y);
+          let ssTot = 0, ssRes = 0;
+          rows.forEach((r, i) => { const yPred = X[i].reduce((s, x, j) => s + x * beta[j], 0); ssRes += (r.y - yPred) ** 2; ssTot += (r.y - yMean) ** 2; });
+          const r2 = ssTot > 0 ? 1 - ssRes / ssTot : 0;
+          return { result: [`多元线性回归`, `目标列：${targetColumn}`, `特征列：${featureColumns.join(', ')}`, `样本数：${n}`, `截距：${fmt(beta[0])}`, ...featureColumns.map((c, i) => `${c} 系数：${fmt(beta[i + 1])}`), `R²：${fmt(r2)}`].join('\n') };
+        }
+        case 'logisticRegression': {
+          if (!Array.isArray(featureColumns) || featureColumns.length === 0 || !targetColumn) return { result: '请选择目标列和特征列。' };
+          const rows = valid.map(r => { const y = toNumber(r[targetColumn]); const xs = featureColumns.map(c => toNumber(r[c])); return y != null && xs.every(x => x != null) ? { y: y > 0 ? 1 : 0, xs } : null; }).filter(Boolean);
+          if (rows.length < 10) return { result: '逻辑回归需要更多样本（至少10个）。' };
+          const p = featureColumns.length;
+          const beta = Array(p + 1).fill(0);
+          const lr = 0.01;
+          for (let iter = 0; iter < 500; iter++) {
+            const grad = Array(p + 1).fill(0);
+            rows.forEach(r => {
+              const z = beta[0] + r.xs.reduce((s, x, i) => s + x * beta[i + 1], 0);
+              const pred = 1 / (1 + Math.exp(-Math.max(-500, Math.min(500, z))));
+              const err = pred - r.y;
+              grad[0] += err;
+              r.xs.forEach((x, i) => { grad[i + 1] += err * x; });
+            });
+            beta.forEach((_, i) => { beta[i] -= lr * grad[i] / rows.length; });
+          }
+          return { result: [`逻辑回归`, `目标列：${targetColumn}`, `特征列：${featureColumns.join(', ')}`, `样本数：${rows.length}`, `截距：${fmt(beta[0])}`, ...featureColumns.map((c, i) => `${c} 系数：${fmt(beta[i + 1])}`)`].join('\n') };
+        }
+        case 'clustering': {
+          if (!xColumn || !yColumn) return { result: '请先选择两个数值列用于聚类。' };
+          const k = clusters || 3;
+          const pts = valid.map(r => { const x = toNumber(r[xColumn]), y = toNumber(r[yColumn]); return x != null && y != null ? [x, y] : null; }).filter(Boolean);
+          if (pts.length < k) return { result: `可用点不足，至少需要 ${k} 个。` };
+          let centers = pts.slice(0, k).map(p => [...p]);
+          const labels = Array(pts.length).fill(0);
+          for (let iter = 0; iter < 50; iter++) {
+            let changed = false;
+            pts.forEach((p, i) => {
+              let minD = Infinity, bestC = 0;
+              centers.forEach((c, ci) => { const d = (p[0] - c[0]) ** 2 + (p[1] - c[1]) ** 2; if (d < minD) { minD = d; bestC = ci; } });
+              if (labels[i] !== bestC) { labels[i] = bestC; changed = true; }
+            });
+            if (!changed) break;
+            centers = centers.map((_, ci) => {
+              const members = pts.filter((_, i) => labels[i] === ci);
+              return members.length === 0 ? centers[ci] : [mean(members.map(m => m[0])), mean(members.map(m => m[1]))];
+            });
+          }
+          return { result: [`聚类数：${k}`, `样本数：${pts.length}`, ...centers.map((c, i) => `簇 ${i + 1} 中心：(${fmt(c[0])}, ${fmt(c[1])})`)].join('\n') };
+        }
+        default: return { result: '未知分析类型。' };
+      }
+    }
+
+    /* ========== 新增统计检验函数 ========== */
+    // 配对t检验
+    function pairedTTest(x, y) {
+      if (x.length !== y.length || x.length < 2) return null;
+      const diffs = x.map((v, i) => v - y[i]);
+      const dMean = mean(diffs);
+      const dStd = stdev(diffs);
+      if (dStd === 0) return { t: Infinity, df: x.length - 1, p: 0, dMean, dStd };
+      const se = dStd / Math.sqrt(diffs.length);
+      const t = dMean / se;
+      const p = tTwoTailP(t, x.length - 1);
+      // Cohen's d
+      const pooled = Math.sqrt((stdev(x) ** 2 + stdev(y) ** 2) / 2);
+      const cohensD = pooled > 0 ? dMean / pooled : 0;
+      return { t, df: x.length - 1, p, dMean, dStd, cohensD };
+    }
+
+    // Wilcoxon符号秩检验
+    function wilcoxonSignedRankTest(x, y) {
+      if (x.length !== y.length || x.length < 5) return null;
+      const diffs = x.map((v, i) => v - y[i]).filter(d => Math.abs(d) > 1e-12);
+      if (diffs.length < 5) return null;
+      const absDiffs = diffs.map(d => Math.abs(d));
+      const sorted = [...absDiffs].sort((a, b) => a - b);
+      const unique = [...new Set(sorted)];
+      // 计算秩（处理 ties，取平均秩）
+      const ranks = absDiffs.map(d => {
+        const indices = absDiffs.reduce((acc, v, idx) => { if (v === d) acc.push(idx); return acc; }, []);
+        return indices.reduce((s, idx) => s + (sorted.indexOf(d) === -1 ? absDiffs.indexOf(d) + 1 : sorted.indexOf(d) + 1) || (indices.reduce((ss, ii) => ss + (sorted.indexOf(absDiffs[ii]) + 1), 0) / indices.length), 0);
+      });
+      // 简化：直接用序列位置
+      const sortedWithIdx = absDiffs.map((d, i) => ({ d, i })).sort((a, b) => a.d - b.d);
+      const ranks2 = Array(diffs.length);
+      let i2 = 0;
+      while (i2 < sortedWithIdx.length) {
+        let j = i2;
+        while (j < sortedWithIdx.length && sortedWithIdx[j].d === sortedWithIdx[i2].d) j++;
+        const avgRank = (i2 + 1 + j) / 2;
+        for (let k = i2; k < j; k++) ranks2[sortedWithIdx[k].i] = avgRank;
+        i2 = j;
+      }
+      // T统计量 = 较小秩和
+      const posSum = diffs.filter(d => d > 0).reduce((s, _, idx) => s + ranks2[idx], 0);
+      const negSum = diffs.filter(d => d < 0).reduce((s, _, idx) => s + ranks2[idx], 0);
+      const T = Math.min(posSum, negSum);
+      const n = diffs.length;
+      // 正态近似（连续性修正）
+      const meanT = n * (n + 1) / 4;
+      const varT = n * (n + 1) * (2 * n + 1) / 24;
+      const z = (T - 0.5 - meanT) / Math.sqrt(varT);
+      const p = 2 * (1 - normalCDF(Math.abs(z)));
+      // r = z / sqrt(n)
+      const r = Math.abs(z) / Math.sqrt(n);
+      return { T, meanT, z, p, r, n };
+    }
+
+    // Mann-Whitney U检验
+    function mannWhitneyUTest(a, b) {
+      if (a.length < 1 || b.length < 1) return null;
+      const combined = [...a.map(v => ({ v, g: 0 })), ...b.map(v => ({ v, g: 1 }))];
+      combined.sort((x, y) => x.v - y.v);
+      const ranks = Array(combined.length);
+      let i3 = 0;
+      while (i3 < combined.length) {
+        let j = i3;
+        while (j < combined.length && combined[j].v === combined[i3].v) j++;
+        const avgRank = (i3 + 1 + j) / 2;
+        for (let k = i3; k < j; k++) ranks[combined[k].g === 0 ? k - (combined.slice(0, k).filter(x => x.g === 0).length) : k] = avgRank;
+        // 更直接的方式
+        for (let k = i3; k < j; k++) {
+          const globalIdx = combined.findIndex((x, idx) => idx >= k && combined[idx].v === combined[i3].v);
+        }
+        i3 = j;
+      }
+      // 重新实现秩计算
+      const allVals = combined.map((item, idx) => ({ v: item.v, g: item.g, origIdx: idx }));
+      allVals.sort((x, y) => x.v - y.v);
+      const rankMap = Array(combined.length);
+      let ti = 0;
+      while (ti < allVals.length) {
+        let tj = ti;
+        while (tj < allVals.length && allVals[tj].v === allVals[ti].v) tj++;
+        const avgR = (ti + 1 + tj) / 2;
+        for (let tk = ti; tk < tj; tk++) rankMap[allVals[tk].origIdx] = avgR;
+        ti = tj;
+      }
+      // 分组秩和
+      const rankA = allVals.filter(x => x.g === 0).reduce((s, item) => s + rankMap[item.origIdx], 0);
+      const rankB = allVals.filter(x => x.g === 1).reduce((s, item) => s + rankMap[item.origIdx], 0);
+      const U1 = rankA - a.length * (a.length + 1) / 2;
+      const U2 = rankB - b.length * (b.length + 1) / 2;
+      const U = Math.min(U1, U2);
+      const n1 = a.length, n2 = b.length;
+      const meanU = n1 * n2 / 2;
+      const varU = n1 * n2 * (n1 + n2 + 1) / 24;
+      // 连续性修正
+      const z = (U + 0.5 - meanU) / Math.sqrt(varU);
+      const p = 2 * (1 - normalCDF(Math.abs(z)));
+      const r = Math.abs(z) / Math.sqrt(n1 + n2);
+      return { U, meanU, z, p, r, n1, n2 };
+    }
+
+    // Kruskal-Wallis检验
+    function kruskalWallisTest(groups) {
+      const keys = Object.keys(groups).filter(k => groups[k].length > 0);
+      if (keys.length < 2) return null;
+      const allVals = [];
+      keys.forEach(k => groups[k].forEach(v => allVals.push({ v, g: k })));
+      allVals.sort((x, y) => x.v - y.v);
+      const rankMap = Array(allVals.length);
+      let ti = 0;
+      while (ti < allVals.length) {
+        let tj = ti;
+        while (tj < allVals.length && allVals[tj].v === allVals[ti].v) tj++;
+        const avgR = (ti + 1 + tj) / 2;
+        for (let tk = ti; tk < tj; tk++) rankMap[tk] = avgR;
+        ti = tj;
+      }
+      const N = allVals.length;
+      const groupRanks = {};
+      keys.forEach(k => {
+        groupRanks[k] = allVals.filter(x => x.g === k).reduce((s, item, idx) => {
+          const origIdx = allVals.findIndex((x, i) => i >= 0 && x.v === item.v && x.g === k && allVals.filter((a, bi) => bi < i && a.v === item.v && a.g === k).length === idx);
+          return s + rankMap[origIdx];
+        }, 0);
+      });
+      // 重新：计算每组秩和
+      const groupData = keys.map(k => allVals.filter(x => x.g === k));
+      const rankByGroup = keys.map(k => {
+        let sum = 0;
+        allVals.forEach((item, idx) => { if (item.g === k) sum += rankMap[idx]; });
+        return sum;
+      });
+      const H = (12 / (N * (N + 1))) * rankByGroup.reduce((s, rankSum, gi) => s + rankSum * rankSum / groupData[gi].length, 0) - 3 * (N + 1);
+      const df = keys.length - 1;
+      const p = 1 - chiSquareCDF(H, df);
+      // epsilon-squared
+      const etaSq = (H - df) / (N - 1);
+      return { H, df, p, etaSq, n: N };
+    }
+
+    // Friedman检验
+    function friedmanTest(dataMatrix) {
+      // dataMatrix: 行=样本，列=处理组
+      const rows = dataMatrix.length;
+      const cols = dataMatrix[0] ? dataMatrix[0].length : 0;
+      if (rows < 2 || cols < 2) return null;
+      // 计算行内秩
+      const rankMatrix = dataMatrix.map(row => {
+        const indexed = row.map((v, j) => ({ v, j }));
+        indexed.sort((a, b) => a.v - b.v);
+        const ranks = Array(row.length);
+        let ti = 0;
+        while (ti < indexed.length) {
+          let tj = ti;
+          while (tj < indexed.length && indexed[tj].v === indexed[ti].v) tj++;
+          const avgR = (ti + 1 + tj) / 2;
+          for (let tk = ti; tk < tj; tk++) ranks[indexed[tk].j] = avgR;
+          ti = tj;
+        }
+        return ranks;
+      });
+      const colRanks = Array(cols).fill(0);
+      rankMatrix.forEach(row => row.forEach((r, j) => { colRanks[j] += r; }));
+      const n = rows, k = cols;
+      const meanRank = k * (k + 1) / 2;
+      const chiSq = (12 * colRanks.reduce((s, cr) => s + (cr - n * meanRank) ** 2, 0)) / (n * k * (k + 1));
+      const df = k - 1;
+      const p = 1 - chiSquareCDF(chiSq, df);
+      // Kendall's W
+      const W = chiSq / (n * (k - 1));
+      return { chiSq, df, p, W, n, k };
+    }
+
+    // 卡方独立性检验
+    function chiSquareTest(col1, col2) {
+      const freq = {};
+      const levels1 = [], levels2 = [];
+      col1.forEach(v => { const k = String(v ?? ''); if (!freq[k]) { freq[k] = {}; levels1.push(k); } });
+      col2.forEach(v => { const k = String(v ?? ''); levels1.forEach(l1 => { if (freq[l1][k] === undefined) freq[l1][k] = 0; }); levels2.push(k); });
+      const uniq2 = [...new Set(levels2)];
+      levels1.forEach(l1 => uniq2.forEach(l2 => { if (freq[l1][l2] === undefined) freq[l1][l2] = 0; }));
+      col1.forEach((v1, i) => { freq[String(v1 ?? '')][String(col2[i] ?? '')]++; });
+      const rowTotals = {};
+      const colTotals = {};
+      let grand = 0;
+      levels1.forEach(r => { rowTotals[r] = 0; uniq2.forEach(c => { rowTotals[r] += freq[r][c]; grand += freq[r][c]; }); });
+      uniq2.forEach(c => { colTotals[c] = 0; levels1.forEach(r => { colTotals[c] += freq[r][c]; }); });
+      // 计算卡方统计量
+      let chiSq = 0;
+      levels1.forEach(r => uniq2.forEach(c => {
+        const observed = freq[r][c];
+        const expected = (rowTotals[r] * colTotals[c]) / grand;
+        if (expected > 0) chiSq += (observed - expected) ** 2 / expected;
+      }));
+      const df = (levels1.length - 1) * (uniq2.length - 1);
+      const p = df > 0 ? 1 - chiSquareCDF(chiSq, df) : 1;
+      // Cramér's V
+      const n = grand;
+      const minDim = Math.min(levels1.length, uniq2.length) - 1;
+      const cramersV = minDim > 0 ? Math.sqrt(chiSq / (n * minDim)) : 0;
+      // 构建列联表
+      const contingencyRows = levels1.map(r => [r, ...uniq2.map(c => freq[r][c])]);
+      return { chiSq, df, p, cramersV, contingencyRows, colLabels: uniq2, rowLabels: levels1, n };
+    }
+
+    // McNemar检验（配对分类数据）
+    function mcnemarTest(col1, col2) {
+      if (col1.length !== col2.length) return null;
+      let b = 0, c = 0;
+      col1.forEach((v1, i) => {
+        const v2 = col2[i];
+        const a1 = String(v1 ?? ''), a2 = String(v2 ?? '');
+        if (a1 === '1' || a1 === 'true' || a1 === '是' || a1 === 'yes') {
+          if (a2 === '0' || a2 === 'false' || a2 === '否' || a2 === 'no') b++;
+        } else {
+          if (a2 === '1' || a2 === 'true' || a2 === '是' || a2 === 'yes') c++;
+        }
+      });
+      if (b + c === 0) return { chiSq: 0, p: 1, b, c, n: col1.length };
+      const chiSq = (Math.abs(b - c) - 1) ** 2 / (b + c);
+      const p = 1 - chiSquareCDF(chiSq, 1);
+      return { chiSq, df: 1, p, b, c, n: col1.length };
+    }
+
+    /* ========== AI 相关函数 ========== */
+    const DEFAULT_AI_CONFIG = { apiKey: '', baseUrl: 'https://api.anthropic.com', model: 'claude-sonnet-4-6', enabled: false };
+
+    function loadAiConfig() {
+      try { const s = localStorage.getItem('excel-ai-config'); return s ? { ...DEFAULT_AI_CONFIG, ...JSON.parse(s) } : DEFAULT_AI_CONFIG; } catch { return DEFAULT_AI_CONFIG; }
+    }
+    function saveAiConfig(cfg) { try { localStorage.setItem('excel-ai-config', JSON.stringify(cfg)); } catch {} }
+    function clearAiConfig() { try { localStorage.removeItem('excel-ai-config'); } catch {} }
+
+    async function callAi(config, systemPrompt, userPrompt, onStream) {
+      if (!config.apiKey) throw new Error('请先配置 API Key');
+      const url = `${config.baseUrl.replace(/\/+$/, '')}/v1/messages`;
+      const body = JSON.stringify({ model: config.model, max_tokens: 4096, system: [{ type: 'text', text: systemPrompt }], messages: [{ role: 'user', content: userPrompt }], stream: !!onStream });
+      const resp = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-api-key': config.apiKey, 'anthropic-version': '2023-06-01' }, body });
+      if (!resp.ok) { const t = await resp.text().catch(() => ''); throw new Error(`API 请求失败 (${resp.status}): ${t || resp.statusText}`); }
+      if (onStream && resp.body) {
+        const reader = resp.body.getReader(), decoder = new TextDecoder();
+        let full = '';
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunks = decoder.decode(value, { stream: true }).split('\n').filter(l => l.startsWith('data: '));
+          for (const chunk of chunks) {
+            try {
+              const obj = JSON.parse(chunk.slice(6));
+              if (obj.type === 'content_block_delta' && obj.delta?.text) { full += obj.delta.text; onStream(full); }
+            } catch {}
+          }
+        }
+        return full;
+      }
+      const json = await resp.json();
+      return json.content?.map(c => c.type === 'text' ? c.text : '').join('').trim() || '';
+    }
+
+    const MODEL_OPTIONS = [
+      { value: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6' },
+      { value: 'claude-sonnet-4-5', label: 'Claude Sonnet 4.5' },
+      { value: 'claude-haiku-4-5', label: 'Claude Haiku 4.5' },
+      { value: 'deepseek-v4-flash', label: 'DeepSeek-V4-Flash' },
+      { value: '__custom__', label: '自定义模型...' },
+    ];
+
+    function parsePromptToType(text) {
+      const t = text.toLowerCase();
+      if (t.includes('描述')) return 'descriptive';
+      if (t.includes('单样')) return 'oneSample';
+      if (t.includes('双样') || t.includes('两样')) return 'twoSample';
+      if (t.includes('多元') || (t.includes('多') && t.includes('回归'))) return 'multipleRegression';
+      if (t.includes('逻辑')) return 'logisticRegression';
+      if (t.includes('相关')) return 'correlation';
+      if (t.includes('方差') || t.includes('anova')) return 'anova';
+      if (t.includes('回归')) return 'regression';
+      if (t.includes('聚类')) return 'clustering';
+      return 'descriptive';
+    }
+
+    /* ========== 可折叠面板组件 ========== */
+    function CollapsiblePanel({ step, title, defaultOpen = true, children }) {
+      const [open, setOpen] = useState(defaultOpen);
+      // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (
+        <section className="panel">
+          <div className="panel-header" onClick={() => setOpen(!open)}>
+            <h2><span className="step-badge">{step}</span>{title}</h2>
+            <span className={`collapse-icon ${open ? '' : 'collapsed'}`}>▼</span>
+          </div>
+          <div className={`panel-body ${open ? '' : 'hidden'}`}>{children}</div>
+        </section>
+      );
+    }
+
+    /* ========== 数据清洗组件 ========== */
+    function DataCleaningPanel({ data, columns, numericColumns, categoricalColumns, onDataChange, columnInfo, currentSheet, setColumnInfo }) {
+      const [cleanLog, setCleanLog] = useState([]);
+      const addLog = (msg) => setCleanLog(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
+
+      const missingStats = useMemo(() => {
+        if (!data || data.length === 0) return [];
+        return columns.map(col => {
+          const missing = data.filter(r => r[col] == null || `${r[col]}`.trim() === '').length;
+          return { col, missing, total: data.length, pct: data.length > 0 ? (missing / data.length * 100) : 0 };
+        }).filter(s => s.missing > 0);
+      }, [data, columns]);
+
+      const fillMissing = (col, method, customVal) => {
+        const newData = data.map(row => {
+          const val = row[col];
+          const isEmpty = val == null || `${val}`.trim() === '';
+          if (!isEmpty) return { ...row };
+          let fillVal;
+          if (method === 'mean') { const nums = data.map(r => toNumber(r[col])).filter(v => v != null); fillVal = nums.length > 0 ? mean(nums) : customVal; }
+          else if (method === 'median') { const nums = data.map(r => toNumber(r[col])).filter(v => v != null); fillVal = nums.length > 0 ? median(nums) : customVal; }
+          else if (method === 'mode') { const vals = data.map(r => r[col]).filter(v => v != null && `${v}`.trim() !== ''); fillVal = vals.length > 0 ? mode(vals) : customVal; }
+          else { fillVal = customVal; }
+          return { ...row, [col]: fillVal };
+        });
+        onDataChange(newData);
+        addLog(`列 "${col}" 缺失值已填充（${method === 'custom' ? `自定义: ${customVal}` : method}）`);
+      };
+
+      const dropMissingRows = (col) => {
+        const newData = data.filter(r => r[col] != null && `${r[col]}`.trim() !== '');
+        onDataChange(newData);
+        addLog(`删除列 "${col}" 缺失行，剩余 ${newData.length} 行`);
+      };
+
+      const outlierInfo = useMemo(() => {
+        return numericColumns.map(col => {
+          const vals = data.map(r => toNumber(r[col])).filter(v => v != null);
+          if (vals.length < 4) return { col, outliers: [], q1: 0, q3: 0 };
+          const q1 = quantile(vals, 0.25), q3 = quantile(vals, 0.75);
+          const iqr = q3 - q1;
+          const lower = q1 - 1.5 * iqr, upper = q3 + 1.5 * iqr;
+          const outliers = vals.filter(v => v < lower || v > upper);
+          return { col, outliers, q1, q3, lower, upper, count: outliers.length };
+        }).filter(o => o.count > 0);
+      }, [data, numericColumns]);
+
+      const removeOutliers = (col) => {
+        const info = outlierInfo.find(o => o.col === col);
+        if (!info) return;
+        const newData = data.filter(r => { const v = toNumber(r[col]); return v == null || (v >= info.lower && v <= info.upper); });
+        onDataChange(newData);
+        addLog(`列 "${col}" 已删除 ${info.count} 个异常值，剩余 ${newData.length} 行`);
+      };
+
+      const replaceOutliers = (col) => {
+        const info = outlierInfo.find(o => o.col === col);
+        if (!info) return;
+        const newData = data.map(r => {
+          const v = toNumber(r[col]);
+          if (v == null) return { ...row };
+          if (v < info.lower) return { ...r, [col]: info.lower };
+          if (v > info.upper) return { ...r, [col]: info.upper };
+          return { ...r };
+        });
+        onDataChange(newData);
+        addLog(`列 "${col}" 异常值已替换为边界值`);
+      };
+
+      const duplicateCount = useMemo(() => {
+        if (!data || data.length === 0) return 0;
+        const seen = new Set();
+        let dupes = 0;
+        data.forEach(r => { const key = JSON.stringify(r); if (seen.has(key)) dupes++; else seen.add(key); });
+        return dupes;
+      }, [data]);
+
+      const removeDuplicates = () => {
+        const seen = new Set();
+        const newData = data.filter(r => { const key = JSON.stringify(r); if (seen.has(key)) return false; seen.add(key); return true; });
+        onDataChange(newData);
+        addLog(`去重完成：删除 ${data.length - newData.length} 行重复，剩余 ${newData.length} 行`);
+      };
+
+      const convertType = (col, fromType, toType) => {
+        const newData = data.map(r => {
+          if (toType === 'numeric' && fromType === 'categorical') { const n = toNumber(r[col]); return n != null ? { ...r, [col]: n } : { ...r, [col]: r[col] }; }
+          if (toType === 'categorical' && fromType === 'numeric') { return { ...r, [col]: r[col] != null ? String(r[col]) : r[col] }; }
+          return { ...r };
+        });
+        if (setColumnInfo && columnInfo && currentSheet) {
+          const newInfo = { ...columnInfo };
+          if (toType === 'numeric') {
+            newInfo[currentSheet] = { ...newInfo[currentSheet], numericColumns: [...(newInfo[currentSheet]?.numericColumns || []).filter(c => c !== col), col], categoricalColumns: (newInfo[currentSheet]?.categoricalColumns || []).filter(c => c !== col) };
+          } else {
+            newInfo[currentSheet] = { ...newInfo[currentSheet], categoricalColumns: [...(newInfo[currentSheet]?.categoricalColumns || []).filter(c => c !== col), col], numericColumns: (newInfo[currentSheet]?.numericColumns || []).filter(c => c !== col) };
+          }
+          setColumnInfo(newInfo);
+        }
+        onDataChange(newData);
+        addLog(`列 "${col}" 已从${fromType === 'numeric' ? '数值' : '分类'}转为${toType === 'numeric' ? '数值' : '分类'}`);
+      };
+
+      const [filterCol, setFilterCol] = useState('');
+      const [filterOp, setFilterOp] = useState('eq');
+      const [filterVal, setFilterVal] = useState('');
+      const [sortCol, setSortCol] = useState('');
+      const [sortDir, setSortDir] = useState('asc');
+
+      const applyFilter = () => {
+        if (!filterCol || !filterVal) return;
+        let newData;
+        const isNum = numericColumns.includes(filterCol);
+        if (isNum) {
+          const target = Number(filterVal);
+          newData = data.filter(r => { const v = toNumber(r[filterCol]); if (v == null) return false; switch (filterOp) { case 'eq': return v === target; case 'ne': return v !== target; case 'gt': return v > target; case 'lt': return v < target; case 'gte': return v >= target; case 'lte': return v <= target; default: return true; } });
+        } else {
+          newData = data.filter(r => { const v = String(r[filterCol] ?? ''); switch (filterOp) { case 'eq': return v === filterVal; case 'ne': return v !== filterVal; case 'contains': return v.includes(filterVal); default: return true; } });
+        }
+        onDataChange(newData);
+        addLog(`筛选：${filterCol} ${filterOp} ${filterVal}，剩余 ${newData.length} 行`);
+      };
+
+      const applySort = () => {
+        if (!sortCol) return;
+        const isNum = numericColumns.includes(sortCol);
+        const sorted = [...data].sort((a, b) => { const va = a[sortCol], vb = b[sortCol]; let cmp; if (isNum) { cmp = (toNumber(va) ?? -Infinity) - (toNumber(vb) ?? -Infinity); } else { cmp = String(va ?? '').localeCompare(String(vb ?? '')); } return sortDir === 'asc' ? cmp : -cmp; });
+        onDataChange(sorted);
+        addLog(`排序：${sortCol} ${sortDir === 'asc' ? '升序' : '降序'}`);
+      };
+
+      if (!data || data.length === 0) return null;
+      // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (
+        <div>
+          <div className="clean-section">
+            <h3>📋 缺失值处理</h3>
+            {missingStats.length === 0 ? (
+              <div style={{ color: 'var(--success)', fontSize: '.9rem' }}>✅ 无缺失值</div>
+            ) : (
+              <div>
+                <div className="clean-missing-grid" style={{ marginBottom: 8, fontWeight: 600, color: 'var(--gray-500)', fontSize: '.8rem' }}>
+                  <span>列名</span><span>缺失占比</span><span>缺失数</span><span>操作</span>
+                </div>
+                {missingStats.map(s => (
+                  <div key={s.col} className="clean-missing-grid">
+                    <span className="col-name">{s.col}</span>
+                    <div className="missing-bar"><div className="missing-bar-fill" style={{ width: `${s.pct}%` }}></div></div>
+                    <span className="missing-count">{s.missing}/{s.total}</span>
+                    <div className="missing-action" style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                      <button className="btn btn-outline btn-sm" onClick={() => dropMissingRows(s.col)} title="删除含缺失行">🗑 删除行</button>
+                      <button className="btn btn-outline btn-sm" onClick={() => fillMissing(s.col, 'mean')} title="均值填充">均值</button>
+                      <button className="btn btn-outline btn-sm" onClick={() => fillMissing(s.col, 'median')} title="中位数填充">中位</button>
+                      <button className="btn btn-outline btn-sm" onClick={() => fillMissing(s.col, 'custom', 0)} title="自定义填充0">填0</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="clean-section">
+            <h3>⚠️ 异常值检测 (IQR)</h3>
+            {outlierInfo.length === 0 ? (
+              <div style={{ color: 'var(--success)', fontSize: '.9rem' }}>✅ 未检测到异常值</div>
+            ) : (
+              <table className="outlier-table">
+                <thead><tr><th>列</th><th>异常数</th><th>范围</th><th>操作</th></tr></thead>
+                <tbody>
+                  {outlierInfo.map(o => (
+                    <tr key={o.col}>
+                      <td>{o.col}</td>
+                      <td className="outlier-val">{o.count}</td>
+                      <td style={{ fontSize: '.8rem' }}>[{fmt(o.lower)}, {fmt(o.upper)}]</td>
+                      <td>
+                        <button className="btn btn-outline btn-sm" onClick={() => removeOutliers(o.col)}>删除</button>
+                        <button className="btn btn-outline btn-sm" onClick={() => replaceOutliers(o.col)} style={{ marginLeft: 4 }}>替换为边界</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+
+          <div className="clean-section">
+            <h3>🔄 去重</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ fontSize: '.9rem', color: duplicateCount > 0 ? 'var(--warning)' : 'var(--success)' }}>
+                {duplicateCount > 0 ? `⚠ 检测到 ${duplicateCount} 行重复` : '✅ 无重复行'}
+              </span>
+              {duplicateCount > 0 && <button className="btn btn-outline btn-sm" onClick={removeDuplicates}>一键去重</button>}
+            </div>
+          </div>
+
+          <div className="clean-section">
+            <h3>🔄 类型转换</h3>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {numericColumns.map(col => (
+                <button key={col} className="btn btn-outline btn-sm" onClick={() => convertType(col, 'numeric', 'categorical')}>{col} (# → ■)</button>
+              ))}
+              {categoricalColumns.map(col => (
+                <button key={col} className="btn btn-outline btn-sm" onClick={() => convertType(col, 'categorical', 'numeric')}>{col} (■ → #)</button>
+              ))}
+            </div>
+          </div>
+
+          <div className="clean-section">
+            <h3>🔍 筛选与排序</h3>
+            <div className="filter-row">
+              <select value={filterCol} onChange={e => setFilterCol(e.target.value)}><option value="">选择列</option>{columns.map(c => <option key={c} value={c}>{c}</option>)}</select>
+              <select value={filterOp} onChange={e => setFilterOp(e.target.value)}>
+                {numericColumns.includes(filterCol) ? (<><option value="eq">=</option><option value="ne">≠</option><option value="gt">&gt;</option><option value="lt">&lt;</option><option value="gte">≥</option><option value="lte">≤</option></>) : (<><option value="eq">等于</option><option value="ne">不等于</option><option value="contains">包含</option></>)}
+              </select>
+              <input type="text" value={filterVal} onChange={e => setFilterVal(e.target.value)} placeholder="值" style={{ width: 120 }} />
+              <button className="btn btn-primary btn-sm" onClick={applyFilter}>筛选</button>
+            </div>
+            <div className="filter-row">
+              <select value={sortCol} onChange={e => setSortCol(e.target.value)}><option value="">选择排序列</option>{columns.map(c => <option key={c} value={c}>{c}</option>)}</select>
+              <select value={sortDir} onChange={e => setSortDir(e.target.value)}><option value="asc">升序</option><option value="desc">降序</option></select>
+              <button className="btn btn-primary btn-sm" onClick={applySort}>排序</button>
+            </div>
+          </div>
+
+          {cleanLog.length > 0 && (
+            <div style={{ marginTop: 12, padding: 12, background: '#1e1e2e', borderRadius: 'var(--radius-sm)', maxHeight: 150, overflowY: 'auto' }}>
+              <div style={{ fontSize: '.8rem', color: '#a5f3fc', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>{cleanLog.join('\n')}</div>
+              <button className="btn btn-outline btn-sm" style={{ marginTop: 8 }} onClick={() => setCleanLog([])}>清除日志</button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    /* ========== ★★★ 新增：更多统计检验面板 ★★★ ========== */
+    function StatisticalTestsPanel({ data, numericColumns, categoricalColumns, columns }) {
+      const [selectedTest, setSelectedTest] = useState(null);
+      const [testResult, setTestResult] = useState(null);
+
+      // 配对t检验字段
+      const [pairedCol1, setPairedCol1] = useState('');
+      const [pairedCol2, setPairedCol2] = useState('');
+      // Wilcoxon 字段
+      const [wilxCol1, setWilxCol1] = useState('');
+      const [wilxCol2, setWilxCol2] = useState('');
+      // Mann-Whitney 字段
+      const [mwCol1, setMwCol1] = useState('');
+      const [mwCol2, setMwCol2] = useState('');
+      // Kruskal-Wallis 字段
+      const [kwGroupCol, setKwGroupCol] = useState('');
+      const [kwTargetCol, setKwTargetCol] = useState('');
+      // Friedman 字段（多列）
+      const [friedmanCols, setFriedmanCols] = useState([]);
+      // 卡方检验字段
+      const [chiCol1, setChiCol1] = useState('');
+      const [chiCol2, setChiCol2] = useState('');
+      // McNemar 字段
+      const [mcnemarCol1, setMcnemarCol1] = useState('');
+      const [mcnemarCol2, setMcnemarCol2] = useState('');
+
+      const runTest = () => {
+        if (!selectedTest || !data || data.length === 0) return;
+        const valid = data.filter(r => r != null);
+
+        switch (selectedTest) {
+          case 'pairedT': {
+            if (!pairedCol1 || !pairedCol2) { setTestResult({ error: '请选择两个配对列' }); return; }
+            const x = valid.map(r => toNumber(r[pairedCol1])).filter(v => v != null);
+            const y = valid.map(r => toNumber(r[pairedCol2])).filter(v => v != null);
+            if (x.length !== y.length) { setTestResult({ error: '两列数据量必须相等（配对数据）' }); return; }
+            if (x.length < 3) { setTestResult({ error: '配对样本至少需要3对数据' }); return; }
+            const result = pairedTTest(x, y);
+            if (!result) { setTestResult({ error: '计算失败，数据不足' }); return; }
+            setTestResult(result);
+            break;
+          }
+          case 'wilcoxon': {
+            if (!wilxCol1 || !wilxCol2) { setTestResult({ error: '请选择两个配对列' }); return; }
+            const x = valid.map(r => toNumber(r[wilxCol1])).filter(v => v != null);
+            const y = valid.map(r => toNumber(r[wilxCol2])).filter(v => v != null);
+            if (x.length !== y.length) { setTestResult({ error: '两列数据量必须相等（配对数据）' }); return; }
+            if (x.length < 5) { setTestResult({ error: 'Wilcoxon 检验至少需要5对数据' }); return; }
+            const result = wilcoxonSignedRankTest(x, y);
+            if (!result) { setTestResult({ error: '计算失败' }); return; }
+            setTestResult(result);
+            break;
+          }
+          case 'mannWhitney': {
+            if (!mwCol1 || !mwCol2) { setTestResult({ error: '请选择两个独立数值列' }); return; }
+            const a = valid.map(r => toNumber(r[mwCol1])).filter(v => v != null);
+            const b = valid.map(r => toNumber(r[mwCol2])).filter(v => v != null);
+            if (a.length < 1 || b.length < 1) { setTestResult({ error: '每组至少需要1个数据' }); return; }
+            const result = mannWhitneyUTest(a, b);
+            if (!result) { setTestResult({ error: '计算失败' }); return; }
+            setTestResult(result);
+            break;
+          }
+          case 'kruskalWallis': {
+            if (!kwGroupCol || !kwTargetCol) { setTestResult({ error: '请选择分组列和目标列' }); return; }
+            const groups = {};
+            valid.forEach(r => { const g = String(r[kwGroupCol] ?? ''); if (!groups[g]) groups[g] = []; const v = toNumber(r[kwTargetCol]); if (v != null) groups[g].push(v); });
+            const result = kruskalWallisTest(groups);
+            if (!result) { setTestResult({ error: '计算失败，至少需要2组数据，每组至少1个数据' }); return; }
+            setTestResult(result);
+            break;
+          }
+          case 'friedman': {
+            if (!Array.isArray(friedmanCols) || friedmanCols.length < 2) { setTestResult({ error: 'Friedman 检验需要至少选择2列（处理组）' }); return; }
+            const matrix = valid.map(r => friedmanCols.map(c => toNumber(r[c])).filter(v => v != null));
+            const result = friedmanTest(matrix);
+            if (!result) { setTestResult({ error: '计算失败' }); return; }
+            setTestResult(result);
+            break;
+          }
+          case 'chiSquare': {
+            if (!chiCol1 || !chiCol2) { setTestResult({ error: '请选择两个分类列' }); return; }
+            const col1 = valid.map(r => r[chiCol1]);
+            const col2 = valid.map(r => r[chiCol2]);
+            const result = chiSquareTest(col1, col2);
+            if (!result) { setTestResult({ error: '计算失败' }); return; }
+            setTestResult(result);
+            break;
+          }
+          case 'mcnemar': {
+            if (!mcnemarCol1 || !mcnemarCol2) { setTestResult({ error: '请选择两个配对分类列' }); return; }
+            const col1 = valid.map(r => r[mcnemarCol1]);
+            const col2 = valid.map(r => r[mcnemarCol2]);
+            const result = mcnemarTest(col1, col2);
+            if (!result) { setTestResult({ error: '计算失败' }); return; }
+            setTestResult(result);
+            break;
+          }
+        }
+      };
+
+      const testDefs = [
+        { key: 'pairedT', name: '配对 t 检验', desc: '检验配对样本均值差异', badge: '参数', badgeClass: 'test-badge-param', hint: '选2列：前测/后测、实验/对照', cols: 2 },
+        { key: 'wilcoxon', name: 'Wilcoxon 符号秩', desc: '非参数配对检验', badge: '非参数', badgeClass: 'test-badge-nonparam', hint: '选2列（配对），数据不满足正态时使用', cols: 2 },
+        { key: 'mannWhitney', name: 'Mann-Whitney U', desc: '两组独立样本非参数检验', badge: '非参数', badgeClass: 'test-badge-nonparam', hint: '选2列（独立），替代独立t检验', cols: 2 },
+        { key: 'kruskalWallis', name: 'Kruskal-Wallis', desc: '多组独立样本非参数检验', badge: '非参数', badgeClass: 'test-badge-nonparam', hint: '选分组列+目标列，替代单因素ANOVA', cols: 2 },
+        { key: 'friedman', name: 'Friedman 检验', desc: '多组配对样本非参数检验', badge: '非参数', badgeClass: 'test-badge-nonparam', hint: '选多个列（处理组），替代重复测量ANOVA', cols: 'multi' },
+        { key: 'chiSquare', name: '卡方独立性检验', desc: '分类变量关联性检验', badge: '类别', badgeClass: 'test-badge-categorical', hint: '选2个分类列，检验列联表独立性', cols: 2 },
+        { key: 'mcnemar', name: 'McNemar 检验', desc: '配对分类数据检验', badge: '类别', badgeClass: 'test-badge-categorical', hint: '选2列（配对），检验二分标志变化', cols: 2 },
+      ];
+
+      const interpret = (result) => {
+        if (!result) return '';
+        if (result.error) return result.error;
+        const sig = result.p !== undefined && result.p < 0.05;
+        const sigText = sig ? '显著差异' : '无显著差异';
+        const pText = result.p !== undefined ? `p=${fmt(result.p)}` : '';
+        switch (selectedTest) {
+          case 'pairedT':
+            return `【结论】两组配对数据均值差异${sigText}（${pText}）。平均差值：${fmt(result.dMean)}，标准差：${fmt(result.dStd)}。效应量 Cohen's d：${fmt(result.cohensD)}（${Math.abs(result.cohensD) < 0.2 ? '微弱' : Math.abs(result.cohensD) < 0.5 ? '小' : Math.abs(result.cohensD) < 0.8 ? '中' : '大'}效应）。`;
+          case 'wilcoxon':
+            return `【结论】两组配对数据分布差异${sigText}（${pText}）。T统计量：${fmt(result.T)}，参考值：${fmt(result.meanT)}。效应量 r：${fmt(result.r)}（${result.r < 0.1 ? '微弱' : result.r < 0.3 ? '小' : result.r < 0.5 ? '中' : '大'}效应）。`;
+          case 'mannWhitney':
+            return `【结论】两组独立数据分布差异${sigText}（${pText}）。U统计量：${fmt(result.U)}，平均U：${fmt(result.meanU)}。效应量 r：${fmt(result.r)}（${result.r < 0.1 ? '微弱' : result.r < 0.3 ? '小' : result.r < 0.5 ? '中' : '大'}效应）。`;
+          case 'kruskalWallis':
+            return `【结论】多组独立数据分布差异${sigText}（${pText}）。H统计量：${fmt(result.H)}，自由度：${result.df}。效应量 η²：${fmt(result.etaSq)}（${result.etaSq < 0.01 ? '微弱' : result.etaSq < 0.06 ? '小' : result.etaSq < 0.14 ? '中' : '大'}效应）。`;
+          case 'friedman':
+            return `【结论】多组配对数据分布差异${sigText}（${pText}）。χ² 统计量：${fmt(result.chiSq)}，自由度：${result.df}。Kendall's W：${fmt(result.W)}（${result.W < 0.1 ? '微弱' : result.W < 0.3 ? '小' : result.W < 0.5 ? '中' : '大'}一致性）。`;
+          case 'chiSquare':
+            return `【结论】两分类变量${sig ? '存在' : '不存在'}显著关联（${pText}）。χ² 统计量：${fmt(result.chiSq)}，自由度：${result.df}。Cramér's V：${fmt(result.cramersV)}（${result.cramersV < 0.1 ? '微弱' : result.cramersV < 0.3 ? '弱' : result.cramersV < 0.5 ? '中等' : '强'}关联）。`;
+          case 'mcnemar':
+            return `【结论】配对分类标志变化${sigText}（${pText}）。χ² 统计量：${fmt(result.chiSq)}。不一致数：B=${result.b}（变化1→2），C=${result.c}（变化2→1）。`;
+          default:
+            return '';
+        }
+      };
+
+      const effectColor = (v) => {
+        if (selectedTest === 'chiSquare') return v >= 0.5 ? '#059669' : v >= 0.3 ? '#4f46e5' : v >= 0.1 ? '#d97706' : '#9ca3af';
+        return '#4f46e5';
+      };
+
+      const renderResult = () => {
+        if (!testResult) return null;
+        if (testResult.error) return <div className="alert alert-error" style={{ marginTop: 12 }}><span>⚠️</span><span>{testResult.error}</span></div>;
+
+        const items = [];
+        switch (selectedTest) {
+          case 'pairedT':
+            items.push({ key: '配对列 1', val: pairedCol1 }, { key: '配对列 2', val: pairedCol2 }, { key: '样本量 (n)', val: data.length }, { key: '平均差值', val: fmt(testResult.dMean) }, { key: '差值标准差', val: fmt(testResult.dStd) }, { key: 't 统计量', val: fmt(testResult.t) }, { key: '自由度 (df)', val: testResult.df }, { key: 'p 值', val: fmt(testResult.p), sig: testResult.p < 0.05 }, { key: "Cohen's d", val: fmt(testResult.cohensD) });
+            break;
+          case 'wilcoxon':
+            items.push({ key: '配对列 1', val: wilxCol1 }, { key: '配对列 2', val: wilxCol2 }, { key: '样本量', val: testResult.n }, { key: 'T 统计量', val: fmt(testResult.T) }, { key: '期望 T', val: fmt(testResult.meanT) }, { key: 'Z 值', val: fmt(testResult.z) }, { key: 'p 值', val: fmt(testResult.p), sig: testResult.p < 0.05 }, { key: '效应量 r', val: fmt(testResult.r) });
+            break;
+          case 'mannWhitney':
+            items.push({ key: '组 1 列', val: mwCol1 }, { key: '组 2 列', val: mwCol2 }, { key: '组 1 样本量', val: testResult.n1 }, { key: '组 2 样本量', val: testResult.n2 }, { key: 'U 统计量', val: fmt(testResult.U) }, { key: '期望 U', val: fmt(testResult.meanU) }, { key: 'Z 值', val: fmt(testResult.z) }, { key: 'p 值', val: fmt(testResult.p), sig: testResult.p < 0.05 }, { key: '效应量 r', val: fmt(testResult.r) });
+            break;
+          case 'kruskalWallis':
+            items.push({ key: '分组列', val: kwGroupCol }, { key: '目标列', val: kwTargetCol }, { key: '总样本量', val: testResult.n }, { key: 'H 统计量', val: fmt(testResult.H) }, { key: '自由度', val: testResult.df }, { key: 'p 值', val: fmt(testResult.p), sig: testResult.p < 0.05 }, { key: '效应量 η²', val: fmt(testResult.etaSq) });
+            break;
+          case 'friedman':
+            items.push({ key: '处理组列', val: friedmanCols.join(', ') }, { key: '样本量（行）', val: testResult.n }, { key: '处理组数', val: testResult.k }, { key: 'χ² 统计量', val: fmt(testResult.chiSq) }, { key: '自由度', val: testResult.df }, { key: 'p 值', val: fmt(testResult.p), sig: testResult.p < 0.05 }, { key: "Kendall's W", val: fmt(testResult.W) });
+            break;
+          case 'chiSquare':
+            items.push({ key: '列 1（行变量）', val: chiCol1 }, { key: '列 2（列变量）', val: chiCol2 }, { key: '总样本量', val: testResult.n }, { key: 'χ² 统计量', val: fmt(testResult.chiSq) }, { key: '自由度', val: testResult.df }, { key: 'p 值', val: fmt(testResult.p), sig: testResult.p < 0.05 }, { key: "Cramér's V", val: fmt(testResult.cramersV) });
+            break;
+          case 'mcnemar':
+            items.push({ key: '列 1（基线）', val: mcnemarCol1 }, { key: '列 2（后续）', val: mcnemarCol2 }, { key: '总配对数', val: testResult.n }, { key: 'χ² 统计量', val: fmt(testResult.chiSq) }, { key: '自由度', val: testResult.df }, { key: 'p 值', val: fmt(testResult.p), sig: testResult.p < 0.05 }, { key: '不一致：B（1→2）', val: testResult.b }, { key: '不一致：C（2→1）', val: testResult.c });
+            break;
+        }
+
+        // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (
+          <div>
+            <div className="test-result-box">
+              <div className="result-title">{testDefs.find(d => d.key === selectedTest)?.name} 结果</div>
+              {items.map(item => (
+                <div key={item.key} className="result-row">
+                  <span className="key">{item.key}</span>
+                  <span className={`val ${item.sig ? 'sig' : ''}`}>{item.val}</span>
+                </div>
+              ))}
+            </div>
+            <div className="test-interpretation">
+              <div className="interp-title">📋 结果解读</div>
+              <div className="interp-text">{interpret(testResult)}</div>
+            </div>
+          </div>
+        );
+      };
+
+      if (!data || data.length === 0) return null;
+
+      // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (
+        <div>
+          {/* 选择检验类型 */}
+          <div className="test-grid">
+            {testDefs.map(td => (
+              <div key={td.key} className={`test-card ${selectedTest === td.key ? 'selected' : ''}`} onClick={() => { setSelectedTest(td.key); setTestResult(null); }}>
+                <div className="test-name">{td.name}</div>
+                <div className="test-desc">{td.desc}</div>
+                <span className={`test-badge ${td.badgeClass}`}>{td.badge}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* 字段配置区 */}
+          {selectedTest && (
+            <div style={{ marginBottom: 16, padding: 16, background: 'var(--gray-50)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--gray-200)' }}>
+              <div style={{ fontWeight: 600, fontSize: '.9rem', color: 'var(--gray-700)', marginBottom: 12 }}>
+                📌 {testDefs.find(d => d.key === selectedTest)?.name} — 参数配置
+              </div>
+              <div className="transform-hint">{testDefs.find(d => d.key === selectedTest)?.hint}</div>
+
+              {(selectedTest === 'pairedT' || selectedTest === 'wilcoxon') && (
+                <div className="grid-two">
+                  <div className="form-row"><label>配对列 1</label><select value={selectedTest === 'pairedT' ? pairedCol1 : wilxCol1} onChange={e => { if (selectedTest === 'pairedT') setPairedCol1(e.target.value); else setWilxCol1(e.target.value); }}><option value="">请选择</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  <div className="form-row"><label>配对列 2</label><select value={selectedTest === 'pairedT' ? pairedCol2 : wilxCol2} onChange={e => { if (selectedTest === 'pairedT') setPairedCol2(e.target.value); else setWilxCol2(e.target.value); }}><option value="">请选择</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                </div>
+              )}
+
+              {selectedTest === 'mannWhitney' && (
+                <div className="grid-two">
+                  <div className="form-row"><label>组 1 数值列</label><select value={mwCol1} onChange={e => setMwCol1(e.target.value)}><option value="">请选择</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  <div className="form-row"><label>组 2 数值列</label><select value={mwCol2} onChange={e => setMwCol2(e.target.value)}><option value="">请选择</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                </div>
+              )}
+
+              {selectedTest === 'kruskalWallis' && (
+                <div className="grid-two">
+                  <div className="form-row"><label>分组列（分类）</label><select value={kwGroupCol} onChange={e => setKwGroupCol(e.target.value)}><option value="">请选择</option>{[...categoricalColumns, ...numericColumns].map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  <div className="form-row"><label>目标列（数值）</label><select value={kwTargetCol} onChange={e => setKwTargetCol(e.target.value)}><option value="">请选择</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                </div>
+              )}
+
+              {selectedTest === 'friedman' && (
+                <div className="form-row">
+                  <label>处理组列（多选，至少2列）</label>
+                  <select multiple size={Math.min(8, numericColumns.length)} value={friedmanCols} onChange={e => setFriedmanCols(Array.from(e.target.selectedOptions, o => o.value))}>
+                    {numericColumns.map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                  <div className="transform-hint">从同一受试者的不同条件下选择数值列，每列代表一个处理组。</div>
+                </div>
+              )}
+
+              {(selectedTest === 'chiSquare' || selectedTest === 'mcnemar') && (
+                <div className="grid-two">
+                  <div className="form-row"><label>分类列 1</label><select value={selectedTest === 'chiSquare' ? chiCol1 : mcnemarCol1} onChange={e => { if (selectedTest === 'chiSquare') setChiCol1(e.target.value); else setMcnemarCol1(e.target.value); }}><option value="">请选择</option>{[...categoricalColumns, ...numericColumns].map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  <div className="form-row"><label>分类列 2</label><select value={selectedTest === 'chiSquare' ? chiCol2 : mcnemarCol2} onChange={e => { if (selectedTest === 'chiSquare') setChiCol2(e.target.value); else setMcnemarCol2(e.target.value); }}><option value="">请选择</option>{[...categoricalColumns, ...numericColumns].map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                </div>
+              )}
+
+              <button className="btn btn-primary" onClick={runTest} style={{ marginTop: 8 }}>▶ 运行检验</button>
+            </div>
+          )}
+
+          {/* 结果展示 */}
+          {testResult && renderResult()}
+        </div>
+      );
+    }
+
+    /* ========== ★★★ 新增：数据转换面板 ★★★ ========== */
+    function DataTransformationPanel({ data, columns, numericColumns, categoricalColumns, onDataChange }) {
+      const [op, setOp] = useState('math');
+      const [history, setHistory] = useState([]);
+
+      // Math ops
+      const [mathCol, setMathCol] = useState('');
+      const [mathOp, setMathOp] = useState('add');
+      const [mathConst, setMathConst] = useState('1');
+      const [mathCol2, setMathCol2] = useState('');
+      const [mathMode, setMathMode] = useState('const'); // 'const' or 'col'
+
+      // Log/exp
+      const [logCol, setLogCol] = useState('');
+      const [logOp, setLogOp] = useState('log');
+
+      // Standardization
+      const [stdCol, setStdCol] = useState('');
+      const [stdOp, setStdOp] = useState('zscore');
+
+      // Binning
+      const [binCol, setBinCol] = useState('');
+      const [binType, setBinType] = useState('equalWidth');
+      const [binNum, setBinNum] = useState('4');
+      const [binBoundStr, setBinBoundStr] = useState('');
+
+      // One-hot
+      const [oneHotCol, setOneHotCol] = useState('');
+
+      // Lag/lead
+      const [lagCol, setLagCol] = useState('');
+      const [lagAmount, setLagAmount] = useState('1');
+
+      // Cumulative
+      const [cumCol, setCumCol] = useState('');
+      const [cumOp, setCumOp] = useState('sum');
+
+      const [preview, setPreview] = useState(null);
+      const [newColName, setNewColName] = useState('');
+
+      const generateNewColName = (base) => {
+        const existing = columns.map(c => c);
+        let candidate = base;
+        let n = 1;
+        while (existing.includes(candidate)) { candidate = `${base}_${n}`; n++; }
+        return candidate;
+      };
+
+      // 计算预览
+      const computePreview = () => {
+        if (!data || data.length === 0) return;
+        let previewData = data.slice(0, 5);
+        let newCol = '';
+        let values = [];
+
+        switch (op) {
+          case 'math': {
+            if (!mathCol) return;
+            const colVals = data.map(r => toNumber(r[mathCol]));
+            if (mathMode === 'const') {
+              const c = Number(mathConst);
+              newCol = generateNewColName(`${mathCol}_${mathOp}`);
+              values = colVals.map(v => v != null ? eval(`${v} ${mathOp.replace('pow', '**')} ${c}`) : null);
+            } else {
+              if (!mathCol2) return;
+              newCol = generateNewColName(`${mathCol}_${mathOp}_${mathCol2}`);
+              const col2Vals = data.map(r => toNumber(r[mathCol2]));
+              values = colVals.map((v, i) => v != null && col2Vals[i] != null ? eval(`${v} ${mathOp} ${col2Vals[i]}`) : null);
+            }
+            break;
+          }
+          case 'logExp': {
+            if (!logCol) return;
+            const colVals = data.map(r => toNumber(r[logCol]));
+            newCol = generateNewColName(`${logCol}_${logOp}`);
+            values = colVals.map(v => {
+              if (v == null) return null;
+              switch (logOp) {
+                case 'log': return v > 0 ? Math.log(v) : null;
+                case 'log10': return v > 0 ? Math.log10(v) : null;
+                case 'sqrt': return v >= 0 ? Math.sqrt(v) : null;
+                case 'square': return v != null ? v * v : null;
+                case 'exp': return Math.exp(Math.min(v, 700));
+                default: return null;
+              }
+            });
+            break;
+          }
+          case 'standardize': {
+            if (!stdCol) return;
+            const colVals = data.map(r => toNumber(r[stdCol])).filter(v => v != null);
+            const m = mean(colVals), sd = stdev(colVals);
+            const allVals = data.map(r => toNumber(r[stdCol]));
+            newCol = generateNewColName(`${stdCol}_${stdOp}`);
+            if (stdOp === 'zscore') {
+              values = allVals.map(v => v != null ? (sd > 0 ? (v - m) / sd : 0) : null);
+            } else {
+              const mn = Math.min(...colVals), mx = Math.max(...colVals);
+              values = allVals.map(v => v != null && mx !== mn ? (v - mn) / (mx - mn) : null);
+            }
+            break;
+          }
+          case 'binning': {
+            if (!binCol) return;
+            const colVals = data.map(r => toNumber(r[binCol])).filter(v => v != null);
+            if (colVals.length === 0) return;
+            const allVals = data.map(r => toNumber(r[binCol]));
+            newCol = generateNewColName(`${binCol}_bin`);
+            if (binType === 'equalWidth') {
+              const n = parseInt(binNum) || 4;
+              const mn = Math.min(...colVals), mx = Math.max(...colVals);
+              const width = (mx - mn) / n;
+              const edges = Array.from({ length: n + 1 }, (_, i) => mn + i * width);
+              edges[n] = mx + 0.0001; // 确保包含最大值
+              values = allVals.map(v => {
+                if (v == null) return null;
+                for (let i = 0; i < n; i++) if (v >= edges[i] && v < edges[i + 1]) return `区间${i + 1} [${edges[i].toFixed(2)}-${edges[i + 1].toFixed(2)})`;
+                return `区间${n} [${edges[n - 1].toFixed(2)}-${edges[n].toFixed(2)})`;
+              });
+            } else if (binType === 'equalFreq') {
+              const n = parseInt(binNum) || 4;
+              const edges = Array.from({ length: n + 1 }, (_, i) => quantile(colVals, i / n));
+              values = allVals.map(v => {
+                if (v == null) return null;
+                for (let i = 0; i < n; i++) if (v >= edges[i] && v <= edges[i + 1]) return `区间${i + 1} [${edges[i].toFixed(2)}-${edges[i + 1].toFixed(2)})`;
+                return null;
+              });
+            } else {
+              // 自定义边界
+              const edges = binBoundStr.split(',').map(s => parseFloat(s.trim())).filter(x => !isNaN(x)).sort((a, b) => a - b);
+              if (edges.length < 2) return;
+              const labels = edges.map((e, i) => i === 0 ? `≤${e}` : i === edges.length - 1 ? `>${edges[i - 1]}` : `${edges[i - 1]}-${e}`);
+              values = allVals.map(v => {
+                if (v == null) return null;
+                for (let i = edges.length - 1; i >= 0; i--) if (v > edges[i - 1]) return labels[i];
+                return labels[0];
+              });
+            }
+            break;
+          }
+          case 'oneHot': {
+            if (!oneHotCol) return;
+            const uniqueVals = [...new Set(data.map(r => String(r[oneHotCol] ?? '')))].filter(v => v !== '');
+            const result = {};
+            uniqueVals.forEach(v => { result[generateNewColName(`${oneHotCol}_${v}`)] = data.map(r => String(r[oneHotCol] ?? '') === v ? 1 : 0); });
+            setPreview({ type: 'oneHot', data: result, labels: uniqueVals });
+            return;
+          }
+          case 'lagLead': {
+            if (!lagCol) return;
+            const allVals = data.map(r => r[lagCol]);
+            const n = parseInt(lagAmount) || 1;
+            newCol = generateNewColName(`${lagCol}_lag${n}`);
+            values = allVals.map((v, i) => i >= n ? allVals[i - n] : null);
+            break;
+          }
+          case 'cumulative': {
+            if (!cumCol) return;
+            const allVals = data.map(r => toNumber(r[cumCol]));
+            newCol = generateNewColName(`${cumCol}_${cumOp}`);
+            if (cumOp === 'sum') {
+              let s = 0;
+              values = allVals.map(v => { if (v != null) s += v; return s; });
+            } else if (cumOp === 'mean') {
+              let s = 0, c = 0;
+              values = allVals.map(v => { if (v != null) { s += v; c++; } return c > 0 ? s / c : null; });
+            } else {
+              values = allVals.map(v => v != null ? 1 : 0).reduce((acc, v, i) => { acc.push((acc[i - 1] || 0) + v); return acc; }, []);
+            }
+            break;
+          }
+        }
+
+        if (newCol && values.length > 0) {
+          setNewColName(newCol);
+          setPreview({ type: 'single', colName: newCol, values: values.map((v, i) => ({ original: data[i] && data[i][columns[0]] !== undefined ? JSON.stringify(Object.fromEntries(Object.keys(data[i]).map((k, ki) => [k, data[i][k]]).slice(0, Math.min(3, Object.keys(data[i]).length))) : '', newVal: v })) });
+        }
+      };
+
+      const applyTransform = () => {
+        if (!preview || !data) return;
+        if (preview.type === 'oneHot') {
+          const newData = data.map((row, i) => {
+            const newRow = { ...row };
+            Object.entries(preview.data).forEach(([colName, vals]) => { newRow[colName] = vals[i]; });
+            return newRow;
+          });
+          onDataChange(newData);
+          setHistory(prev => [...prev, { label: `哑变量：${preview.labels.join(', ')}`, preview: null }]);
+        } else if (preview.type === 'single') {
+          const newData = data.map((row, i) => ({ ...row, [newColName]: preview.values[i] }));
+          onDataChange(newData);
+          setHistory(prev => [...prev, { label: `新增列：${newColName}`, col: newColName, preview: null }]);
+        }
+        setPreview(null);
+        setNewColName('');
+      };
+
+      const undoTransform = (idx) => {
+        const item = history[idx];
+        if (!item) return;
+        // 简单撤销：移除历史项对应的新增列
+        // 实际应用中需要存储变换的反向操作
+        setHistory(prev => prev.filter((_, i) => i !== idx));
+      };
+
+      const opTabs = [
+        { key: 'math', label: '📐 数学运算' },
+        { key: 'logExp', label: '📊 对数/指数' },
+        { key: 'standardize', label: '⚖ 标准化/归一化' },
+        { key: 'binning', label: '📦 分箱' },
+        { key: 'oneHot', label: '🔲 哑变量编码' },
+        { key: 'lagLead', label: '⏪ 滞后/领先' },
+        { key: 'cumulative', label: '➕ 累计运算' },
+      ];
+
+      if (!data || data.length === 0) return null;
+
+      // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (
+        <div>
+          {/* 操作选择标签页 */}
+          <div className="transform-op-tabs">
+            {opTabs.map(t => (
+              <button key={t.key} className={`transform-op-tab ${op === t.key ? 'active' : ''}`} onClick={() => { setOp(t.key); setPreview(null); }}>
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {/* 各操作配置 */}
+          <div className="transform-section">
+            <h3>{opTabs.find(t => t.key === op)?.label}</h3>
+
+            {op === 'math' && (
+              <>
+                <div className="transform-hint">对数值列进行数学运算，生成新列（保留原列）。</div>
+                <div className="transform-config">
+                  <div className="form-row"><label>操作列</label><select value={mathCol} onChange={e => setMathCol(e.target.value)}><option value="">请选择数值列</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  <div className="form-row"><label>运算方式</label><select value={mathMode} onChange={e => setMathMode(e.target.value)}><option value="const">与常数运算</option><option value="col">与另一列运算</option></select></div>
+                  {mathMode === 'const' ? (
+                    <>
+                      <div className="form-row"><label>运算符</label><select value={mathOp} onChange={e => setMathOp(e.target.value)}><option value="add">加 (+)</option><option value="sub">减 (−)</option><option value="mul">乘 (×)</option><option value="div">除 (÷)</option><option value="pow">幂 (^)</option></select></div>
+                      <div className="form-row"><label>常数</label><input type="number" value={mathConst} onChange={e => setMathConst(e.target.value)} placeholder="输入数值" /></div>
+
+          {/* 暗色模式切换按钮 */}
+          <button className="dark-mode-toggle" onClick={() => setDarkMode(d => !d)} title={darkMode ? "切换到亮色模式" : "切换到暗色模式"}>
+            {darkMode ? "☀️" : "🌙"}
+          </button>
+
+                    </>
+                  ) : (
+                    <div className="form-row"><label>第二列</label><select value={mathCol2} onChange={e => setMathCol2(e.target.value)}><option value="">请选择数值列</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {op === 'logExp' && (
+              <>
+                <div className="transform-hint">对数、指数、幂变换。注意：log 类变换需要正值。</div>
+                <div className="transform-config">
+                  <div className="form-row"><label>数值列</label><select value={logCol} onChange={e => setLogCol(e.target.value)}><option value="">请选择数值列</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  <div className="form-row"><label>变换类型</label><select value={logOp} onChange={e => setLogOp(e.target.value)}><option value="log">自然对数 (ln)</option><option value="log10">常用对数 (log₁₀)</option><option value="sqrt">平方根 (√)</option><option value="square">平方 (x²)</option><option value="exp">指数 (eˣ)</option></select></div>
+                </div>
+              </>
+            )}
+
+            {op === 'standardize' && (
+              <>
+                <div className="transform-hint">数据标准化或归一化，生成无量纲的新列。</div>
+                <div className="transform-config">
+                  <div className="form-row"><label>数值列</label><select value={stdCol} onChange={e => setStdCol(e.target.value)}><option value="">请选择数值列</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  <div className="form-row"><label>方法</label><select value={stdOp} onChange={e => setStdOp(e.target.value)}><option value="zscore">Z-Score 标准化</option><option value="minmax">Min-Max 归一化</option></select></div>
+                  <div style={{ fontSize: '.8rem', color: 'var(--gray-500)', alignSelf: 'center' }}>
+                    {stdOp === 'zscore' ? '→ 转为均值0、标准差1的分布' : '→ 转为 [0, 1] 区间的分布'}
+                  </div>
+                </div>
+              </>
+            )}
+
+            {op === 'binning' && (
+              <>
+                <div className="transform-hint">将连续数值离散化为分类区间。</div>
+                <div className="transform-config">
+                  <div className="form-row"><label>数值列</label><select value={binCol} onChange={e => setBinCol(e.target.value)}><option value="">请选择数值列</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  <div className="form-row"><label>分箱方式</label><select value={binType} onChange={e => setBinType(e.target.value)}><option value="equalWidth">等宽分箱</option><option value="equalFreq">等频分箱</option><option value="custom">自定义边界</option></select></div>
+                  {binType !== 'custom' && (
+                    <div className="form-row"><label>箱数</label><input type="number" min={2} max={20} value={binNum} onChange={e => setBinNum(e.target.value)} /></div>
+                  )}
+                  {binType === 'custom' && (
+                    <div className="form-row" style={{ gridColumn: '1 / -1' }}><label>自定义边界（逗号分隔，如 10,20,30,40）</label><input type="text" value={binBoundStr} onChange={e => setBinBoundStr(e.target.value)} placeholder="10,20,30,40" /></div>
+                  )}
+                </div>
+              </>
+            )}
+
+            {op === 'oneHot' && (
+              <>
+                <div className="transform-hint">将分类变量转换为哑变量（One-Hot）编码，每个类别生成一列。</div>
+                <div className="transform-config">
+                  <div className="form-row"><label>分类列</label><select value={oneHotCol} onChange={e => setOneHotCol(e.target.value)}><option value="">请选择分类列</option>{[...categoricalColumns, ...numericColumns].map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  {oneHotCol && (() => {
+                    const unique = [...new Set(data.map(r => String(r[oneHotCol] ?? '')))].filter(v => v !== '');
+                    return <div style={{ fontSize: '.85rem', color: 'var(--gray-600)' }}>将生成 {unique.length} 个哑变量列：{unique.slice(0, 5).map(v => v).join(', ')}{unique.length > 5 ? '...' : ''}</div>;
+                  })()}
+                </div>
+              </>
+            )}
+
+            {op === 'lagLead' && (
+              <>
+                <div className="transform-hint">时间序列操作：滞后（Lag）将值向下移动，领先（Lead）向上移动。</div>
+                <div className="transform-config">
+                  <div className="form-row"><label>数值列</label><select value={lagCol} onChange={e => setLagCol(e.target.value)}><option value="">请选择数值列</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  <div className="form-row"><label>偏移量（行数）</label><input type="number" min={1} max={data.length - 1} value={lagAmount} onChange={e => setLagAmount(e.target.value)} /></div>
+                </div>
+              </>
+            )}
+
+            {op === 'cumulative' && (
+              <>
+                <div className="transform-hint">沿数据方向（从上到下）计算累计值。</div>
+                <div className="transform-config">
+                  <div className="form-row"><label>数值列</label><select value={cumCol} onChange={e => setCumCol(e.target.value)}><option value="">请选择数值列</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+                  <div className="form-row"><label>累计方式</label><select value={cumOp} onChange={e => setCumOp(e.target.value)}><option value="sum">累计求和</option><option value="mean">累计均值</option><option value="count">累计计数（非空）</option></select></div>
+                </div>
+              </>
+            )}
+
+            <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+              <button className="btn btn-outline btn-sm" onClick={computePreview}>👁 预览结果</button>
+              {preview && <button className="btn btn-primary btn-sm" onClick={applyTransform}>✅ 确认应用</button>}
+              {preview && <button className="btn btn-outline btn-sm" onClick={() => setPreview(null)}>✕ 取消</button>}
+            </div>
+          </div>
+
+          {/* 预览区 */}
+          {preview && preview.type === 'single' && (
+            <div className="transform-section" style={{ background: '#fff' }}>
+              <h3>👁 预览（前5行）</h3>
+              <div className="transform-preview">
+                <table>
+                  <thead><tr><th>#</th><th className="orig-col">{columns[0] || '原值'}</th><th className="new-col">→ {preview.colName}</th></tr></thead>
+                  <tbody>
+                    {preview.values.slice(0, 5).map((v, i) => (
+                      <tr key={i}><td>{i + 1}</td><td>{data[i] ? String(data[i][columns[0]] ?? '-') : '-'}</td><td>{v == null ? 'null' : fmt(v)}</td></tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+          {preview && preview.type === 'oneHot' && (
+            <div className="transform-section" style={{ background: '#fff' }}>
+              <h3>👁 哑变量预览（前5行）</h3>
+              <div className="transform-preview">
+                <table>
+                  <thead><tr><th>#</th>{Object.keys(preview.data).map(k => <th key={k} className="new-col">{k}</th>)}</tr></thead>
+                  <tbody>
+                {Object.values(preview.data)[0] && Object.values(preview.data)[0].slice(0, 5).map((_, i) => (
+                  <tr key={i}><td>{i + 1}</td>{Object.values(preview.data).map(vals => <td key={Math.random()}>{vals[i]}</td>)}</tr>
+                ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* 转换历史 */}
+          {history.length > 0 && (
+            <div className="transform-history">
+              <div style={{ fontWeight: 600, fontSize: '.88rem', color: 'var(--gray-600)', marginBottom: 6 }}>📜 历史操作</div>
+              {history.map((item, i) => (
+                <div key={i} className="transform-history-item">
+                  <span className="hist-label">{item.label}</span>
+                  <div className="hist-action">
+                    <button className="btn btn-danger btn-sm" onClick={() => undoTransform(i)}>↩ 撤销</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    /* ========== 数据可视化组件 ========== */
+    function DataVisualizationPanel({ data, numericColumns, categoricalColumns, columns }) {
+      const [chartType, setChartType] = useState('histogram');
+      const chartRef = useRef(null);
+      const heatmapRef = useRef(null);
+      const chartInstanceRef = useRef(null);
+
+      const [histCol, setHistCol] = useState('');
+      const [histBins, setHistBins] = useState(20);
+      const [boxCols, setBoxCols] = useState([]);
+      const [scatterX, setScatterX] = useState('');
+      const [scatterY, setScatterY] = useState('');
+      const [barCatCol, setBarCatCol] = useState('');
+      const [barNumCol, setBarNumCol] = useState('');
+      const [barAgg, setBarAgg] = useState('mean');
+      const [pieCol, setPieCol] = useState('');
+      const [heatmapCols, setHeatmapCols] = useState([]);
+      const [qqCol, setQqCol] = useState('');
+
+      useEffect(() => {
+        if (numericColumns.length > 0 && !histCol) setHistCol(numericColumns[0]);
+        if (numericColumns.length > 0 && !scatterX) setScatterX(numericColumns[0]);
+        if (numericColumns.length > 1 && !scatterY) setScatterY(numericColumns[1]);
+        if (numericColumns.length > 0 && !qqCol) setQqCol(numericColumns[0]);
+        if (categoricalColumns.length > 0 && !barCatCol) setBarCatCol(categoricalColumns[0]);
+        if (categoricalColumns.length > 0 && !pieCol) setPieCol(categoricalColumns[0]);
+        if (numericColumns.length > 0 && !barNumCol) setBarNumCol(numericColumns[0]);
+        if (numericColumns.length > 0 && boxCols.length === 0) setBoxCols(numericColumns.slice(0, Math.min(3, numericColumns.length)));
+        if (numericColumns.length >= 2 && heatmapCols.length === 0) setHeatmapCols(numericColumns.slice(0, Math.min(5, numericColumns.length)));
+      }, [numericColumns, categoricalColumns]);
+
+      const destroyChart = () => {
+        if (chartInstanceRef.current) { chartInstanceRef.current.destroy(); chartInstanceRef.current = null; }
+      };
+
+      const inverseNormalCDF = (p) => {
+        if (p <= 0) return -Infinity;
+        if (p >= 1) return Infinity;
+        if (p === 0.5) return 0;
+        const a = [-3.969683028665376e1, 2.209460984245205e2, -2.759285104469687e2, 1.383577518672690e2, -3.066479806614716e1, 2.506628277459239e0];
+        const b = [-5.447609879822406e1, 1.615858368580409e2, -1.556989798598866e2, 6.680131188771972e1, -1.328068155288572e1];
+        const c = [-7.784894002430293e-3, -3.223964580411365e-1, -2.400758277161838e0, -2.549732539343734e0, 4.374664141464968e0, 2.938163982698783e0];
+        const d = [7.784695709041462e-3, 3.224671290700398e-1, 2.445134137142996e0, 3.754408661907416e0];
+        const pLow = 0.02425, pHigh = 1 - pLow;
+        let q, r;
+        if (p < pLow) {
+          q = Math.sqrt(-2 * Math.log(p));
+          // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+        } else if (p <= pHigh) {
+          q = p - 0.5; r = q * q;
+          // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+        } else {
+          q = Math.sqrt(-2 * Math.log(1 - p));
+          return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+        }
+      };
+
+      const drawChart = useCallback(() => {
+        if (!data || data.length === 0) return;
+        destroyChart();
+        if (chartType === 'heatmap') { drawHeatmap(); return; }
+        const ctx = chartRef.current?.getContext('2d');
+        if (!ctx) return;
+        const colors = ['#4f46e5', '#7c3aed', '#059669', '#d97706', '#dc2626', '#0284c7', '#c026d3', '#ea580c', '#0d9488', '#475569'];
+
+        let config;
+        switch (chartType) {
+          case 'histogram': {
+            if (!histCol) return;
+            const vals = data.map(r => toNumber(r[histCol])).filter(v => v != null);
+            if (vals.length === 0) return;
+            const min = Math.min(...vals), max = Math.max(...vals);
+            const binWidth = (max - min) / histBins || 1;
+            const bins = Array(histBins).fill(0);
+            const labels = [];
+            vals.forEach(v => { const idx = Math.min(Math.floor((v - min) / binWidth), histBins - 1); bins[idx]++; });
+            for (let i = 0; i < histBins; i++) labels.push((min + i * binWidth).toFixed(1));
+            config = { type: 'bar', data: { labels, datasets: [{ label: histCol, data: bins, backgroundColor: colors[0] + '99', borderColor: colors[0], borderWidth: 1 }] }, options: { responsive: true, plugins: { title: { display: true, text: `${histCol} 频率分布直方图` } }, scales: { x: { title: { display: true, text: histCol } }, y: { title: { display: true, text: '频数' } } } } };
+            break;
+          }
+          case 'boxplot': {
+            if (boxCols.length === 0) return;
+            const datasets = boxCols.map((col, i) => {
+              const vals = data.map(r => toNumber(r[col])).filter(v => v != null).sort((a, b) => a - b);
+              if (vals.length === 0) return null;
+              const q1 = quantile(vals, 0.25), med = median(vals), q3 = quantile(vals, 0.75), min = Math.min(...vals), max = Math.max(...vals);
+              return { col, q1, med, q3, min, max };
+            }).filter(Boolean);
+            config = { type: 'bar', data: { labels: datasets.map(d => d.col), datasets: [
+              { label: '最小值→Q1', data: datasets.map(d => d.q1 - d.min), backgroundColor: colors[2] + '66', stack: 'box' },
+              { label: 'Q1→中位数', data: datasets.map(d => d.med - d.q1), backgroundColor: colors[0] + '99', stack: 'box' },
+              { label: '中位数→Q3', data: datasets.map(d => d.q3 - d.med), backgroundColor: colors[1] + '99', stack: 'box' },
+              { label: 'Q3→最大值', data: datasets.map(d => d.max - d.q3), backgroundColor: colors[2] + '66', stack: 'box' },
+            ] }, options: { responsive: true, indexAxis: 'y', plugins: { title: { display: true, text: '箱线图（堆叠视图）' }, tooltip: { callbacks: { label: (ctx) => { const d = datasets[ctx.dataIndex]; return d ? `最小:${fmt(d.min)} Q1:${fmt(d.q1)} 中位:${fmt(d.med)} Q3:${fmt(d.q3)} 最大:${fmt(d.max)}` : ''; } } } }, scales: { x: { stacked: true, title: { display: true, text: '值' } }, y: { stacked: true } } } };
+            break;
+          }
+          case 'scatter': {
+            if (!scatterX || !scatterY) return;
+            const pts = data.map(r => { const x = toNumber(r[scatterX]), y = toNumber(r[scatterY]); return x != null && y != null ? { x, y } : null; }).filter(Boolean);
+            config = { type: 'scatter', data: { datasets: [{ label: `${scatterX} vs ${scatterY}`, data: pts, backgroundColor: colors[0] + '88', pointRadius: 4 }] }, options: { responsive: true, plugins: { title: { display: true, text: `${scatterX} vs ${scatterY} 散点图` } }, scales: { x: { title: { display: true, text: scatterX } }, y: { title: { display: true, text: scatterY } } } } };
+            break;
+          }
+          case 'bar': {
+            if (!barCatCol || !barNumCol) return;
+            const groups = {};
+            data.forEach(r => { const g = r[barCatCol]; if (g != null) { if (!groups[g]) groups[g] = []; const v = toNumber(r[barNumCol]); if (v != null) groups[g].push(v); } });
+            const labels = Object.keys(groups);
+            const aggData = labels.map(g => barAgg === 'mean' ? mean(groups[g]) : groups[g].reduce((a, b) => a + b, 0));
+            config = { type: 'bar', data: { labels, datasets: [{ label: `${barNumCol} (${barAgg === 'mean' ? '均值' : '求和'})`, data: aggData, backgroundColor: labels.map((_, i) => colors[i % colors.length] + '99'), borderColor: labels.map((_, i) => colors[i % colors.length]), borderWidth: 1 }] }, options: { responsive: true, plugins: { title: { display: true, text: `${barCatCol} 分组 - ${barNumCol} ${barAgg === 'mean' ? '均值' : '求和'}` } }, scales: { x: { title: { display: true, text: barCatCol } }, y: { title: { display: true, text: barNumCol } } } } };
+            break;
+          }
+          case 'pie': {
+            if (!pieCol) return;
+            const freq = {};
+            data.forEach(r => { const v = r[pieCol]; if (v != null) freq[v] = (freq[v] || 0) + 1; });
+            const labels = Object.keys(freq), values = Object.values(freq);
+            config = { type: 'pie', data: { labels, datasets: [{ data: values, backgroundColor: labels.map((_, i) => colors[i % colors.length] + 'cc') }] }, options: { responsive: true, plugins: { title: { display: true, text: `${pieCol} 分布饼图` }, legend: { position: 'right' } } } };
+            break;
+          }
+          case 'qq': {
+            if (!qqCol) return;
+            const vals = data.map(r => toNumber(r[qqCol])).filter(v => v != null).sort((a, b) => a - b);
+            if (vals.length < 3) return;
+            const n = vals.length;
+            const m = mean(vals), sd = stdev(vals);
+            const pts = vals.map((v, i) => { const p = (i + 0.5) / n; const z = inverseNormalCDF(p); return { x: z, y: sd > 0 ? (v - m) / sd : 0 }; });
+            const lineData = [{ x: pts[0].x, y: pts[0].x }, { x: pts[pts.length - 1].x, y: pts[pts.length - 1].x }];
+            config = { type: 'scatter', data: { datasets: [
+              { label: 'QQ 点', data: pts, backgroundColor: colors[0] + '88', pointRadius: 3 },
+              { label: '参考线 (y=x)', data: lineData, type: 'line', borderColor: '#dc2626', borderWidth: 2, pointRadius: 0, fill: false },
+            ] }, options: { responsive: true, plugins: { title: { display: true, text: `${qqCol} Q-Q 图（正态性检验）` } }, scales: { x: { title: { display: true, text: '理论分位数' } }, y: { title: { display: true, text: '样本分位数' } } } } };
+            break;
+          }
+          default: return;
+        }
+        if (config) chartInstanceRef.current = new Chart(ctx, config);
+      }, [chartType, data, histCol, histBins, boxCols, scatterX, scatterY, barCatCol, barNumCol, barAgg, pieCol, qqCol]);
+
+      const drawHeatmap = useCallback(() => {
+        if (heatmapCols.length < 2) return;
+        const canvas = heatmapRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const n = heatmapCols.length;
+        const cellSize = Math.min(80, Math.max(40, 500 / n));
+        const labelWidth = 80;
+        const w = labelWidth + n * cellSize + 60;
+        const h = labelWidth + n * cellSize + 40;
+        canvas.width = w; canvas.height = h;
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);
+
+        const matrix = [];
+        for (let i = 0; i < n; i++) {
+          matrix[i] = [];
+          for (let j = 0; j < n; j++) {
+            if (i === j) { matrix[i][j] = 1; continue; }
+            const pairs = data.map(r => { const a = toNumber(r[heatmapCols[i]]), b = toNumber(r[heatmapCols[j]]); return a != null && b != null ? [a, b] : null; }).filter(Boolean);
+            matrix[i][j] = pairs.length > 1 ? pearsonCorr(pairs.map(p => p[0]), pairs.map(p => p[1])) : 0;
+          }
+        }
+
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            const r = matrix[i][j];
+            const x = labelWidth + j * cellSize;
+            const y = labelWidth + i * cellSize;
+            const intensity = Math.abs(r);
+            if (r >= 0) ctx.fillStyle = `rgba(79, 70, 229, ${intensity * 0.8 + 0.1})`;
+            else ctx.fillStyle = `rgba(220, 38, 38, ${intensity * 0.8 + 0.1})`;
+            ctx.fillRect(x, y, cellSize, cellSize);
+            ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.strokeRect(x, y, cellSize, cellSize);
+            ctx.fillStyle = intensity > 0.5 ? '#fff' : '#333';
+            ctx.font = `${Math.min(12, cellSize / 4)}px sans-serif`;
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(r.toFixed(2), x + cellSize / 2, y + cellSize / 2);
+          }
+        }
+
+        ctx.fillStyle = '#333'; ctx.font = `${Math.min(11, cellSize / 4)}px sans-serif`;
+        for (let i = 0; i < n; i++) {
+          ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+          ctx.fillText(heatmapCols[i].slice(0, 8), labelWidth - 4, labelWidth + i * cellSize + cellSize / 2);
+          ctx.save(); ctx.translate(labelWidth + i * cellSize + cellSize / 2, labelWidth - 4);
+          ctx.rotate(-Math.PI / 4); ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+          ctx.fillText(heatmapCols[i].slice(0, 8), 0, 0); ctx.restore();
+        }
+      }, [data, heatmapCols]);
+
+      useEffect(() => {
+        if (data && data.length > 0) drawChart();
+        // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return () => destroyChart();
+      }, [drawChart]);
+
+      if (!data || data.length === 0) return null;
+
+      const chartTypes = [
+        { key: 'histogram', label: '📊 直方图' },
+        { key: 'boxplot', label: '📦 箱线图' },
+        { key: 'scatter', label: '⚬ 散点图' },
+        { key: 'bar', label: '📊 柱状图' },
+        { key: 'pie', label: '🥧 饼图' },
+        { key: 'heatmap', label: '🔥 热力图' },
+        { key: 'qq', label: '📈 QQ图' },
+      ];
+
+      // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (
+        <div>
+          <div className="chart-type-tabs">
+            {chartTypes.map(t => (<button key={t.key} className={`chart-type-tab ${chartType === t.key ? 'active' : ''}`} onClick={() => setChartType(t.key)}>{t.label}</button>))}
+          </div>
+
+          <div className="grid-two" style={{ marginBottom: 16 }}>
+            {chartType === 'histogram' && (<><div className="form-row"><label>数值列</label><select value={histCol} onChange={e => setHistCol(e.target.value)}>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div><div className="form-row"><label>分箱数</label><input type="number" min={5} max={100} value={histBins} onChange={e => setHistBins(Number(e.target.value))} /></div></>)}
+            {chartType === 'boxplot' && (<div className="form-row" style={{ gridColumn: '1 / -1' }}><label>数值列（多选）</label><select multiple size={Math.min(6, numericColumns.length)} value={boxCols} onChange={e => setBoxCols(Array.from(e.target.selectedOptions, o => o.value))}>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>)}
+            {chartType === 'scatter' && (<><div className="form-row"><label>X 轴</label><select value={scatterX} onChange={e => setScatterX(e.target.value)}>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div><div className="form-row"><label>Y 轴</label><select value={scatterY} onChange={e => setScatterY(e.target.value)}>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div></>)}
+            {chartType === 'bar' && (<><div className="form-row"><label>分类列</label><select value={barCatCol} onChange={e => setBarCatCol(e.target.value)}>{[...categoricalColumns, ...numericColumns].map(c => <option key={c} value={c}>{c}</option>)}</select></div><div className="form-row"><label>数值列</label><select value={barNumCol} onChange={e => setBarNumCol(e.target.value)}>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div><div className="form-row"><label>聚合方式</label><select value={barAgg} onChange={e => setBarAgg(e.target.value)}><option value="mean">均值</option><option value="sum">求和</option></select></div></>)}
+            {chartType === 'pie' && (<div className="form-row"><label>分类列</label><select value={pieCol} onChange={e => setPieCol(e.target.value)}>{[...categoricalColumns, ...numericColumns].map(c => <option key={c} value={c}>{c}</option>)}</select></div>)}
+            {chartType === 'heatmap' && (<div className="form-row" style={{ gridColumn: '1 / -1' }}><label>数值列（多选）</label><select multiple size={Math.min(8, numericColumns.length)} value={heatmapCols} onChange={e => setHeatmapCols(Array.from(e.target.selectedOptions, o => o.value))}>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>)}
+            {chartType === 'qq' && (<div className="form-row"><label>数值列</label><select value={qqCol} onChange={e => setQqCol(e.target.value)}>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>)}
+          </div>
+
+          <div className="chart-canvas-wrapper">
+            {chartType === 'heatmap' ? (<canvas ref={heatmapRef} className="heatmap-canvas" />) : (<canvas ref={chartRef} />)}
+          </div>
+          <div style={{ marginTop: 12, textAlign: 'center' }}>
+            <button className="btn btn-outline btn-sm" onClick={() => {
+              const canvas = chartType === 'heatmap' ? heatmapRef.current : chartRef.current;
+              if (!canvas) return;
+              const scale = 2;
+              const offscreen = document.createElement('canvas');
+              offscreen.width = canvas.width * scale;
+              offscreen.height = canvas.height * scale;
+              const ctx2 = offscreen.getContext('2d');
+              ctx2.scale(scale, scale);
+              ctx2.fillStyle = '#fff';
+              ctx2.fillRect(0, 0, canvas.width, canvas.height);
+              ctx2.drawImage(canvas, 0, 0);
+              const link = document.createElement('a');
+              link.download = `chart-${chartType}-${Date.now()}.jpg`;
+              link.href = offscreen.toDataURL('image/jpeg', 0.95);
+              link.click();
+            }}>🖼️ 导出JPG</button>
+          </div>
+        </div>
+      );
+    }
+
+    /* ========== 透视表面板 ========== */
+    function PivotTablePanel({ data, columns, numericColumns, categoricalColumns }) {
+      const [rowField, setRowField] = useState('');
+      const [colField, setColField] = useState('');
+      const [valField, setValField] = useState('');
+      const [aggMethod, setAggMethod] = useState('sum');
+      const [pivotResult, setPivotResult] = useState(null);
+      const [sortCol, setSortCol] = useState(null);
+      const [sortDir, setSortDir] = useState('asc');
+
+      useEffect(() => {
+        if (categoricalColumns.length > 0 && !rowField) setRowField(categoricalColumns[0]);
+        if (categoricalColumns.length > 1 && !colField) setColField(categoricalColumns[1]);
+        if (numericColumns.length > 0 && !valField) setValField(numericColumns[0]);
+      }, [categoricalColumns, numericColumns]);
+
+      const generatePivot = () => {
+        if (!rowField || !valField) return;
+        const rowGroups = {};
+        const colGroups = new Set();
+        data.forEach(r => {
+          const rv = r[rowField] ?? '(空)';
+          const cv = colField ? (r[colField] ?? '(空)') : '(全部)';
+          const v = toNumber(r[valField]);
+          if (v == null) return;
+          if (!rowGroups[rv]) rowGroups[rv] = {};
+          if (!rowGroups[rv][cv]) rowGroups[rv][cv] = [];
+          rowGroups[rv][cv].push(v);
+          colGroups.add(cv);
+        });
+        const colKeys = [...colGroups].sort();
+        const rowKeys = Object.keys(rowGroups).sort();
+        const applyAgg = (arr) => {
+          if (!arr || arr.length === 0) return null;
+          switch (aggMethod) {
+            case 'sum': return arr.reduce((a, b) => a + b, 0);
+            case 'count': return arr.length;
+            case 'mean': return mean(arr);
+            case 'max': return Math.max(...arr);
+            case 'min': return Math.min(...arr);
+            default: return arr.reduce((a, b) => a + b, 0);
+          }
+        };
+        const table = rowKeys.map(rk => {
+          const row = { _row: rk };
+          colKeys.forEach(ck => { row[ck] = applyAgg(rowGroups[rk][ck]); });
+          row._total = applyAgg(colKeys.flatMap(ck => rowGroups[rk][ck] || []));
+          return row;
+        });
+        setPivotResult({ table, colKeys, rowKeys });
+      };
+
+      const sortedTable = useMemo(() => {
+        if (!pivotResult) return [];
+        const t = [...pivotResult.table];
+        if (!sortCol) return t;
+        t.sort((a, b) => {
+          const va = a[sortCol] ?? -Infinity, vb = b[sortCol] ?? -Infinity;
+          const cmp = va - vb;
+          return sortDir === 'asc' ? cmp : -cmp;
+        });
+        return t;
+      }, [pivotResult, sortCol, sortDir]);
+
+      const toggleSort = (col) => {
+        if (sortCol === col) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+        else { setSortCol(col); setSortDir('asc'); }
+      };
+
+      if (!data || data.length === 0) return null;
+      const allCatCols = [...categoricalColumns, ...numericColumns];
+      // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (
+        <div>
+          <div className="grid-four" style={{ marginBottom: 16 }}>
+            <div className="form-row"><label>行字段</label><select value={rowField} onChange={e => setRowField(e.target.value)}><option value="">选择</option>{allCatCols.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+            <div className="form-row"><label>列字段</label><select value={colField} onChange={e => setColField(e.target.value)}><option value="">无</option>{allCatCols.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+            <div className="form-row"><label>值字段</label><select value={valField} onChange={e => setValField(e.target.value)}><option value="">选择</option>{numericColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+            <div className="form-row"><label>聚合方式</label><select value={aggMethod} onChange={e => setAggMethod(e.target.value)}><option value="sum">求和</option><option value="count">计数</option><option value="mean">平均</option><option value="max">最大</option><option value="min">最小</option></select></div>
+          </div>
+          <button className="btn btn-primary btn-sm" onClick={generatePivot} disabled={!rowField || !valField}>生成透视表</button>
+          {pivotResult && sortedTable.length > 0 && (
+            <div style={{ marginTop: 16 }}>
+              <div className="table-wrapper">
+                <table>
+                  <thead><tr>
+                    <th onClick={() => toggleSort('_row')} style={{ cursor: 'pointer' }}>行字段 {sortCol === '_row' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</th>
+                    {pivotResult.colKeys.map(ck => <th key={ck} onClick={() => toggleSort(ck)} style={{ cursor: 'pointer' }}>{ck} {sortCol === ck ? (sortDir === 'asc' ? '↑' : '↓') : ''}</th>)}
+                    <th onClick={() => toggleSort('_total')} style={{ cursor: 'pointer', fontWeight: 700 }}>合计 {sortCol === '_total' ? (sortDir === 'asc' ? '↑' : '↓') : ''}</th>
+                  </tr></thead>
+                  <tbody>
+                    {sortedTable.map((row, i) => (
+                      <tr key={i}>
+                        <td style={{ fontWeight: 600 }}>{row._row}</td>
+                        {pivotResult.colKeys.map(ck => <td key={ck}>{row[ck] != null ? (typeof row[ck] === 'number' ? row[ck].toFixed(2) : row[ck]) : '-'}</td>)}
+                        <td style={{ fontWeight: 600 }}>{row._total != null ? (typeof row._total === 'number' ? row._total.toFixed(2) : row._total) : '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    /* ========== 批量分析面板 ========== */
+    function BatchAnalysisPanel({ data, columns, numericColumns, categoricalColumns }) {
+      const [activeTab, setActiveTab] = useState('desc');
+      const [descResult, setDescResult] = useState(null);
+      const [corrResult, setCorrResult] = useState(null);
+      const [histResults, setHistResults] = useState(null);
+      const [groupCol, setGroupCol] = useState('');
+      const [groupResult, setGroupResult] = useState(null);
+      const descChartRefs = useRef({});
+      const chartInstances = useRef([]);
+
+      useEffect(() => {
+        if (categoricalColumns.length > 0 && !groupCol) setGroupCol(categoricalColumns[0]);
+      }, [categoricalColumns]);
+
+      // 清理图表实例
+      useEffect(() => {
+        // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return () => { chartInstances.current.forEach(c => c.destroy()); chartInstances.current = []; };
+      }, []);
+
+      const runDescriptive = () => {
+        const rows = numericColumns.map(col => {
+          const vals = data.map(r => toNumber(r[col])).filter(v => v != null);
+          if (vals.length === 0) return { col, count: 0 };
+          return {
+            col, count: vals.length, mean: mean(vals), median: median(vals),
+            std: stdev(vals), min: Math.min(...vals), max: Math.max(...vals),
+            q1: quantile(vals, 0.25), q3: quantile(vals, 0.75)
+          };
+        });
+        setDescResult(rows);
+      };
+
+      const runCorrelation = () => {
+        if (numericColumns.length < 2) return;
+        const matrix = [];
+        for (let i = 0; i < numericColumns.length; i++) {
+          matrix[i] = [];
+          for (let j = 0; j < numericColumns.length; j++) {
+            if (i === j) { matrix[i][j] = 1; continue; }
+            const pairs = data.map(r => { const a = toNumber(r[numericColumns[i]]), b = toNumber(r[numericColumns[j]]); return a != null && b != null ? [a, b] : null; }).filter(Boolean);
+            matrix[i][j] = pairs.length > 1 ? pearsonCorr(pairs.map(p => p[0]), pairs.map(p => p[1])) : 0;
+          }
+        }
+        setCorrResult(matrix);
+      };
+
+      const runHistograms = () => {
+        // 先清理旧图表
+        chartInstances.current.forEach(c => c.destroy());
+        chartInstances.current = [];
+        setHistResults(numericColumns.slice(0, 10)); // 最多10列
+        // 延迟绘制，等DOM更新
+        setTimeout(() => {
+          numericColumns.slice(0, 10).forEach((col, idx) => {
+            const canvas = descChartRefs.current[col];
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const vals = data.map(r => toNumber(r[col])).filter(v => v != null);
+            if (vals.length === 0) return;
+            const min = Math.min(...vals), max = Math.max(...vals);
+            const bins = 15;
+            const bw = (max - min) / bins || 1;
+            const counts = Array(bins).fill(0);
+            const labels = [];
+            vals.forEach(v => { const bi = Math.min(Math.floor((v - min) / bw), bins - 1); counts[bi]++; });
+            for (let i = 0; i < bins; i++) labels.push((min + i * bw).toFixed(1));
+            const chart = new Chart(ctx, {
+              type: 'bar',
+              data: { labels, datasets: [{ label: col, data: counts, backgroundColor: '#4f46e599', borderColor: '#4f46e5', borderWidth: 1 }] },
+              options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: `${col} 分布`, font: { size: 12 } }, legend: { display: false } }, scales: { x: { ticks: { font: { size: 9 } } }, y: { ticks: { font: { size: 9 } } } } }
+            });
+            chartInstances.current.push(chart);
+          });
+        }, 100);
+      };
+
+      const runGroupStats = () => {
+        if (!groupCol) return;
+        const groups = {};
+        data.forEach(r => {
+          const g = r[groupCol];
+          if (g == null) return;
+          if (!groups[g]) groups[g] = {};
+          numericColumns.forEach(col => {
+            const v = toNumber(r[col]);
+            if (v != null) { if (!groups[g][col]) groups[g][col] = []; groups[g][col].push(v); }
+          });
+        });
+        const result = Object.entries(groups).map(([group, cols]) => {
+          const row = { group };
+          numericColumns.forEach(col => {
+            const vals = cols[col] || [];
+            row[`${col}_均值`] = vals.length > 0 ? mean(vals) : null;
+            row[`${col}_计数`] = vals.length;
+          });
+          return row;
+        });
+        setGroupResult(result);
+      };
+
+      const exportCSV = () => {
+        let csvContent = '';
+        if (activeTab === 'desc' && descResult) {
+          csvContent = '列,计数,均值,中位数,标准差,最小值,最大值,Q1,Q3\n';
+          descResult.forEach(r => { csvContent += `${r.col},${r.count},${r.mean?.toFixed(4)},${r.median?.toFixed(4)},${r.std?.toFixed(4)},${r.min?.toFixed(4)},${r.max?.toFixed(4)},${r.q1?.toFixed(4)},${r.q3?.toFixed(4)}\n`; });
+        } else if (activeTab === 'corr' && corrResult) {
+          csvContent = ',' + numericColumns.join(',') + '\n';
+          corrResult.forEach((row, i) => { csvContent += numericColumns[i] + ',' + row.map(v => v.toFixed(4)).join(',') + '\n'; });
+        } else if (activeTab === 'group' && groupResult) {
+          if (groupResult.length > 0) {
+            const keys = Object.keys(groupResult[0]);
+            csvContent = keys.join(',') + '\n';
+            groupResult.forEach(r => { csvContent += keys.map(k => r[k] != null ? (typeof r[k] === 'number' ? r[k].toFixed(4) : r[k]) : '').join(',') + '\n'; });
+          }
+        } else { return; }
+        const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `batch-analysis-${activeTab}.csv`;
+        a.click(); URL.revokeObjectURL(url);
+      };
+
+      if (!data || data.length === 0) return null;
+
+      const tabs = [
+        { key: 'desc', label: '📊 描述统计' },
+        { key: 'corr', label: '🔥 相关矩阵' },
+        { key: 'hist', label: '📈 批量直方图' },
+        { key: 'group', label: '📋 分组统计' },
+      ];
+
+      // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (
+        <div>
+          <div className="chart-type-tabs" style={{ marginBottom: 16 }}>
+            {tabs.map(t => (<button key={t.key} className={`chart-type-tab ${activeTab === t.key ? 'active' : ''}`} onClick={() => setActiveTab(t.key)}>{t.label}</button>))}
+          </div>
+
+          {activeTab === 'desc' && (
+            <div>
+              <button className="btn btn-primary btn-sm" onClick={runDescriptive}>生成描述统计</button>
+              {descResult && (
+                <div style={{ marginTop: 16 }}>
+                  <div className="table-wrapper">
+                    <table>
+                      <thead><tr><th>列</th><th>计数</th><th>均值</th><th>中位数</th><th>标准差</th><th>最小值</th><th>最大值</th><th>Q1</th><th>Q3</th></tr></thead>
+                      <tbody>
+                        {descResult.map(r => (
+                          <tr key={r.col}><td style={{ fontWeight: 600 }}>{r.col}</td><td>{r.count}</td><td>{r.mean?.toFixed(4)}</td><td>{r.median?.toFixed(4)}</td><td>{r.std?.toFixed(4)}</td><td>{r.min?.toFixed(4)}</td><td>{r.max?.toFixed(4)}</td><td>{r.q1?.toFixed(4)}</td><td>{r.q3?.toFixed(4)}</td></tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'corr' && (
+            <div>
+              <button className="btn btn-primary btn-sm" onClick={runCorrelation}>生成相关矩阵</button>
+              {corrResult && (
+                <div style={{ marginTop: 16, overflowX: 'auto' }}>
+                  <table style={{ borderCollapse: 'collapse', fontSize: '.82rem' }}>
+                    <thead><tr><th style={{ padding: '6px 10px', background: 'var(--gray-100)' }}></th>{numericColumns.map(c => <th key={c} style={{ padding: '6px 10px', background: 'var(--gray-100)', writingMode: 'vertical-rl', maxWidth: 60 }}>{c}</th>)}</tr></thead>
+                    <tbody>
+                      {corrResult.map((row, i) => (
+                        <tr key={i}>
+                          <td style={{ padding: '6px 10px', fontWeight: 600, background: 'var(--gray-50)' }}>{numericColumns[i]}</td>
+                          {row.map((v, j) => {
+                            const intensity = Math.abs(v);
+                            const bg = v >= 0 ? `rgba(79,70,229,${intensity * 0.5})` : `rgba(220,38,38,${intensity * 0.5})`;
+                            return <td key={j} style={{ padding: '6px 10px', background: bg, color: intensity > 0.5 ? '#fff' : '#333', textAlign: 'center', fontWeight: i === j ? 700 : 400 }}>{v.toFixed(3)}</td>;
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'hist' && (
+            <div>
+              <button className="btn btn-primary btn-sm" onClick={runHistograms}>生成批量直方图</button>
+              {histResults && (
+                <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 16 }}>
+                  {histResults.map(col => (
+                    <div key={col} style={{ background: '#fff', border: '1px solid var(--gray-200)', borderRadius: 8, padding: 12 }}>
+                      <canvas ref={el => descChartRefs.current[col] = el} style={{ width: '100%', height: 200 }} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'group' && (
+            <div>
+              <div className="grid-two" style={{ marginBottom: 12 }}>
+                <div className="form-row"><label>分组列</label><select value={groupCol} onChange={e => setGroupCol(e.target.value)}>{categoricalColumns.map(c => <option key={c} value={c}>{c}</option>)}</select></div>
+              </div>
+              <button className="btn btn-primary btn-sm" onClick={runGroupStats}>生成分组统计</button>
+              {groupResult && groupResult.length > 0 && (
+                <div style={{ marginTop: 16 }}>
+                  <div className="table-wrapper">
+                    <table>
+                      <thead><tr>{Object.keys(groupResult[0]).map(k => <th key={k}>{k}</th>)}</tr></thead>
+                      <tbody>
+                        {groupResult.map((r, i) => (
+                          <tr key={i}>{Object.entries(r).map(([k, v]) => <td key={k}>{v != null ? (typeof v === 'number' ? v.toFixed(4) : v) : '-'}</td>)}</tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {(descResult || corrResult || groupResult) && (
+            <div style={{ marginTop: 16 }}>
+              <button className="btn btn-outline btn-sm" onClick={exportCSV}>⬇ 导出CSV</button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    /* ========== 主应用组件 ========== */
+    function App() {
+      const [fileName, setFileName] = useState('');
+      const [fileSize, setFileSize] = useState(0);
+      const [sheets, setSheets] = useState([]);
+      const [allSheetData, setAllSheetData] = useState(null);
+      const [columnInfo, setColumnInfo] = useState({});
+      const [currentSheet, setCurrentSheet] = useState('');
+      const [data, setData] = useState([]);
+
+      const [analysisType, setAnalysisType] = useState('descriptive');
+      const [analysisPrompt, setAnalysisPrompt] = useState('描述性统计');
+      const [xColumn, setXColumn] = useState('');
+      const [yColumn, setYColumn] = useState('');
+      const [compareColumnA, setCompareColumnA] = useState('');
+      const [compareColumnB, setCompareColumnB] = useState('');
+      const [targetColumn, setTargetColumn] = useState('');
+      const [featureColumns, setFeatureColumns] = useState([]);
+      const [correlationColumns, setCorrelationColumns] = useState([]);
+      const [groupColumn, setGroupColumn] = useState('');
+      const [hypothesisValue, setHypothesisValue] = useState('0');
+      const [clusters, setClusters] = useState(3);
+      const [result, setResult] = useState('');
+
+      const [loading, setLoading] = useState(false);
+
+
+
+      useEffect(() => {
+        if (darkMode) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          localStorage.setItem('darkMode', 'true');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+          localStorage.setItem('darkMode', 'false');
+        }
+      }, [darkMode]);
+
+      const [aiLoading, setAiLoading] = useState(false);
+      const [error, setError] = useState('');
+      const [dragOver, setDragOver] = useState(false);
+      const [darkMode, setDarkMode] = useState(() => JSON.parse(localStorage.getItem('darkMode') || 'false'));
+      const [history, setHistory] = useState(() => JSON.parse(localStorage.getItem('analysisHistory') || '[]'));
+
+      const [aiConfig, setAiConfig] = useState(() => { const c = loadAiConfig(); return c.apiKey ? c : DEFAULT_AI_CONFIG; });
+      const [showAiConfig, setShowAiConfig] = useState(false);
+      const [customModel, setCustomModel] = useState(false);
+      const [configSaved, setConfigSaved] = useState(false);
+      const [aiInterpretation, setAiInterpretation] = useState('');
+      const aiInterpRef = useRef(null);
+
+      const columns = useMemo(() => Object.keys(data[0] ?? {}), [data]);
+      const numericColumns = useMemo(() => { var o; return ((o = columnInfo[currentSheet]) == null ? void 0 : o.numericColumns) ?? []; }, [columnInfo, currentSheet]);
+      const categoricalColumns = useMemo(() => { var o; return ((o = columnInfo[currentSheet]) == null ? void 0 : o.categoricalColumns) ?? []; }, [columnInfo, currentSheet]);
+      const previewRows = useMemo(() => { var o; return ((o = columnInfo[currentSheet]) == null ? void 0 : o.previewRows) ?? []; }, [columnInfo, currentSheet]);
+      const columnOptions = columns.map(c => ({ value: c, label: c }));
+      const hasData = data.length > 0 && sheets.length > 0;
+
+
+
+
+
+        else { document.documentElement.removeAttribute("data-theme"); localStorage.setItem("darkMode", "false"); }
+      }, [darkMode]);
+
+      const resetFields = () => { setXColumn(''); setYColumn(''); setCompareColumnA(''); setCompareColumnB(''); setTargetColumn(''); setFeatureColumns([]); setCorrelationColumns([]); setGroupColumn(''); };
+
+      const handleFile = useCallback(async (file) => {
+        setLoading(true); setError('');
+        try {
+          const ab = await file.arrayBuffer();
+          const wb = XLSX.read(ab, { type: 'array' });
+          const sn = wb.SheetNames;
+          const allData = {}, info = {};
+          sn.forEach(name => {
+            const sheetData = XLSX.utils.sheet_to_json(wb.Sheets[name], { defval: null });
+            allData[name] = sheetData;
+            const types = detectColumnTypes(sheetData);
+            info[name] = { numericColumns: types.numericColumns, categoricalColumns: types.categoricalColumns, previewRows: sheetData.slice(0, 8) };
+          });
+          const first = sn[0] ?? '';
+          setFileName(file.name); setFileSize(file.size); setSheets(sn); setAllSheetData(allData); setColumnInfo(info);
+          setCurrentSheet(first); setData(allData[first] ?? []); setResult(''); setAiInterpretation(''); resetFields();
+        } catch { setError('解析 Excel 失败，请确认文件格式为 .xlsx 或 .xls。'); }
+        finally { setLoading(false); }
+      }, []);
+
+      const onFileInput = (e) => { const f = e.target.files?.[0]; f && handleFile(f); };
+      const onDrop = (e) => { e.preventDefault(); setDragOver(false); const f = e.dataTransfer.files?.[0]; f && handleFile(f); };
+      const onDragOver = (e) => { e.preventDefault(); setDragOver(true); };
+      const onDragLeave = () => setDragOver(false);
+
+      const resetAll = () => { setFileName(''); setFileSize(0); setSheets([]); setAllSheetData(null); setColumnInfo({}); setCurrentSheet(''); setData([]); setResult(''); setAiInterpretation(''); setError(''); resetFields(); };
+      const switchSheet = (name) => { setCurrentSheet(name); setData(allSheetData?.[name] ?? []); resetFields(); setResult(''); setAiInterpretation(''); };
+
+      const onPromptChange = (text) => { setAnalysisPrompt(text); setAnalysisType(parsePromptToType(text)); };
+
+      const runAnalysisClick = () => {
+        if (data.length === 0) { setError('请先上传 Excel 文件并选择工作表。'); return; }
+        setLoading(true); setError(''); setAiInterpretation('');
+        try {
+          const res = runAnalysis({ analysisType, data, xColumn, yColumn, compareColumnA, compareColumnB, targetColumn, featureColumns, correlationColumns, groupColumn, hypothesisValue, clusters });
+          setResult(res.result ?? '分析完成但未返回结果。');
+        } catch { setError('分析过程出现错误，请检查字段和数据格式。'); }
+        finally { setLoading(false); }
+      };
+
+      const exportExcel = () => {
+        if (!data.length) { setError('请先上传并加载数据。'); return; }
+        try {
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(data), currentSheet || '原始数据');
+          XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(result.split('\n').map(r => [r])), '分析结果');
+          const blob = new Blob([XLSX.write(wb, { bookType: 'xlsx', type: 'array' })], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a'); a.href = url; a.download = 'analysis-report.xlsx';
+          document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+        } catch { setError('导出 Excel 失败。'); }
+      };
+
+      const copyText = (text) => { text && navigator.clipboard.writeText(text).then(() => setError('')); };
+
+      const updateAiConfig = useCallback((upd) => { setAiConfig(prev => ({ ...prev, ...upd })); setConfigSaved(false); }, []);
+      const saveConfig = () => { if (!aiConfig.apiKey) { setError('请先输入 API Key'); return; } saveAiConfig({ ...aiConfig, enabled: true }); setConfigSaved(true); };
+      const clearConfig = () => { clearAiConfig(); setConfigSaved(false); setAiConfig({ apiKey: '', baseUrl: 'https://api.anthropic.com', model: 'claude-sonnet-4-6', enabled: false }); setCustomModel(false); };
+
+      const aiParsePrompt = async () => {
+        if (!aiConfig.enabled || !aiConfig.apiKey) { setError('请先启用 AI 并配置 API Key'); return; }
+        if (!analysisPrompt.trim()) { setError('请先输入分析提示词'); return; }
+        setAiLoading(true); setError('');
+        try {
+          const colList = [...numericColumns.map(n => ({ name: n, type: 'numeric' })), ...categoricalColumns.map(n => ({ name: n, type: 'categorical' }))];
+          const sysPrompt = `你是数据分析助手。根据数据列判断最合适的分析类型。\n可用分析: descriptive, oneSample, twoSample, regression, multipleRegression, logisticRegression, correlation, anova, clustering\n可用列:\n${colList.map(c => `  - "${c.name}" (${c.type === 'numeric' ? '数值' : '分类'})`).join('\n')}\n请返回JSON: { "analysisType": "...", "xColumn": "...", "yColumn": "...", "targetColumn": "...", "groupColumn": "...", "featureColumns": [], "correlationColumns": [], "hypothesisValue": "0", "clusters": 3, "explanation": "..." }`;
+          const resp = await callAi(aiConfig, sysPrompt, analysisPrompt);
+          const match = resp.match(/\{[\s\S]*\}/);
+          if (!match) throw new Error('AI 返回格式异常');
+          const parsed = JSON.parse(match[0]);
+          if (parsed.analysisType && ANALYSIS_TYPES.some(t => t.value === parsed.analysisType)) setAnalysisType(parsed.analysisType);
+          if (parsed.xColumn && columns.includes(parsed.xColumn)) setXColumn(parsed.xColumn);
+          if (parsed.yColumn && columns.includes(parsed.yColumn)) setYColumn(parsed.yColumn);
+          if (parsed.compareColumnA && columns.includes(parsed.compareColumnA)) setCompareColumnA(parsed.compareColumnA);
+          if (parsed.compareColumnB && columns.includes(parsed.compareColumnB)) setCompareColumnB(parsed.compareColumnB);
+          if (parsed.targetColumn && columns.includes(parsed.targetColumn)) setTargetColumn(parsed.targetColumn);
+          if (parsed.groupColumn && columns.includes(parsed.groupColumn)) setGroupColumn(parsed.groupColumn);
+          if (Array.isArray(parsed.featureColumns)) setFeatureColumns(parsed.featureColumns.filter(c => columns.includes(c)));
+          if (Array.isArray(parsed.correlationColumns)) setCorrelationColumns(parsed.correlationColumns.filter(c => columns.includes(c)));
+          if (parsed.hypothesisValue) setHypothesisValue(String(parsed.hypothesisValue));
+          if (parsed.clusters) setClusters(Number(parsed.clusters));
+          if (parsed.explanation) {
+            const label = ANALYSIS_TYPES.find(t => t.value === parsed.analysisType)?.label || parsed.analysisType;
+            setResult(`[AI 解析结果]\n分析类型: ${label}\n${parsed.explanation}\n\n参数已自动配置，请检查后点击"运行分析"。`);
+          }
+        } catch (e) { setError(`AI 解析失败: ${e.message || '请检查 API 配置'}`); }
+        finally { setAiLoading(false); }
+      };
+
+      const aiInterpret = async () => {
+        if (!aiConfig.enabled || !aiConfig.apiKey) { setError('请先启用 AI 并配置 API Key'); return; }
+        if (!result) { setError('请先运行分析'); return; }
+        setAiLoading(true); setError(''); setAiInterpretation('');
+        try {
+          const userPrompt = [`## 数据信息`, `数据列: ${[...numericColumns.map(c => `${c}(数值)`), ...categoricalColumns.map(c => `${c}(分类)`)].join('、')}`, `数据行数: ${data.length}`, `分析类型: ${ANALYSIS_TYPES.find(t => t.value === analysisType)?.label || analysisType}`, '', '## 分析结果', result].join('\n');
+          const sysPrompt = '你是数据分析专家。请用通俗易懂的中文解释统计分析结果，指出关键发现、趋势和业务建议。';
+          await callAi(aiConfig, sysPrompt, userPrompt, (text) => setAiInterpretation(text));
+        } catch (e) { setError(`AI 解读失败: ${e.message || '请检查 API 配置'}`); }
+        finally { setAiLoading(false); }
+      };
+
+      const handleDataChange = (newData) => {
+        setData(newData);
+        if (allSheetData && currentSheet) {
+          setAllSheetData(prev => ({ ...prev, [currentSheet]: newData }));
+          const types = detectColumnTypes(newData);
+          setColumnInfo(prev => ({ ...prev, [currentSheet]: { ...prev[currentSheet], numericColumns: types.numericColumns, categoricalColumns: types.categoricalColumns, previewRows: newData.slice(0, 8) } }));
+        }
+      };
+
+      const formatSize = (b) => b < 1024 ? b + ' B' : b < 1048576 ? (b / 1024).toFixed(1) + ' KB' : (b / 1048576).toFixed(1) + ' MB';
+
+      // IIFE: 页面加载时应用暗色模式
+      (function() {
+        if (localStorage.getItem("darkMode") === "true") {
+          document.documentElement.setAttribute("data-theme", "dark");
+        }
+      })();
+
+      return (
+        <div className="app-shell">
+          <header className="app-header">
+            <h1>Excel 自动统计分析工具</h1>
+            <p>上传 Excel 文件，在浏览器中完成统计分析 · 支持数据清洗与可视化</p>
+          </header>
+
+          <div className="ai-config-bar">
+            <button className={`btn ${aiConfig.enabled ? 'btn-ai-active' : 'btn-outline'} btn-sm`} onClick={() => setShowAiConfig(!showAiConfig)}>
+              {aiConfig.enabled ? '🤖 AI 已就绪' : '⚙ AI 设置'}
+            </button>
+            {aiConfig.enabled && aiConfig.apiKey && <span className="ai-status-ok">API 已连接</span>}
+          </div>
+
+          {showAiConfig && (
+            <section className="panel ai-config-panel">
+              <h2 style={{ margin: '0 0 16px', fontSize: '1rem' }}>🤖 AI 配置</h2>
+              <div className="form-row"><label><input type="checkbox" checked={aiConfig.enabled} onChange={e => updateAiConfig({ enabled: e.target.checked })} style={{ width: 'auto', marginRight: 8 }} />启用 AI 功能</label></div>
+              <div className="form-row"><label>API Key / Token <span className="label-hint">(必填)</span></label><input type="password" value={aiConfig.apiKey} onChange={e => updateAiConfig({ apiKey: e.target.value })} placeholder="输入你的 API Key 或 Coding Plan Token" /></div>
+              <div className="grid-two">
+                <div className="form-row"><label>API Base URL <span className="label-hint">(必填)</span></label><input type="text" value={aiConfig.baseUrl} onChange={e => updateAiConfig({ baseUrl: e.target.value })} placeholder="https://api.anthropic.com" /></div>
+                <div className="form-row"><label>模型</label>
+                  <select value={customModel ? '__custom__' : aiConfig.model} onChange={e => { const v = e.target.value; if (v === '__custom__') setCustomModel(true); else { setCustomModel(false); updateAiConfig({ model: v }); } }}>
+                    {MODEL_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                  </select>
+                  {customModel && <input type="text" value={aiConfig.model} onChange={e => updateAiConfig({ model: e.target.value })} placeholder="输入模型名称" style={{ marginTop: 8 }} />}
+                </div>
+              </div>
+              <div className="ai-config-actions">
+                <button className="btn btn-primary btn-sm" onClick={saveConfig} disabled={!aiConfig.apiKey}>{configSaved ? '✅ 已保存' : '💾 保存配置'}</button>
+                {configSaved && <button className="btn btn-outline btn-sm" onClick={clearConfig}>🗑 清除已保存配置</button>}
+              </div>
+              <div className="ai-config-hint">支持任意兼容 Anthropic Messages API 格式的服务。</div>
+            </section>
+          )}
+
+          {/* Step 1: 上传文件 */}
+          <CollapsiblePanel step={1} title="上传 Excel 文件">
+            {fileName ? (
+              <>
+                <div className="file-info">
+                  <span className="file-icon">📊</span>
+                  <span className="file-name">{fileName}</span>
+                  <span className="file-size">{formatSize(fileSize)}</span>
+                  <button className="file-remove" onClick={resetAll} title="移除文件">✕</button>
+                </div>
+                {sheets.length > 1 && (<div className="sheet-tabs">{sheets.map(s => <button key={s} className={`sheet-tab ${s === currentSheet ? 'active' : ''}`} onClick={() => switchSheet(s)}>{s}</button>)}</div>)}
+              </>
+            ) : (
+              <div className={`upload-zone ${dragOver ? 'drag-over' : ''}`} onDrop={onDrop} onDragOver={onDragOver} onDragLeave={onDragLeave} onClick={() => document.getElementById('file-input')?.click()}>
+                <div className="upload-icon">📂</div>
+                <div className="upload-text">点击选择文件，或将 Excel 文件拖拽到此处</div>
+                <div className="upload-hint">支持 .xlsx 和 .xls 格式</div>
+                <input id="file-input" type="file" accept=".xlsx,.xls" onChange={onFileInput} />
+              </div>
+            )}
+            {error && <div className="alert alert-error"><span>⚠️</span><span>{error}</span><button className="alert-close" onClick={() => setError('')}>✕</button></div>}
+          </CollapsiblePanel>
+
+          {/* Step 2: 数据预览 */}
+          {previewRows.length > 0 && (
+            <CollapsiblePanel step={2} title="数据预览">
+              <div className="data-stats">
+                <span className="stat-chip"><strong>{data.length}</strong> 行数据</span>
+                <span className="stat-chip"><strong>{columns.length}</strong> 列</span>
+                <span className="stat-chip">数值列: <strong>{numericColumns.length}</strong></span>
+                <span className="stat-chip">分类列: <strong>{categoricalColumns.length}</strong></span>
+              </div>
+              <div className="table-wrapper">
+                <table>
+                  <thead><tr>{Object.keys(previewRows[0]).map(c => <th key={c}>{c}</th>)}</tr></thead>
+                  <tbody>{previewRows.map((row, i) => <tr key={i}>{Object.keys(previewRows[0]).map(c => <td key={c}>{String(row[c] ?? '')}</td>)}</tr>)}</tbody>
+                </table>
+              </div>
+            </CollapsiblePanel>
+          )}
+
+          {/* Step 2.5: 数据清洗 */}
+          {hasData && (
+            <CollapsiblePanel step="2.5" title="🧹 数据清洗" defaultOpen={false}>
+              <DataCleaningPanel data={data} columns={columns} numericColumns={numericColumns} categoricalColumns={categoricalColumns} onDataChange={handleDataChange} columnInfo={columnInfo} currentSheet={currentSheet} setColumnInfo={setColumnInfo} />
+            </CollapsiblePanel>
+          )}
+
+          {/* ★★★ 新增模块2：数据转换 ★★★ */}
+          {hasData && (
+            <CollapsiblePanel step="2.6" title="🔧 数据转换" defaultOpen={false}>
+              <DataTransformationPanel data={data} columns={columns} numericColumns={numericColumns} categoricalColumns={categoricalColumns} onDataChange={handleDataChange} />
+            </CollapsiblePanel>
+          )}
+
+          {/* Step 3: 选择分析类型 */}
+          {hasData && (
+            <CollapsiblePanel step={3} title="选择分析类型">
+              <div className="form-row">
+                <div className="label-with-action"><label>分析提示词</label>{aiConfig.enabled && aiConfig.apiKey && <button className="btn btn-ai btn-sm" onClick={aiParsePrompt} disabled={aiLoading || !analysisPrompt.trim()}>🤖 AI 解析提示词</button>}</div>
+                <textarea rows={2} value={analysisPrompt} onChange={e => onPromptChange(e.target.value)} placeholder="例如：描述性统计、相关性分析、逻辑回归、ANOVA&#10;或输入自然语言：看看销售额和广告投入有没有关系" />
+              </div>
+              <div className="form-row"><label>分析类型</label><select value={analysisType} onChange={e => setAnalysisType(e.target.value)}>{ANALYSIS_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}</select></div>
+            </CollapsiblePanel>
+          )}
+
+          {/* Step 4: 选择字段与参数 */}
+          {hasData && (
+            <CollapsiblePanel step={4} title="选择字段与参数">
+              <div className="grid-two">
+                <div className="form-row"><label>数值列 <span className="label-hint">(可用)</span></label><div className="badge-list">{numericColumns.length > 0 ? numericColumns.map(c => <span key={c} className="badge-numeric">{c}</span>) : <span style={{ color: 'var(--gray-400)', fontSize: '.85rem' }}>无</span>}</div></div>
+                <div className="form-row"><label>分类列 <span className="label-hint">(可用)</span></label><div className="badge-list">{categoricalColumns.length > 0 ? categoricalColumns.map(c => <span key={c} className="badge-categorical">{c}</span>) : <span style={{ color: 'var(--gray-400)', fontSize: '.85rem' }}>无</span>}</div></div>
+              </div>
+              <div className="grid-two">
+                <div className="form-row"><label>X 列</label><select value={xColumn} onChange={e => setXColumn(e.target.value)}><option value="">请选择</option>{columnOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>
+                <div className="form-row"><label>Y 列</label><select value={yColumn} onChange={e => setYColumn(e.target.value)}><option value="">请选择</option>{columnOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>
+              </div>
+              {analysisType === 'twoSample' && (
+                <div className="grid-two">
+                  <div className="form-row"><label>比较列 A</label><select value={compareColumnA} onChange={e => setCompareColumnA(e.target.value)}><option value="">请选择</option>{columnOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>
+                  <div className="form-row"><label>比较列 B</label><select value={compareColumnB} onChange={e => setCompareColumnB(e.target.value)}><option value="">请选择</option>{columnOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>
+                </div>
+              )}
+              {analysisType === 'correlation' && (<div className="form-row"><label>相关列（多选）</label><select multiple size={Math.min(6, columnOptions.length)} value={correlationColumns} onChange={e => setCorrelationColumns(Array.from(e.target.selectedOptions, o => o.value))}>{columnOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>)}
+              {analysisType === 'anova' && (
+                <div className="grid-two">
+                  <div className="form-row"><label>分组列</label><select value={groupColumn} onChange={e => setGroupColumn(e.target.value)}><option value="">请选择</option>{columnOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>
+                  <div className="form-row"><label>目标列</label><select value={targetColumn} onChange={e => setTargetColumn(e.target.value)}><option value="">请选择</option>{columnOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>
+                </div>
+              )}
+              {(analysisType === 'multipleRegression' || analysisType === 'logisticRegression') && (
+                <>
+                  <div className="form-row"><label>特征列（多选）</label><select multiple size={Math.min(6, columnOptions.length)} value={featureColumns} onChange={e => setFeatureColumns(Array.from(e.target.selectedOptions, o => o.value))}>{columnOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>
+                  <div className="form-row"><label>目标列</label><select value={targetColumn} onChange={e => setTargetColumn(e.target.value)}><option value="">请选择</option>{columnOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}</select></div>
+                </>
+              )}
+              {analysisType === 'oneSample' && <div className="form-row"><label>单样本假设值</label><input type="text" value={hypothesisValue} onChange={e => setHypothesisValue(e.target.value)} placeholder="例如 0 或 10" /></div>}
+              {analysisType === 'clustering' && <div className="form-row"><label>聚类簇数</label><input type="number" min={2} value={clusters} onChange={e => setClusters(Number(e.target.value))} /></div>}
+            </CollapsiblePanel>
+          )}
+
+          {/* ★★★ 新增模块1：更多统计检验 ★★★ */}
+          {hasData && (
+            <CollapsiblePanel step="4.5" title="📊 更多统计检验" defaultOpen={false}>
+              <StatisticalTestsPanel data={data} numericColumns={numericColumns} categoricalColumns={categoricalColumns} columns={columns} />
+            </CollapsiblePanel>
+          )}
+
+          {/* 操作按钮 */}
+          {hasData && (
+            <section className="panel">
+              <div className="actions">
+                <button className="btn btn-primary" onClick={runAnalysisClick} disabled={loading || aiLoading}>{loading ? '分析中...' : '▶ 运行分析'}</button>
+                <button className="btn btn-success" onClick={exportExcel} disabled={!result || loading}>⬇ 导出 Excel 结果</button>
+                <button className="btn btn-pdf" onClick={exportPDF} disabled={!result || loading} style={{background: "#dc2626"}}>📄 导出 PDF</button>
+                <button className="btn btn-word" onClick={exportWord} disabled={!result || loading} style={{background: "#2563eb"}}>📝 导出 Word</button>
+                <button className="btn btn-outline" onClick={resetAll}>重新上传</button>
+              </div>
+            </section>
+          )}
+
+          {/* ★★★ 新增功能1：历史记录 ★★★ */}
+          {history.length > 0 && (
+            <CollapsiblePanel step="9" title="📋 历史记录" defaultOpen={false}>
+              <div style={{marginBottom: 12}}>
+                <button className="btn btn-sm btn-outline" onClick={() => { setHistory([]); localStorage.removeItem("analysisHistory"); }}>清空历史</button>
+              </div>
+              <div style={{maxHeight: 300, overflowY: "auto"}}>
+                {history.map(item => (
+                  <div key={item.id} style={{padding: "8px", borderBottom: "1px solid var(--gray-200)", fontSize: ".85rem"}}>
+                    <div style={{display: "flex", justifyContent: "space-between"}}>
+                      <strong>{item.type}</strong>
+                      <span style={{color: "var(--gray-400)"}}>{item.time}</span>
+                    </div>
+                    <div style={{color: "var(--gray-500)", marginTop: 4}}>{item.fileName}</div>
+                    <div style={{marginTop: 4, maxHeight: 60, overflow: "hidden", fontSize: ".8rem"}}>{item.result}</div>
+                  </div>
+                ))}
+              </div>
+            </CollapsiblePanel>
+          )}
+
+          {/* 分析结果 */}
+          <section className="panel">
+            <div className="panel-header" style={{ cursor: 'default' }}>
+              <h2><span className="step-badge">{hasData ? 5 : 2}</span>分析结果</h2>
+            </div>
+            <div className="panel-body" style={{ marginTop: 16 }}>
+              {result ? (
+                <>
+                  <div className="result-toolbar">
+                    <button className="btn btn-outline btn-sm" onClick={() => copyText(result)}>📋 复制</button>
+                    {aiConfig.enabled && aiConfig.apiKey && <button className="btn btn-ai btn-sm" onClick={aiInterpret} disabled={aiLoading}>{aiLoading ? '🤖 解读中...' : '🤖 AI 解读结果'}</button>}
+                  </div>
+                  <div className="result-container"><pre>{result}</pre></div>
+                </>
+              ) : (
+                <div className="result-placeholder">
+                  <div className="placeholder-icon">📋</div>
+                  <div className="placeholder-text">{hasData ? '请配置分析参数后点击"运行分析"' : '请上传 Excel 文件'}</div>
+                </div>
+              )}
+              {aiInterpretation && (
+                <div className="ai-interpretation">
+                  <div className="ai-interp-header"><span>🤖 AI 解读</span><button className="btn btn-outline btn-sm" onClick={() => copyText(aiInterpretation)}>📋 复制</button></div>
+                  <pre ref={aiInterpRef} className="ai-interp-content">{aiInterpretation}</pre>
+                </div>
+              )}
+            </div>
+          </section>
+
+          {/* Step 6: 图表分析 */}
+          {hasData && (
+            <CollapsiblePanel step={6} title="📈 图表分析" defaultOpen={false}>
+              <DataVisualizationPanel data={data} numericColumns={numericColumns} categoricalColumns={categoricalColumns} columns={columns} />
+            </CollapsiblePanel>
+          )}
+
+          {/* Step 7: 透视表分析 */}
+          {hasData && (
+            <CollapsiblePanel step={7} title="📊 透视表分析" defaultOpen={false}>
+              <PivotTablePanel data={data} columns={columns} numericColumns={numericColumns} categoricalColumns={categoricalColumns} />
+            </CollapsiblePanel>
+          )}
+
+          {/* Step 8: 批量分析 */}
+          {hasData && (
+            <CollapsiblePanel step={8} title="🔬 批量分析" defaultOpen={false}>
+              <BatchAnalysisPanel data={data} columns={columns} numericColumns={numericColumns} categoricalColumns={categoricalColumns} />
+            </CollapsiblePanel>
+          )}
+
+          <section className="panel note">
+            <h2 style={{ margin: 0 }}>🔒 数据安全说明</h2>
+            <p>统计分析在浏览器中本地完成。AI 功能将列名和分析结果发送到您配置的 API 地址，原始数据不会离开您的电脑。</p>
+          </section>
+
+          {loading && (
+            <div className="loading-overlay">
+              <div className="loading-card">
+                <div className="spinner"></div>
+                <div className="loading-text">{aiLoading ? 'AI 处理中...' : '正在处理，请稍候...'}</div>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<React.StrictMode><App /></React.StrictMode>);
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

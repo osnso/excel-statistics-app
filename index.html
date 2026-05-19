@@ -223,5 +223,425 @@ Referer: https://...`})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("
 李四	35	上海`})]}),R.jsx("button",{className:"btn btn-primary btn-sm",onClick:G,disabled:!ka.trim(),children:"📥 导入粘贴数据"})]}),nr&&R.jsxs("div",{className:"alert alert-warning",style:{whiteSpace:"pre-wrap"},children:[R.jsx("span",{children:"⚠️"}),R.jsx("span",{children:nr}),R.jsx("button",{className:"alert-close",onClick:()=>Ye(""),children:"✕"})]}),En.length>0&&R.jsxs("div",{className:"scrape-result",children:[R.jsxs("div",{className:"scrape-result-header",children:["找到 ",R.jsx("strong",{children:En.length})," 个表格，选择要导入的表格："]}),R.jsx("div",{className:"scrape-table-list",children:En.map((O,Q)=>R.jsxs("div",{className:"scrape-table-card",children:[R.jsxs("div",{className:"scrape-table-name",children:["📊 ",O.info.name,R.jsxs("span",{className:"scrape-table-meta",children:[O.info.rowCount," 行 × ",O.info.colCount," 列"]})]}),R.jsx("div",{className:"scrape-table-preview",children:R.jsxs("table",{children:[R.jsx("thead",{children:R.jsx("tr",{children:O.info.headers.map((re,_e)=>R.jsx("th",{children:re},_e))})}),R.jsxs("tbody",{children:[O.records.slice(0,5).map((re,_e)=>R.jsx("tr",{children:O.info.headers.map((Fe,xe)=>R.jsx("td",{children:String(re[Fe]??"")},xe))},_e)),O.records.length>5&&R.jsx("tr",{children:R.jsxs("td",{colSpan:O.info.headers.length,style:{textAlign:"center",color:"var(--gray-400)"},children:["... 还有 ",O.records.length-5," 行"]})})]})]})}),R.jsx("button",{className:"btn btn-primary btn-sm",onClick:()=>X(O.records,O.info),children:"📥 导入此表格用于分析"})]},Q))})]})]}),(M||K||rt)&&R.jsx("div",{className:"loading-overlay",children:R.jsxs("div",{className:"loading-card",children:[R.jsx("div",{className:"spinner"}),R.jsx("div",{className:"loading-text",children:rt?"正在抓取网页数据...":K?"AI 处理中...":"正在处理，请稍候..."})]})}),R.jsxs(hs,{step:1,title:"上传 Excel 文件",children:[e?R.jsxs(R.Fragment,{children:[R.jsxs("div",{className:"file-info",children:[R.jsx("span",{className:"file-icon",children:"📊"}),R.jsx("span",{className:"file-name",children:e}),R.jsx("span",{className:"file-size",children:F6(t)}),R.jsx("button",{className:"file-remove",onClick:I0,title:"移除文件",children:"✕"})]}),a.length>1&&R.jsx("div",{className:"sheet-tabs",children:a.map(O=>R.jsx("button",{className:`sheet-tab ${O===c?"active":""}`,onClick:()=>w(O),children:O},O))})]}):R.jsxs("div",{className:`upload-zone ${ne?"drag-over":""}`,onDrop:rs,onDragOver:Lo,onDragLeave:Mo,onClick:()=>{var O;return(O=document.getElementById("file-input"))==null?void 0:O.click()},children:[R.jsx("div",{className:"upload-icon",children:"📂"}),R.jsx("div",{className:"upload-text",children:"点击选择文件，或将 Excel 文件拖拽到此处"}),R.jsx("div",{className:"upload-hint",children:"支持 .xlsx 和 .xls 格式"}),R.jsx("input",{id:"file-input",type:"file",accept:".xlsx,.xls",onChange:Po})]}),oe&&R.jsxs("div",{className:"alert alert-error",children:[R.jsx("span",{children:"⚠️"}),R.jsx("span",{children:oe}),R.jsx("button",{className:"alert-close",onClick:()=>q(""),children:"✕"})]})]}),si.length>0&&R.jsxs(hs,{step:2,title:"数据预览",children:[R.jsxs("div",{className:"data-stats",children:[R.jsxs("span",{className:"stat-chip",children:[R.jsx("strong",{children:h.length})," 行数据"]}),R.jsxs("span",{className:"stat-chip",children:[R.jsx("strong",{children:tt.length})," 列"]}),R.jsxs("span",{className:"stat-chip",children:["数值列: ",R.jsx("strong",{children:Ea.length})]}),R.jsxs("span",{className:"stat-chip",children:["分类列: ",R.jsx("strong",{children:Sa.length})]})]}),R.jsx("div",{className:"table-wrapper",children:R.jsxs("table",{children:[R.jsx("thead",{children:R.jsx("tr",{children:Object.keys(si[0]).map(O=>R.jsx("th",{children:O},O))})}),R.jsx("tbody",{children:si.map((O,Q)=>R.jsx("tr",{children:Object.keys(si[0]).map(re=>R.jsx("td",{children:String(O[re]??"")},re))},Q))})]})})]}),Ta&&R.jsxs(hs,{step:3,title:"选择分析类型",children:[R.jsxs("div",{className:"form-row",children:[R.jsxs("div",{className:"label-with-action",children:[R.jsx("label",{children:"分析提示词"}),A.enabled&&A.apiKey&&R.jsx("button",{className:"btn btn-ai btn-sm",onClick:ie,disabled:K||!v.trim(),children:"🤖 AI 解析提示词"})]}),R.jsx("textarea",{rows:2,value:v,onChange:O=>T(O.target.value),placeholder:`例如：描述性统计、相关性分析、逻辑回归、ANOVA
 或输入自然语言：看看销售额和广告投入有没有关系`})]}),R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"分析类型"}),R.jsx("select",{value:p,onChange:O=>d(O.target.value),children:ol.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))})]})]}),Ta&&R.jsxs(hs,{step:4,title:"选择字段与参数",children:[R.jsxs("div",{className:"grid-two",children:[R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["数值列 ",R.jsx("span",{className:"label-hint",children:"(可用)"})]}),R.jsx("div",{className:"badge-list",children:Ea.length>0?Ea.map(O=>R.jsx("span",{className:"badge-numeric",children:O},O)):R.jsx("span",{style:{color:"var(--gray-400)",fontSize:"0.85rem"},children:"无"})})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["分类列 ",R.jsx("span",{className:"label-hint",children:"(可用)"})]}),R.jsx("div",{className:"badge-list",children:Sa.length>0?Sa.map(O=>R.jsx("span",{className:"badge-categorical",children:O},O)):R.jsx("span",{style:{color:"var(--gray-400)",fontSize:"0.85rem"},children:"无"})})]})]}),R.jsxs("div",{className:"grid-two",children:[R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"X 列"}),R.jsxs("select",{value:_,onChange:O=>m(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]}),R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"Y 列"}),R.jsxs("select",{value:k,onChange:O=>I(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]})]}),p==="twoSample"&&R.jsxs("div",{className:"grid-two",children:[R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"比较列 A"}),R.jsxs("select",{value:N,onChange:O=>y(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]}),R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"比较列 B"}),R.jsxs("select",{value:L,onChange:O=>P(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]})]}),p==="correlation"&&R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"相关列（多选）"}),R.jsx("select",{multiple:!0,size:Math.min(6,Et.length),value:me,onChange:O=>fe(bd(O)),children:Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))})]}),p==="anova"&&R.jsxs("div",{className:"grid-two",children:[R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"分组列"}),R.jsxs("select",{value:ve,onChange:O=>de(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]}),R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"目标列"}),R.jsxs("select",{value:W,onChange:O=>H(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]})]}),(p==="multipleRegression"||p==="logisticRegression")&&R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"特征列（多选）"}),R.jsx("select",{multiple:!0,size:Math.min(6,Et.length),value:j,onChange:O=>Z(bd(O)),children:Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))})]}),(p==="multipleRegression"||p==="logisticRegression")&&R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"目标列"}),R.jsxs("select",{value:W,onChange:O=>H(O.target.value),children:[R.jsx("option",{value:"",children:"请选择"}),Et.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))]})]}),p==="oneSample"&&R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"单样本假设值"}),R.jsx("input",{type:"text",value:ae,onChange:O=>b(O.target.value),placeholder:"例如 0 或 10"})]}),p==="clustering"&&R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"聚类簇数"}),R.jsx("input",{type:"number",min:2,value:le,onChange:O=>ge(Number(O.target.value))})]})]}),Ta&&R.jsx("section",{className:"panel",children:R.jsxs("div",{className:"actions",children:[R.jsx("button",{className:"btn btn-primary",type:"button",onClick:E,disabled:M||K,children:M?"分析中...":"▶ 运行分析"}),R.jsx("button",{className:"btn btn-success",type:"button",onClick:S,disabled:!F||M,children:"⬇ 导出 Excel 结果"}),R.jsx("button",{className:"btn btn-outline",type:"button",onClick:I0,children:"重新上传"})]})}),R.jsxs("section",{className:"panel",children:[R.jsx("div",{className:"panel-header",style:{cursor:"default"},children:R.jsxs("h2",{children:[R.jsx("span",{className:"step-badge",children:Ta?5:2}),"分析结果"]})}),R.jsxs("div",{className:"panel-body",style:{marginTop:16},children:[F?R.jsxs(R.Fragment,{children:[R.jsxs("div",{className:"result-toolbar",children:[R.jsx("button",{className:"btn btn-outline btn-sm",onClick:()=>C(F),children:"📋 复制"}),A.enabled&&A.apiKey&&R.jsx("button",{className:"btn btn-ai btn-sm",onClick:he,disabled:K,children:K?"🤖 解读中...":"🤖 AI 解读结果"})]}),R.jsx("div",{className:"result-container",children:R.jsx("pre",{children:F})})]}):R.jsxs("div",{className:"result-placeholder",children:[R.jsx("div",{className:"placeholder-icon",children:"📋"}),R.jsx("div",{className:"placeholder-text",children:Ta?'请配置分析参数后点击"运行分析"':"请上传 Excel 文件"})]}),ut&&R.jsxs("div",{className:"ai-interpretation",children:[R.jsxs("div",{className:"ai-interp-header",children:[R.jsx("span",{children:"🤖 AI 解读"}),R.jsx("button",{className:"btn btn-outline btn-sm",onClick:()=>C(ut),children:"📋 复制"})]}),R.jsx("pre",{ref:ya,className:"ai-interp-content",children:ut})]})]})]}),R.jsxs("section",{className:"panel note",children:[R.jsx("h2",{style:{margin:0},children:"🔒 数据安全说明"}),R.jsx("p",{children:"统计分析在浏览器中本地完成。AI 功能将列名和分析结果发送到您配置的 API 地址， 原始数据不会离开您的电脑。"})]})]})}Sf.createRoot(document.getElementById("root")).render(R.jsx(Ag.StrictMode,{children:R.jsx(C6,{})}));
 </script>
-  </body>
+  
+<!-- ===== 统计学术语库 ===== -->
+<style>
+.glossary-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  box-shadow: 0 4px 16px rgba(79,70,229,0.4);
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.glossary-fab:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(79,70,229,0.55);
+}
+.glossary-fab .badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.glossary-overlay {
+  display: none;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(0,0,0,0.4);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: glossaryFadeIn 0.25s ease;
+}
+.glossary-overlay.open {
+  display: flex;
+}
+.glossary-modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 780px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  animation: glossarySlideUp 0.3s ease;
+  overflow: hidden;
+}
+.glossary-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+.glossary-modal-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.glossary-modal-header h2 span {
+  font-size: 1.4rem;
+}
+.glossary-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.glossary-close:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+.glossary-search {
+  padding: 12px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+}
+.glossary-search input {
+  width: 100%;
+  padding: 10px 14px 10px 38px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: #f9fafb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 12px center no-repeat;
+  transition: all 0.2s;
+  outline: none;
+}
+.glossary-search input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+  background-color: #fff;
+}
+.glossary-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 24px 20px;
+}
+.glossary-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.glossary-item:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.glossary-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  background: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background 0.2s;
+}
+.glossary-item-header:hover {
+  background: #f9fafb;
+}
+.glossary-item-header .icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.glossary-item-header .name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #1f2937;
+}
+.glossary-item-header .arrow {
+  color: #9ca3af;
+  font-size: 0.8rem;
+  transition: transform 0.25s ease;
+  line-height: 1;
+}
+.glossary-item-header .arrow.open {
+  transform: rotate(180deg);
+}
+.glossary-item-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.3s ease;
+  padding: 0 16px;
+  border-top: 0 solid #e5e7eb;
+}
+.glossary-item-body.open {
+  max-height: 2000px;
+  padding: 16px;
+  border-top-width: 1px;
+}
+.glossary-item-body h4 {
+  margin: 0 0 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.glossary-item-body h4:not(:first-child) {
+  margin-top: 16px;
+}
+.glossary-item-body p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: #374151;
+  white-space: pre-wrap;
+}
+.glossary-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+@keyframes glossaryFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes glossarySlideUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (max-width: 600px) {
+  .glossary-fab { bottom: 16px; right: 16px; width: 48px; height: 48px; font-size: 20px; }
+  .glossary-overlay { padding: 12px; }
+  .glossary-modal { max-height: 90vh; }
+  .glossary-modal-header { padding: 16px 16px 12px; }
+  .glossary-search { padding: 8px 16px; }
+  .glossary-list { padding: 8px 16px 16px; }
+  .glossary-item-body.open { padding: 12px; }
+}
+</style>
+
+<button class="glossary-fab" id="glossaryFab" title="统计学术语库" aria-label="打开统计学术语库">
+  📚
+  <span class="badge">9</span>
+</button>
+
+<div class="glossary-overlay" id="glossaryOverlay">
+  <div class="glossary-modal">
+    <div class="glossary-modal-header">
+      <h2><span>📚</span> 统计学术语库</h2>
+      <button class="glossary-close" id="glossaryClose" aria-label="关闭">✕</button>
+    </div>
+    <div class="glossary-search">
+      <input type="text" id="glossarySearch" placeholder="搜索统计方法名称..." autocomplete="off">
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  if (document.getElementById('glossaryFabInit')) return;
+  document.getElementById('glossaryFabInit') || true;
+
+  const ITEMS = [
+  {
+    "id": "descriptive",
+    "name": "描述性统计 (Descriptive Statistics)",
+    "icon": "📊",
+    "principle": "描述性统计是通过图表和概括性数据来描述数据集中趋势、离散程度和分布形态的方法。\n\n核心指标包括：\n• 集中趋势指标：均值（算术平均数）、中位数（排序后中间位置的值）、众数（出现频率最高的值）\n• 离散程度指标：标准差（数据偏离均值的平均程度）、方差（标准差的平方）、极差（最大值-最小值）、四分位距（第三四分位数-第一四分位数）\n• 分布形态指标：偏度（分布不对称程度）、峰度（分布尖峭或平坦程度）\n\n这些指标共同构成了对数据的全面概括，为后续深入分析奠定基础。",
+    "scope": "适用于任何数值型数据的初步探索和分析报告。无论数据是否需要进行后续统计推断，描述性统计都是数据分析的第一步。\n\n典型应用场景：\n• 市场调研数据初步分析\n• 学生考试成绩分布分析\n• 产品质量指标的波动监测\n• 财务报表数据的年度汇总\n• 任何需要了解数据基本特征的研究起始阶段",
+    "example": "假设有一组销售数据 [12, 15, 14, 10, 18, 20, 13, 16]：\n• 均值 = 14.75（平均销售额）\n• 中位数 = 14.5（中间水平的销售额）\n• 标准差 ≈ 3.15（销售额的波动程度）\n• 极差 = 10（最值差距）\n\nExcel 操作：选中\"描述性统计\"→ 选择销售额列 → 点击运行，即可获得上述所有指标。"
+  },
+  {
+    "id": "oneSample",
+    "name": "单样本统计 (One-Sample Test)",
+    "icon": "🎯",
+    "principle": "单样本 t 检验用于检验单组数据的均值是否与某个已知值（假设值）存在显著差异。\n\n原理：计算 t 统计量 = (样本均值 - 假设值) / (标准误)，其中标准误 = 标准差 / √样本量。\n• 如果 t 值的绝对值大于临界值（由置信水平和自由度决定），则拒绝\"均值等于假设值\"的原假设\n• p 值 < 0.05 表示在 95% 置信水平下存在显著差异\n\n这本质上是在判断：观察到的差异是否可能是由随机抽样误差造成的。",
+    "scope": "适用于需要判断样本均值与标准值或目标值是否存在差异的场景：\n\n• 质量控制：产品实际尺寸是否等于设计规格\n• 教育评估：学生平均分是否达到及格线（60分）\n• 医疗健康：患者平均血压是否等于正常值（120/80）\n• 生产制造：生产线的平均产量是否达到目标值\n\n要求：数据近似正态分布。",
+    "example": "检查某生产线产品重量是否达标（标准 500g）。\n测得 10 个产品重量：[498, 502, 501, 497, 503, 499, 500, 501, 498, 502]\n\n• 设置假设值 = 500\n• 计算得 p = 0.67 > 0.05\n• 结论：无显著差异，生产线正常\n\nExcel 操作：选择\"单样本统计\"→ 选择重量列 → 输入假设值 500 → 运行。"
+  },
+  {
+    "id": "twoSample",
+    "name": "双样本统计 (Two-Sample Test)",
+    "icon": "⚖️",
+    "principle": "双样本 t 检验用于比较两组独立数据的均值是否存在显著差异。\n\n原理：计算 t 统计量 = (均值A - 均值B) / 合并标准误。\n• 合并标准误考虑了两组数据的方差和样本量\n• 如果两组数据方差差异较大，可使用 Welch t 检验（不假设方差相等）\n• t 值的绝对值越大，p 值越小，越有理由认为两组存在真实差异\n\n注意：双样本 t 检验假设两组数据相互独立（即一个样本的取值不影响另一个样本的取值）。",
+    "scope": "用于比较两个不同群体的差异，是实验研究和 A/B 测试的核心工具：\n\n• A/B 测试：新旧两个版本的转化率是否有差异\n• 医学研究：实验组（用药）与对照组（安慰剂）的疗效差异\n• 教育研究：两种教学方法的成绩差异\n• 市场调研：不同城市消费者满意度的差异\n• 产品测试：两个供应商提供的原材料质量差异\n\n要求：两组数据相互独立，近似正态分布。",
+    "example": "比较新旧两种肥料对作物产量的影响。\n新肥料组：[45, 48, 52, 47, 50] | 旧肥料组：[40, 42, 38, 44, 41]\n\n• A列 = 新肥料组, B列 = 旧肥料组\n• 计算得 p = 0.003 < 0.05\n• 结论：新肥料显著优于旧肥料\n\nExcel 操作：上传数据 → 选择\"双样本统计\"→ 选择新肥料列为 A，旧肥料列为 B → 运行。"
+  },
+  {
+    "id": "regression",
+    "name": "简单线性回归 (Simple Linear Regression)",
+    "icon": "📈",
+    "principle": "简单线性回归用于研究一个自变量 (X) 与一个因变量 (Y) 之间的线性关系。\n\n模型：Y = β₀ + β₁X + ε\n• β₀（截距）：当 X=0 时的 Y 值\n• β₁（斜率）：X 每增加 1 单位，Y 的预期变化量\n• ε（误差项）：实际值与预测值的差异\n\n关键评估指标：\n• R²（决定系数）：表示模型能解释 Y 变异的百分比，0~1 之间，越大越好\n• p 值（F 检验）：判断模型是否显著\n• 残差分析：检查模型假设是否满足\n\n由最小二乘法（OLS）估计参数，目标是最小化所有数据点的预测误差平方和。",
+    "scope": "适用于研究两个变量之间的线性因果关系或预测关系：\n\n• 经济学：广告投入 vs 销售额\n• 环境科学：温度 vs 用电量\n• 教育研究：学习时间 vs 考试成绩\n• 金融：市场指数 vs 个股收益\n• 房地产：房屋面积 vs 房价\n\n注意事项：\n• 需要 X 和 Y 均为数值型变量\n• 关系应为线性（可先画散点图判断）\n• 异常值会对结果产生较大影响",
+    "example": "分析广告投入与销售额的关系：\n广告费(X) 万元：[1, 2, 3, 4, 5]\n销售额(Y) 万元：[10, 14, 18, 22, 30]\n\n• 回归方程：Ŷ = 6 + 4.6X\n• R² = 0.97（广告投入解释了 97% 的销售额变异）\n• 广告费每增加 1 万元，销售额预期增加 4.6 万元\n\nExcel 操作：选择\"回归分析\"→ X 列选广告费，Y 列选销售额 → 运行。"
+  },
+  {
+    "id": "multipleRegression",
+    "name": "多元线性回归 (Multiple Linear Regression)",
+    "icon": "📊",
+    "principle": "多元线性回归是简单线性回归的扩展，用于研究多个自变量 (X₁, X₂, ..., Xₖ) 与一个因变量 (Y) 之间的线性关系。\n\n模型：Y = β₀ + β₁X₁ + β₂X₂ + ... + βₖXₖ + ε\n\n关键概念：\n• 每个回归系数 βᵢ 表示在其他变量不变的情况下，Xᵢ 每变化 1 单位 Y 的预期变化\n• 调整 R²：对 R² 的修正，惩罚引入不显著变量的行为（防止过拟合）\n• VIF（方差膨胀因子）：检测多重共线性（自变量之间高度相关的问题）\n• F 检验：整体模型是否显著\n• 各变量的 t 检验：单个变量是否对 Y 有显著影响\n\n变量选择方法：向前选择、向后剔除、逐步回归。",
+    "scope": "适用于需要同时考虑多个因素对结果影响的复杂场景：\n\n• 房价预测：面积、房龄、卧室数、地段评分 → 房价\n• 销量预测：广告费、价格、促销力度、季节性 → 销量\n• 绩效分析：工作时长、教育水平、经验年限 → 绩效评分\n• 医学：年龄、体重、血压、胆固醇 → 心脏病风险评分\n\n注意事项：\n• 自变量之间不应高度相关（避免多重共线性）\n• 样本量通常应不少于自变量数量的 10~20 倍\n• 需要检查残差是否符合正态分布",
+    "example": "预测房价：特征列选\"面积、卧室数、房龄\"，目标列选\"价格\"。\n面积(㎡)  卧室数  房龄(年)  价格(万)\n  80       2       5       120\n 100       3       2       160\n  70       2      10       100\n 120       3       1       200\n\n• 模型：价格 = 40 + 1.2×面积 + 8×卧室数 - 2×房龄\n• 调整 R² = 0.92\n\nExcel 操作：选择\"多元线性回归\"→ 多选特征列，选择目标列 → 运行。"
+  },
+  {
+    "id": "logisticRegression",
+    "name": "逻辑回归 (Logistic Regression)",
+    "icon": "🎯",
+    "principle": "逻辑回归用于研究多个自变量对二元分类结果（是/否、成功/失败）的影响。\n\n核心原理：不是直接预测 Y 值（0 或 1），而是预测 Y=1 的概率，然后通过 Logit 转换将概率映射到 (-∞, +∞)。\n\n模型：log(p/(1-p)) = β₀ + β₁X₁ + β₂X₂ + ... + βₖXₖ\n\n其中 p = P(Y=1) 是事件发生的概率，p/(1-p) 是优势比 (Odds)。\n\n评估指标：\n• 准确率、精确率、召回率、F1 分数\n• AUC（ROC 曲线下面积）：区分能力\n• 混淆矩阵：预测值与实际值的交叉表\n\n注意：逻辑回归仍然是\"回归\"模型，但用于分类问题。",
+    "scope": "适用于二分类预测问题，是医学、金融、营销等领域最常用的模型之一：\n\n• 信用评分：客户是否会违约（是/否）\n• 医学诊断：患者是否患病（是/否）\n• 营销：客户是否会购买产品（是/否）\n• 人力资源：员工是否会离职（是/否）\n• 风险预警：设备是否会故障（是/否）\n\n特点：\n• 不需要自变量正态分布\n• 可解释性强（每个变量对 odds 的贡献可量化）\n• 比决策树等模型更稳定",
+    "example": "预测学生是否能通过考试 (通过=1, 未通过=0)。\n特征：学习时间(小时)、出勤率(%)\n目标：是否通过\n\n学习时间  出勤率  通过\n  2       60      0\n  5       90      1\n  3       70      0\n  6       85      1\n\n• 模型可输出每个学生的通过概率\n• 概率 > 0.5 预测为\"通过\"，否则预测为\"未通过\"\n\nExcel 操作：选择\"逻辑回归\"→ 选择学习时间、出勤率为特征列，通过为目标列 → 运行。"
+  },
+  {
+    "id": "correlation",
+    "name": "相关性分析 (Correlation Analysis)",
+    "icon": "🔗",
+    "principle": "相关性分析用于衡量两个或多个变量之间关系的方向和强度。\n\n核心指标——Pearson 相关系数 r：\n• r 取值范围：-1 到 +1\n  • r > 0：正相关（X 增加时 Y 也增加）\n  • r < 0：负相关（X 增加时 Y 减少）\n  • |r| ≈ 0：无线性相关\n• |r| ≥ 0.8：强相关 | 0.5 ≤ |r| < 0.8：中等相关 | |r| < 0.5：弱相关\n• r² 表示两个变量共享的变异比例（即一个变量的变异能解释另一个变量的变异的百分比）\n\n⚠️ 重要：相关性 ≠ 因果性。即使两个变量高度相关，也不能断定它们之间存在因果关系。",
+    "scope": "适用于数据探索阶段的变量关系分析：\n\n• 市场研究：品牌知名度与市场份额的关系\n• 金融投资：不同股票收益率之间的相关性（投资组合分散风险）\n• 医学：体重与血压的关系\n• 教育学：课外辅导时间与成绩的关系\n• 质量控制：两个工艺参数之间的关联\n\n注意事项：\n• Pearson 相关系数仅衡量线性关系\n• 异常值会严重影响相关系数\n• 使用相关性矩阵可同时分析多个变量",
+    "example": "分析温度与冰淇淋销量的关系：\n温度(°C)  销量(个)\n  28        200\n  30        240\n  32        280\n  35        320\n  25        160\n\n• r = 0.99（强正相关）\n• 温度越高，冰淇淋销量越大\n\nExcel 操作：选择\"相关性分析\"→ 多选\"温度、销量\"列 → 运行。"
+  },
+  {
+    "id": "anova",
+    "name": "ANOVA 方差分析 (Analysis of Variance)",
+    "icon": "📋",
+    "principle": "方差分析用于比较三个或更多组的均值是否存在显著差异。\n\n原理：将总变异分解为组间变异和组内变异。\n• 组间变异：不同组之间的差异（由分组因素引起）\n• 组内变异：组内个体之间的差异（随机误差）\n• F 统计量 = 组间均方 / 组内均方\n\n如果 F 值较大（p < 0.05），说明分组因素对结果有显著影响——至少有一组与其他组存在差异。\n\n事后检验（Post-hoc）：如果 ANOVA 显著，可用 Tukey HSD 等方法找出具体哪些组之间存在差异。\n\n单因素 vs 多因素：按分组变量的数量区分。单因素 ANOVA 有一个分组变量，双因素 ANOVA 有两个分组变量（可分析交互效应）。",
+    "scope": "适用于需要在多个组之间进行比较的场景：\n\n• 农业：三种不同肥料对作物产量的影响\n• 医学：四种不同药物的治疗效果比较\n• 营销：五种广告方案的转化率比较\n• 教育：三种教学方法的考试成绩比较\n• 制造业：四台机器的产品合格率比较\n\n要求：\n• 各组数据服从正态分布\n• 各组方差齐性（方差大致相等）\n• 观测值相互独立",
+    "example": "比较三种不同培训方法对员工绩效的影响：\n方法A  方法B  方法C\n 75     85     70\n 80     88     72\n 78     90     68\n 82     86     75\n\n• F = 15.8, p = 0.002 < 0.05\n• 结论：三种培训方法的效果存在显著差异\n• 方法B 的绩效最高\n\nExcel 操作：选择\"ANOVA 方差分析\"→ 分组列选\"培训方法\"，目标列选\"绩效评分\"→ 运行。"
+  },
+  {
+    "id": "clustering",
+    "name": "聚类分析 (Clustering / K-Means)",
+    "icon": "🔮",
+    "principle": "聚类分析是一种无监督学习方法，将数据按相似性自动分组，使组内差异最小、组间差异最大。\n\nK-Means 算法原理：\n1. 随机选择 K 个点作为初始聚类中心\n2. 将每个数据点分配给最近的聚类中心\n3. 重新计算每个聚类的中心（均值）\n4. 重复步骤 2-3 直到收敛（中心不再明显变化）\n\nK 值的选择：\n• 肘部法则：绘制 K 值与总内距离的关系图，寻找\"拐点\"\n• 轮廓系数：衡量聚类的紧密性和分离度\n\n距离度量：最常用欧氏距离，也支持曼哈顿距离、余弦相似度等。\n\n注意：K-Means 假设聚类为球形，对异常值和量纲敏感（通常需要标准化数据）。",
+    "scope": "适用于没有预定义标签的数据探索和模式发现：\n\n• 客户细分：按消费行为将客户分为不同群体\n• 图像分割：将图像像素分为不同区域\n• 市场研究：产品定位和市场细分\n• 异常检测：不落入任何聚类的点可能是异常值\n• 文档分类：按主题对文档进行自动归类\n\n注意事项：\n• 需要对数据进行标准化（消除量纲影响）\n• K 值需要事先指定（可用肘部法则辅助确定）\n• 对初始中心点的选择敏感（可多运行几次取最优）",
+    "example": "根据客户的年消费额和访问频率进行客户分群：\n客户  消费额(千元)  年访问次数\n A       8           15\n B       3            5\n C       9           18\n D       4            6\n E       2            4\n F       7           14\n\n• K=2 时得到两组：\n  • 高价值组 (A, C, F)：高消费高频率\n  • 低价值组 (B, D, E)：低消费低频率\n\nExcel 操作：选择\"聚类分析\"→ 选择\"消费额、访问次数\"列 → 设置簇数 K=2 → 运行。"
+  }
+];
+
+  const fab = document.getElementById('glossaryFab');
+  const overlay = document.getElementById('glossaryOverlay');
+  const closeBtn = document.getElementById('glossaryClose');
+  const searchInput = document.getElementById('glossarySearch');
+  const list = document.getElementById('glossaryList');
+
+  function renderItems(filter) {
+    const q = (filter || '').toLowerCase().trim();
+    const filtered = q ? ITEMS.filter(function(item) {
+      return item.name.toLowerCase().includes(q) || item.principle.toLowerCase().includes(q) || item.scope.toLowerCase().includes(q);
+    }) : ITEMS;
+
+    if (filtered.length === 0) {
+      list.innerHTML = '<div class="glossary-empty">没有找到匹配的统计方法</div>';
+      return;
+    }
+
+    list.innerHTML = filtered.map(function(item, idx) {
+      return '<div class="glossary-item">' +
+        '<div class="glossary-item-header" data-idx="' + idx + '">' +
+          '<span class="icon">' + item.icon + '</span>' +
+          '<span class="name">' + item.name + '</span>' +
+          '<span class="arrow">▼</span>' +
+        '</div>' +
+        '<div class="glossary-item-body">' +
+          '<h4>📐 原理</h4><p>' + item.principle + '</p>' +
+          '<h4>🎯 适用范围</h4><p>' + item.scope + '</p>' +
+          '<h4>💡 使用范例</h4><p>' + item.example + '</p>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    // Attach click handlers
+    var headers = list.querySelectorAll('.glossary-item-header');
+    for (var i = 0; i < headers.length; i++) {
+      headers[i].addEventListener('click', function() {
+        var body = this.nextElementSibling;
+        var arrow = this.querySelector('.arrow');
+        var isOpen = body.classList.contains('open');
+
+        // Close all
+        var allBodies = list.querySelectorAll('.glossary-item-body');
+        var allArrows = list.querySelectorAll('.glossary-item-header .arrow');
+        for (var j = 0; j < allBodies.length; j++) {
+          allBodies[j].classList.remove('open');
+          allArrows[j].classList.remove('open');
+        }
+
+        // Toggle current
+        if (!isOpen) {
+          body.classList.add('open');
+          arrow.classList.add('open');
+        }
+      });
+    }
+  }
+
+  function openGlossary() {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    renderItems('');
+    searchInput.value = '';
+    searchInput.focus();
+  }
+
+  function closeGlossary() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  fab.addEventListener('click', openGlossary);
+  closeBtn.addEventListener('click', closeGlossary);
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) closeGlossary();
+  });
+
+  searchInput.addEventListener('input', function() {
+    renderItems(this.value);
+  });
+
+  // Keyboard shortcut: Escape to close
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) {
+      closeGlossary();
+    }
+  });
+})();
+</script>
+<!-- ===== End 统计学术语库 ===== -->
+</body>
 </html>

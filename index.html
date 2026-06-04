@@ -2102,11 +2102,15 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
 <style id="tripbuddy-ui-upgrade">
   :root {
     --tb-bg: #f6f8ff;
-    --tb-card: rgba(255, 255, 255, .92);
+    --tb-card: rgba(255, 255, 255, .94);
+    --tb-card-solid: #ffffff;
     --tb-line: rgba(99, 102, 241, .16);
     --tb-primary: #4f46e5;
     --tb-primary-2: #7c3aed;
     --tb-accent: #06b6d4;
+    --tb-success: #059669;
+    --tb-warning: #d97706;
+    --tb-danger: #dc2626;
     --tb-text: #172033;
     --tb-muted: #667085;
     --tb-shadow: 0 18px 55px rgba(30, 41, 59, .10);
@@ -2127,19 +2131,18 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
     inset: 0;
     pointer-events: none;
     background-image: linear-gradient(rgba(79, 70, 229, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(79, 70, 229, .045) 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: linear-gradient(180deg, rgba(0,0,0,.75), transparent 70%);
-    z-index: -1;
+    background-size: 36px 36px;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,.8), transparent 72%);
+    z-index: 0;
   }
 
   .tb-topbar {
     position: sticky;
     top: 0;
-    z-index: 9999;
+    z-index: 50;
     backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
     background: rgba(246, 248, 255, .80);
-    border-bottom: 1px solid rgba(79, 70, 229, .10);
+    border-bottom: 1px solid rgba(99, 102, 241, .14);
   }
 
   .tb-topbar-inner {
@@ -2149,112 +2152,459 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 18px;
+    gap: 16px;
   }
 
-  .tb-brand { display: flex; align-items: center; gap: 12px; min-width: 220px; }
+  .tb-brand { display: flex; align-items: center; gap: 12px; min-width: 250px; }
   .tb-brand-logo {
-    width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center; color: #fff;
+    width: 44px; height: 44px; border-radius: 15px;
+    display: grid; place-items: center;
     background: linear-gradient(135deg, var(--tb-primary), var(--tb-primary-2));
-    box-shadow: 0 12px 28px rgba(79, 70, 229, .28); font-size: 20px;
+    color: #fff; box-shadow: 0 14px 30px rgba(79, 70, 229, .24);
+    font-size: 22px;
   }
-  .tb-brand-title { font-weight: 800; letter-spacing: -.03em; color: #111827; line-height: 1.15; }
-  .tb-brand-subtitle { font-size: 12px; color: var(--tb-muted); margin-top: 2px; }
+  .tb-brand-title { font-weight: 800; letter-spacing: -.02em; color: var(--tb-text); }
+  .tb-brand-subtitle { margin-top: 2px; color: var(--tb-muted); font-size: 12px; }
 
   .tb-tabs {
-    display: inline-flex; padding: 5px; border-radius: 999px; background: rgba(255, 255, 255, .74);
-    border: 1px solid rgba(79, 70, 229, .12); box-shadow: 0 8px 26px rgba(30, 41, 59, .06);
+    display: flex; gap: 6px; padding: 6px;
+    border: 1px solid rgba(99, 102, 241, .14);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .72);
+    box-shadow: 0 10px 25px rgba(15, 23, 42, .06);
   }
   .tb-tab {
-    border: 0; background: transparent; color: #475467; padding: 10px 18px; border-radius: 999px;
-    cursor: pointer; font-weight: 700; transition: all .22s ease; white-space: nowrap; font-size: 14px;
+    border: 0; border-radius: 999px; padding: 10px 18px;
+    color: var(--tb-muted); background: transparent;
+    font-weight: 700; cursor: pointer; transition: all .2s ease;
   }
-  .tb-tab:hover { color: var(--tb-primary); background: rgba(79, 70, 229, .06); }
-  .tb-tab.active { color: #fff; background: linear-gradient(135deg, var(--tb-primary), var(--tb-primary-2)); box-shadow: 0 10px 22px rgba(79, 70, 229, .23); }
+  .tb-tab:hover { color: var(--tb-primary); background: rgba(79, 70, 229, .08); }
+  .tb-tab.active { color: #fff; background: linear-gradient(135deg, var(--tb-primary), var(--tb-primary-2)); box-shadow: 0 10px 24px rgba(79, 70, 229, .28); }
 
   .tb-status-pill {
-    display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px;
-    background: rgba(16, 185, 129, .10); border: 1px solid rgba(16, 185, 129, .16);
-    color: #047857; font-size: 12px; font-weight: 700; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 13px; border-radius: 999px;
+    background: rgba(5, 150, 105, .10); color: #047857;
+    border: 1px solid rgba(5, 150, 105, .18);
+    font-size: 12px; font-weight: 700; white-space: nowrap;
   }
-  .tb-status-dot { width: 8px; height: 8px; border-radius: 999px; background: #10b981; box-shadow: 0 0 0 4px rgba(16, 185, 129, .14); }
+  .tb-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 5px rgba(16, 185, 129, .14); }
 
-  .app-shell { max-width: 1180px !important; padding: 28px 24px 64px !important; }
-  .app-header {
-    position: relative; overflow: hidden; text-align: left !important; padding: 42px 40px !important;
-    border-radius: 28px !important;
-    background: linear-gradient(135deg, rgba(79,70,229,.96), rgba(124,58,237,.92)), radial-gradient(circle at 86% 12%, rgba(255,255,255,.28), transparent 28%) !important;
-    box-shadow: 0 24px 70px rgba(79, 70, 229, .26) !important;
-  }
-  .app-header::after { content: ""; position: absolute; right: -70px; top: -70px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255, 255, 255, .13); }
-  .app-header h1 { font-size: clamp(28px, 4vw, 44px) !important; line-height: 1.08 !important; }
-  .app-header p { max-width: 720px; font-size: 16px !important; line-height: 1.7 !important; opacity: .92 !important; }
-
-  .panel, .config-card, .summary-card, .chart-card, .analysis-section, .settings-card {
-    border-radius: var(--tb-radius) !important; border: 1px solid rgba(79, 70, 229, .10) !important;
-    background: var(--tb-card) !important; box-shadow: var(--tb-shadow) !important;
-  }
-  .panel { padding: 26px !important; }
-  .panel:hover, .config-card:hover, .summary-card:hover, .chart-card:hover { transform: translateY(-2px); transition: transform .2s ease, box-shadow .2s ease; box-shadow: 0 22px 65px rgba(30, 41, 59, .13) !important; }
-  .panel-header h2 { font-size: 18px !important; color: #111827 !important; }
-  .panel-header .step-badge { background: linear-gradient(135deg, var(--tb-primary), var(--tb-primary-2)) !important; box-shadow: 0 8px 18px rgba(79, 70, 229, .24); }
-  .upload-zone { border-radius: 24px !important; border-color: rgba(79, 70, 229, .24) !important; background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(238,242,255,.66)) !important; min-height: 168px; }
-  .upload-zone:hover, .upload-zone.drag-over { transform: translateY(-2px); border-color: var(--tb-primary) !important; box-shadow: 0 18px 45px rgba(79, 70, 229, .14); }
-  button, .btn, .button, input[type="button"], input[type="submit"] { border-radius: 12px !important; }
-  button:not(:disabled), .btn:not(:disabled) { transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
-  button:not(:disabled):hover, .btn:not(:disabled):hover { transform: translateY(-1px); }
-  input, select, textarea { border-radius: 12px !important; border-color: rgba(79, 70, 229, .16) !important; }
-
-  .tb-page { max-width: 1180px; margin: 0 auto; padding: 28px 24px 64px; display: none; }
-  .tb-page.active { display: block; }
+  #root { position: relative; z-index: 1; }
   body.tb-page-special #root { display: none !important; }
+  body:not(.tb-page-special) #tb-special-page { display: none !important; }
 
-  .tb-special-hero {
-    position: relative; overflow: hidden; border-radius: 30px; padding: 42px 40px; color: #fff;
-    background: linear-gradient(135deg, #0f172a, #4338ca 48%, #06b6d4); box-shadow: 0 28px 70px rgba(15, 23, 42, .22); margin-bottom: 22px;
+  .app-shell, .adv-section, .panel, .scrape-section, .glossary-panel { position: relative; z-index: 1; }
+  .app-header {
+    border: 1px solid rgba(255,255,255,.45) !important;
+    background:
+      linear-gradient(135deg, rgba(79,70,229,.96), rgba(124,58,237,.94)) !important;
+    box-shadow: var(--tb-shadow) !important;
   }
-  .tb-special-hero::after { content: ""; position: absolute; width: 280px; height: 280px; right: -80px; top: -90px; border-radius: 999px; background: rgba(255,255,255,.14); }
-  .tb-kicker { display:inline-flex; align-items:center; gap:8px; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.16); font-size:13px; font-weight:700; margin-bottom:14px; }
-  .tb-special-hero h1 { margin: 0 0 12px; font-size: clamp(30px, 5vw, 50px); line-height: 1.06; letter-spacing: -.04em; }
-  .tb-special-hero p { margin: 0; max-width: 760px; line-height: 1.75; opacity: .92; font-size: 16px; }
-  .tb-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
-  .tb-card { border-radius: 24px; border: 1px solid rgba(79, 70, 229, .10); background: rgba(255,255,255,.92); box-shadow: var(--tb-shadow); padding: 24px; }
-  .tb-card.span-7 { grid-column: span 7; } .tb-card.span-5 { grid-column: span 5; } .tb-card.span-4 { grid-column: span 4; }
-  .tb-card h2, .tb-card h3 { margin: 0 0 10px; color: #111827; letter-spacing: -.02em; }
-  .tb-card p { color: var(--tb-muted); line-height: 1.7; margin: 0 0 16px; }
-  .tb-card ul { margin: 0; padding-left: 18px; color: #475467; line-height: 1.9; }
-  .tb-template-list { display:grid; gap: 12px; }
-  .tb-template { display:flex; align-items:flex-start; gap: 12px; padding: 14px; border-radius: 16px; background: linear-gradient(180deg, #fff, #f8fafc); border: 1px solid rgba(79,70,229,.10); }
-  .tb-template-icon { width: 38px; height:38px; border-radius: 13px; display:grid; place-items:center; background:#eef2ff; color:#4f46e5; flex-shrink:0; }
-  .tb-template strong { display:block; color:#111827; margin-bottom:3px; }
-  .tb-template span { color:var(--tb-muted); font-size:13px; line-height:1.55; }
-  .tb-action-row { display:flex; flex-wrap:wrap; gap: 12px; margin-top: 18px; }
-  .tb-primary-btn, .tb-secondary-btn { appearance:none; border:0; cursor:pointer; font-weight:800; padding: 12px 18px; border-radius: 14px; }
-  .tb-primary-btn { color:#fff; background:linear-gradient(135deg, var(--tb-primary), var(--tb-primary-2)); box-shadow:0 12px 26px rgba(79,70,229,.24); }
-  .tb-secondary-btn { color:#334155; background:#fff; border:1px solid rgba(79,70,229,.14); }
-  .tb-metric-row { display:grid; grid-template-columns:repeat(3,1fr); gap: 12px; margin-top:16px; }
-  .tb-metric { border-radius:18px; padding:16px; background:#f8fafc; border:1px solid rgba(99,102,241,.10); }
-  .tb-metric b { display:block; color:#111827; font-size:24px; margin-bottom:4px; }
-  .tb-metric span { color:var(--tb-muted); font-size:12px; font-weight:700; }
+  .panel, .adv-section, .scrape-section, .glossary-panel {
+    border-color: rgba(99,102,241,.14) !important;
+    box-shadow: 0 14px 42px rgba(15, 23, 42, .07) !important;
+    border-radius: 20px !important;
+  }
+  .upload-zone { background: rgba(255,255,255,.74) !important; border-color: rgba(99,102,241,.24) !important; }
 
-  @media (max-width: 840px) {
-    .tb-topbar-inner { align-items:flex-start; flex-direction:column; }
-    .tb-tabs { width: 100%; display:grid; grid-template-columns:1fr 1fr; }
-    .tb-status-pill { display:none; }
-    .app-header, .tb-special-hero { padding: 30px 24px !important; }
-    .tb-card.span-7, .tb-card.span-5, .tb-card.span-4 { grid-column: 1 / -1; }
-    .tb-metric-row { grid-template-columns:1fr; }
+  #tb-special-page {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 24px 54px;
+  }
+
+  .tb-hero {
+    overflow: hidden;
+    position: relative;
+    padding: 34px;
+    border-radius: 30px;
+    background:
+      linear-gradient(135deg, rgba(79,70,229,.96), rgba(6,182,212,.85)),
+      radial-gradient(circle at 85% 18%, rgba(255,255,255,.32), transparent 28%);
+    color: #fff;
+    box-shadow: var(--tb-shadow);
+  }
+  .tb-hero::after {
+    content: "";
+    position: absolute;
+    width: 260px; height: 260px; right: -80px; bottom: -120px;
+    border-radius: 50%; background: rgba(255,255,255,.16);
+  }
+  .tb-hero-kicker {
+    display: inline-flex; gap: 8px; align-items: center;
+    padding: 7px 12px; border-radius: 999px;
+    background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.24);
+    font-size: 13px; font-weight: 800;
+  }
+  .tb-hero h1 { margin: 16px 0 10px; font-size: clamp(30px, 5vw, 48px); line-height: 1.05; letter-spacing: -.04em; }
+  .tb-hero p { margin: 0; max-width: 760px; color: rgba(255,255,255,.88); line-height: 1.75; }
+
+  .tb-category-tabs {
+    margin: 22px 0 18px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .tb-category-tab {
+    border: 1px solid rgba(99,102,241,.15);
+    border-radius: 20px;
+    background: rgba(255,255,255,.78);
+    color: var(--tb-text);
+    padding: 16px;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(15,23,42,.06);
+    transition: all .2s ease;
+  }
+  .tb-category-tab:hover { transform: translateY(-2px); border-color: rgba(79,70,229,.32); }
+  .tb-category-tab.active { background: linear-gradient(135deg, rgba(79,70,229,.96), rgba(124,58,237,.92)); color: #fff; box-shadow: 0 18px 42px rgba(79,70,229,.22); }
+  .tb-category-icon { font-size: 24px; display: block; margin-bottom: 8px; }
+  .tb-category-name { font-weight: 900; display: block; }
+  .tb-category-desc { display: block; margin-top: 5px; font-size: 12px; color: var(--tb-muted); line-height: 1.45; }
+  .tb-category-tab.active .tb-category-desc { color: rgba(255,255,255,.78); }
+
+  .tb-category-panel { display: none; }
+  .tb-category-panel.active { display: block; }
+
+  .tb-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
+  .tb-card {
+    background: var(--tb-card);
+    border: 1px solid rgba(99,102,241,.14);
+    border-radius: var(--tb-radius);
+    padding: 22px;
+    box-shadow: 0 14px 42px rgba(15, 23, 42, .07);
+  }
+  .span-12 { grid-column: span 12; }
+  .span-8 { grid-column: span 8; }
+  .span-6 { grid-column: span 6; }
+  .span-4 { grid-column: span 4; }
+  .span-3 { grid-column: span 3; }
+
+  .tb-card h2, .tb-card h3 { margin: 0 0 10px; color: var(--tb-text); letter-spacing: -.02em; }
+  .tb-card p { margin: 0; color: var(--tb-muted); line-height: 1.75; }
+  .tb-mini-label { font-size: 12px; color: var(--tb-muted); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+  .tb-badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .tb-badge { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border-radius: 999px; background: rgba(79,70,229,.08); color: var(--tb-primary); font-size: 12px; font-weight: 800; }
+
+  .tb-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+  .tb-field { display: flex; flex-direction: column; gap: 7px; }
+  .tb-field label { font-weight: 800; color: var(--tb-text); font-size: 13px; }
+  .tb-field input, .tb-field select, .tb-field textarea {
+    width: 100%; border: 1px solid rgba(99,102,241,.18); border-radius: 14px;
+    padding: 12px 13px; background: rgba(255,255,255,.82); color: var(--tb-text);
+    outline: none; transition: all .2s ease; font: inherit;
+  }
+  .tb-field textarea { min-height: 190px; resize: vertical; line-height: 1.65; }
+  .tb-field input:focus, .tb-field select:focus, .tb-field textarea:focus { border-color: var(--tb-primary); box-shadow: 0 0 0 4px rgba(79,70,229,.10); }
+  .tb-field .hint { color: var(--tb-muted); font-size: 12px; line-height: 1.55; }
+
+  .tb-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .tb-btn {
+    border: 0; border-radius: 14px; padding: 12px 16px;
+    font-weight: 900; cursor: pointer; transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .tb-btn.primary { color: #fff; background: linear-gradient(135deg, var(--tb-primary), var(--tb-primary-2)); box-shadow: 0 12px 28px rgba(79,70,229,.24); }
+  .tb-btn.secondary { color: var(--tb-primary); background: rgba(79,70,229,.09); }
+  .tb-btn.ghost { color: var(--tb-muted); background: rgba(100,116,139,.08); }
+  .tb-btn:hover { transform: translateY(-1px); }
+  .tb-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+
+  .tb-result-box {
+    margin-top: 16px; padding: 16px; border-radius: 18px;
+    background: #0f172a; color: #e5e7eb;
+    min-height: 122px; white-space: pre-wrap; line-height: 1.7;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    overflow: auto;
+  }
+  .tb-table-wrap { margin-top: 16px; overflow: auto; border: 1px solid rgba(99,102,241,.14); border-radius: 16px; background: #fff; }
+  .tb-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .tb-table th, .tb-table td { padding: 10px 12px; border-bottom: 1px solid rgba(226,232,240,.9); text-align: left; vertical-align: top; }
+  .tb-table th { background: rgba(79,70,229,.06); color: var(--tb-text); font-weight: 900; white-space: nowrap; }
+  .tb-table tr:last-child td { border-bottom: 0; }
+
+  .tb-empty-card { min-height: 340px; display: grid; place-items: center; text-align: center; }
+  .tb-empty-card .emoji { font-size: 42px; margin-bottom: 12px; display: block; }
+  .tb-empty-card h2 { margin-bottom: 8px; }
+
+  @media (max-width: 900px) {
+    .tb-topbar-inner { flex-wrap: wrap; }
+    .tb-status-pill { display: none; }
+    .tb-tabs { order: 3; width: 100%; }
+    .tb-tab { flex: 1; }
+    .tb-category-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .span-8, .span-6, .span-4, .span-3 { grid-column: span 12; }
+    .tb-form-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .tb-topbar-inner, #tb-special-page { padding-left: 14px; padding-right: 14px; }
+    .tb-brand-subtitle, .tb-status-pill { display: none; }
+    .tb-category-tabs { grid-template-columns: 1fr; }
+    .tb-hero { padding: 24px; border-radius: 24px; }
   }
 </style>
-<script id="tripbuddy-page-upgrade">
+<script id="tripbuddy-ui-upgrade-script">
 (function () {
-  function ready(fn) {
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
-    else fn();
+  function byId(id) { return document.getElementById(id); }
+  function escapeHtml(text) {
+    return String(text || '').replace(/[&<>"']/g, function (ch) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+    });
   }
 
-  ready(function () {
-    var root = document.getElementById('root');
+  var SERVICE_CHECK_KB = {
+    stages: {
+      stage1: '阶段一：存在明显无效共情/红线问题，客户情绪未被接住或被进一步激化。',
+      stage2: '阶段二：有共情动作但偏模板化、笼统，未充分回应客户具体情绪点。',
+      stage3: '阶段三：能结合客户问题进行有效安抚，流程较完整，仍有轻微提升空间。',
+      stage4: '阶段四：高质量有效共情，能准确识别情绪、主动致歉并推动解决方案。'
+    },
+    points: {
+      1: '机械模板或泛化安抚，未回应客户具体情绪',
+      2: '反问、推诿、否定客户感受或表达生硬',
+      3: '打断抢话、忽略客户诉求或处理节奏失当',
+      4: '关键情绪爆点未及时承接/未持续跟进',
+      5: '客户情绪明显缓和，安抚动作有效',
+      6: '针对服务缺陷主动致歉并解释处理路径',
+      7: '存在红线话术或可能激化矛盾的表达',
+      8: '外呼/开场/结尾礼貌语完整',
+      9: '对差评/投诉场景有复盘和补救动作'
+    }
+  };
+
+  function localServiceCheck(text) {
+    var raw = String(text || '').trim();
+    if (!raw || raw.length <= 2 || /^\d{4,}$/.test(raw)) {
+      return { stage: '不涉及', confidence: 100, points: [], reason: '内容为空、过短或仅为订单号，无法构成客服对话。' };
+    }
+    var lower = raw.toLowerCase();
+    var bad = /(你自己|不是我们|没办法|不归|随便|投诉也|不可能|你要这么想|我不知道|不能处理|无法处理)/.test(raw);
+    var apology = /(抱歉|不好意思|对不起|非常理解|理解您|给您添麻烦|给您带来不便|很遗憾)/.test(raw);
+    var specific = /(订单|房间|酒店|航班|退款|发票|费用|价格|入住|退订|取消|权益|会员|客服|客人|先生|女士|您反馈|您提到)/.test(raw);
+    var solution = /(帮您|为您|处理|核实|反馈|申请|跟进|补偿|方案|稍后|预计|联系|升级|记录)/.test(raw);
+    var emotional = /(生气|着急|焦虑|不满|投诉|差评|失望|离谱|麻烦|耽误|影响|不舒服|担心)/.test(raw);
+    var polite = /(您好|请问|感谢|谢谢|祝您|辛苦)/.test(raw);
+    var generic = /(亲亲|请您耐心等待|给您带来不便敬请谅解|非常抱歉呢)/.test(raw) && !specific;
+
+    if (bad) return { stage: '阶段一', confidence: 88, points: [2, 7], reason: '识别到推诿/否定/可能激化矛盾的话术。' };
+    if (generic || (!apology && emotional)) return { stage: '阶段二', confidence: 78, points: [1, 4], reason: '存在情绪或投诉场景，但共情回应不足或偏模板化。' };
+    if (apology && specific && solution) return { stage: '阶段四', confidence: 90, points: [5, 6, polite ? 8 : 4], reason: '能针对具体问题表达理解/致歉，并给出处理路径。' };
+    if ((apology && solution) || (specific && solution)) return { stage: '阶段三', confidence: 82, points: [5, 6], reason: '具备安抚和解决动作，但情绪承接或证据不够充分。' };
+    return { stage: '阶段二', confidence: 72, points: [1], reason: '未识别到充分的有效共情和闭环处理动作。' };
+  }
+
+  function parseCsvLine(line) {
+    var out = [], cur = '', quoted = false;
+    for (var i = 0; i < line.length; i++) {
+      var ch = line[i];
+      if (ch === '"') {
+        if (quoted && line[i + 1] === '"') { cur += '"'; i++; }
+        else quoted = !quoted;
+      } else if (ch === ',' && !quoted) { out.push(cur); cur = ''; }
+      else cur += ch;
+    }
+    out.push(cur);
+    return out;
+  }
+
+  function csvEscape(v) {
+    v = String(v == null ? '' : v);
+    return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  }
+
+  function downloadText(filename, content, mime) {
+    var blob = new Blob(['\ufeff' + content], { type: mime || 'text/plain;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1200);
+  }
+
+  async function callLLM(text, config) {
+    if (!config.apiKey) return null;
+    var endpoint = config.endpoint || 'https://api.openai.com/v1/chat/completions';
+    var model = config.model || 'gpt-4o-mini';
+    var prompt = '你是客服质检评估助手，只评估「有效共情」。请根据以下规则输出严格 JSON：{"stage":"阶段一/阶段二/阶段三/阶段四/不涉及","confidence":0-100,"points":[数字],"reason":"一句话"}。判断点：1机械模板；2反问推诿否定；3打断抢话；4情绪爆点未承接；5情绪缓和；6主动致歉并处理；7红线话术；8礼貌语；9差评补救。对话：\n' + text;
+    var resp = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + config.apiKey },
+      body: JSON.stringify({ model: model, messages: [{ role: 'user', content: prompt }], temperature: 0.1 })
+    });
+    if (!resp.ok) throw new Error('LLM 请求失败：HTTP ' + resp.status);
+    var data = await resp.json();
+    var content = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
+    if (!content) throw new Error('LLM 未返回有效内容');
+    var jsonText = content.match(/\{[\s\S]*\}/);
+    if (!jsonText) throw new Error('LLM 返回不是 JSON');
+    return JSON.parse(jsonText[0]);
+  }
+
+  function formatServiceResult(result) {
+    if (!result) return '暂无结果';
+    var title = result.stage === '不涉及' ? '【有效共情 - 不涉及】（置信度：100%）' : '【有效共情 - ' + result.stage + '】（置信度：' + Math.round(result.confidence || 0) + '%）';
+    var points = result.points && result.points.length ? '\n判断点：' + result.points.join('、') : '';
+    var reason = result.reason ? '\n说明：' + result.reason : '';
+    return title + points + reason;
+  }
+
+  function renderSpecialPage(root) {
+    if (byId('tb-special-page')) return;
+    var special = document.createElement('main');
+    special.id = 'tb-special-page';
+    special.innerHTML = [
+      '<section class="tb-hero">',
+        '<div class="tb-hero-kicker">✨ 专项分析工作台</div>',
+        '<h1>面向运营场景的专项分析</h1>',
+        '<p>通用分析继续承载 Excel 清洗、统计描述和高级统计分析；专项分析聚焦垂直运营场景，并将 service-check 客服质检能力内置在「成本/用量运营」中。</p>',
+      '</section>',
+      '<section class="tb-category-tabs" role="tablist" aria-label="专项分析分类">',
+        '<button class="tb-category-tab active" data-tb-special-category="cost" role="tab" aria-selected="true"><span class="tb-category-icon">💰</span><span class="tb-category-name">成本/用量运营</span><span class="tb-category-desc">成本、消耗、质检、用量健康度</span></button>',
+        '<button class="tb-category-tab" data-tb-special-category="efficiency" role="tab" aria-selected="false"><span class="tb-category-icon">👥</span><span class="tb-category-name">人效运营</span><span class="tb-category-desc">人均产能、排班、团队效能</span></button>',
+        '<button class="tb-category-tab" data-tb-special-category="intelligent" role="tab" aria-selected="false"><span class="tb-category-icon">🤖</span><span class="tb-category-name">智能运营</span><span class="tb-category-desc">自动化、模型效果、智能助手</span></button>',
+        '<button class="tb-category-tab" data-tb-special-category="show" role="tab" aria-selected="false"><span class="tb-category-icon">🎬</span><span class="tb-category-name">展演运营</span><span class="tb-category-desc">直播、会场、讲解与转化</span></button>',
+      '</section>',
+
+      '<section class="tb-category-panel active" data-tb-special-panel="cost">',
+        '<div class="tb-grid">',
+          '<article class="tb-card span-12">',
+            '<div class="tb-mini-label">内置技能 · service-check</div>',
+            '<h2>客服质检评估：有效共情</h2>',
+            '<p>支持单条客服对话评分，也支持粘贴 CSV 批量评估。评分会输出阶段、判断点、置信度和一句说明。若你希望调用大模型，可先在下方填写 API Key / Token 并选择模型；不填写时使用本地规则引擎离线评估。</p>',
+            '<div class="tb-badge-row">',
+              '<span class="tb-badge">双视角规则：话术质量 + 情绪轨迹</span>',
+              '<span class="tb-badge">阶段一至阶段四</span>',
+              '<span class="tb-badge">可选 LLM 增强</span>',
+              '<span class="tb-badge">浏览器本地处理</span>',
+            '</div>',
+          '</article>',
+          '<article class="tb-card span-4">',
+            '<h3>大模型配置（可选）</h3>',
+            '<p>如需调用 OpenAI 兼容接口，请先填写 Token 和模型；Key 仅保存在当前浏览器内存，不会随页面上传。</p>',
+            '<div class="tb-form-grid" style="grid-template-columns:1fr">',
+              '<div class="tb-field"><label for="tb-llm-token">API Key / Token</label><input id="tb-llm-token" type="password" autocomplete="off" placeholder="sk-... 或你的网关 Token"><span class="hint">留空则使用内置规则，不发起网络请求。</span></div>',
+              '<div class="tb-field"><label for="tb-llm-model">模型</label><select id="tb-llm-model"><option value="gpt-4o-mini">gpt-4o-mini</option><option value="gpt-4o">gpt-4o</option><option value="deepseek-chat">deepseek-chat</option><option value="qwen-plus">qwen-plus</option><option value="custom">自定义模型</option></select></div>',
+              '<div class="tb-field"><label for="tb-llm-custom-model">自定义模型名</label><input id="tb-llm-custom-model" type="text" placeholder="例如 claude-3-5-sonnet / company-model"></div>',
+              '<div class="tb-field"><label for="tb-llm-endpoint">接口地址</label><input id="tb-llm-endpoint" type="url" placeholder="https://api.openai.com/v1/chat/completions"><span class="hint">默认使用 OpenAI Chat Completions 兼容格式。</span></div>',
+            '</div>',
+          '</article>',
+          '<article class="tb-card span-8">',
+            '<h3>单条对话评估</h3>',
+            '<div class="tb-field"><label for="tb-service-text">客服/客人对话文本</label><textarea id="tb-service-text" placeholder="请粘贴对话文本，例如：\n客服：您好，非常抱歉给您带来不便，我先帮您核实订单...\n客人：我等了很久，很着急...\n客服：理解您的着急，我会优先为您跟进处理..."></textarea></div>',
+            '<div class="tb-actions"><button class="tb-btn primary" id="tb-service-run">开始评估</button><button class="tb-btn secondary" id="tb-service-sample">填入示例</button><button class="tb-btn ghost" id="tb-service-clear">清空</button></div>',
+            '<div class="tb-result-box" id="tb-service-result">等待输入对话内容后开始评估...</div>',
+          '</article>',
+          '<article class="tb-card span-12">',
+            '<h3>批量评估（CSV 粘贴）</h3>',
+            '<p>请粘贴包含「录音内容」列的 CSV 数据；如果没有该列，将默认使用最后一列作为对话内容。评估结果可导出 CSV。</p>',
+            '<div class="tb-field" style="margin-top:12px"><label for="tb-service-csv">CSV 内容</label><textarea id="tb-service-csv" style="min-height:150px" placeholder="录音内容,订单号\n客服：您好，非常抱歉... 客人：我很着急...,12345"></textarea></div>',
+            '<div class="tb-actions"><button class="tb-btn primary" id="tb-service-batch-run">批量评估</button><button class="tb-btn secondary" id="tb-service-batch-export" disabled>导出结果 CSV</button></div>',
+            '<div class="tb-table-wrap" id="tb-service-table-wrap" style="display:none"><table class="tb-table"><thead><tr><th>#</th><th>阶段</th><th>置信度</th><th>判断点</th><th>说明</th><th>内容预览</th></tr></thead><tbody id="tb-service-table"></tbody></table></div>',
+          '</article>',
+          '<article class="tb-card span-4"><h3>成本口径</h3><p>后续可接入用量账单、Token 消耗、人工复核成本等指标，形成质检成本看板。</p></article>',
+          '<article class="tb-card span-4"><h3>用量健康度</h3><p>按团队、业务线、时间段拆解评估量、异常量和模型调用量，定位波动来源。</p></article>',
+          '<article class="tb-card span-4"><h3>复核闭环</h3><p>低置信度样本自动进入人工复核池，沉淀新的判断样例和运营规则。</p></article>',
+        '</div>',
+      '</section>',
+
+      '<section class="tb-category-panel" data-tb-special-panel="efficiency">',
+        '<div class="tb-grid">',
+          '<article class="tb-card span-12 tb-empty-card"><div><span class="emoji">👥</span><h2>人效运营</h2><p>规划中：人均处理量、响应时长、排班饱和度、团队产能对比、质检通过率与人效联动。</p></div></article>',
+        '</div>',
+      '</section>',
+      '<section class="tb-category-panel" data-tb-special-panel="intelligent">',
+        '<div class="tb-grid">',
+          '<article class="tb-card span-12 tb-empty-card"><div><span class="emoji">🤖</span><h2>智能运营</h2><p>规划中：智能助手使用率、自动化解决率、模型命中率、知识库覆盖率、低置信度问题聚类。</p></div></article>',
+        '</div>',
+      '</section>',
+      '<section class="tb-category-panel" data-tb-special-panel="show">',
+        '<div class="tb-grid">',
+          '<article class="tb-card span-12 tb-empty-card"><div><span class="emoji">🎬</span><h2>展演运营</h2><p>规划中：展演场次、直播互动、讲解质量、转化漏斗、重点活动复盘与异常波动归因。</p></div></article>',
+        '</div>',
+      '</section>'
+    ].join('');
+    root.insertAdjacentElement('afterend', special);
+  }
+
+  function getLLMConfig() {
+    var selected = byId('tb-llm-model') ? byId('tb-llm-model').value : '';
+    var custom = byId('tb-llm-custom-model') ? byId('tb-llm-custom-model').value.trim() : '';
+    return {
+      apiKey: byId('tb-llm-token') ? byId('tb-llm-token').value.trim() : '',
+      model: selected === 'custom' ? custom : selected,
+      endpoint: byId('tb-llm-endpoint') && byId('tb-llm-endpoint').value.trim() ? byId('tb-llm-endpoint').value.trim() : 'https://api.openai.com/v1/chat/completions'
+    };
+  }
+
+  function initServiceCheck() {
+    var run = byId('tb-service-run');
+    if (!run || run.dataset.bound) return;
+    run.dataset.bound = '1';
+    var batchResults = [];
+
+    byId('tb-service-sample').addEventListener('click', function () {
+      byId('tb-service-text').value = '客人：我已经等了半小时了，真的很着急，酒店还说查不到订单。\n客服：您好，非常抱歉给您带来不便，我理解您现在入住受阻会非常着急。我马上帮您核实订单并同步联系酒店前台，预计 5 分钟内给您明确回复。如果确实影响入住，我会继续帮您申请补偿方案。';
+    });
+    byId('tb-service-clear').addEventListener('click', function () {
+      byId('tb-service-text').value = '';
+      byId('tb-service-result').textContent = '等待输入对话内容后开始评估...';
+    });
+    run.addEventListener('click', async function () {
+      var text = byId('tb-service-text').value;
+      var resultBox = byId('tb-service-result');
+      if (!text.trim()) { resultBox.textContent = '请先输入客服对话内容。'; return; }
+      run.disabled = true; resultBox.textContent = '评估中...';
+      try {
+        var config = getLLMConfig();
+        var result = config.apiKey ? await callLLM(text, config) : localServiceCheck(text);
+        resultBox.textContent = formatServiceResult(result);
+      } catch (err) {
+        var fallback = localServiceCheck(text);
+        resultBox.textContent = '大模型调用失败，已回退到本地规则评估。\n错误：' + (err && err.message ? err.message : err) + '\n\n' + formatServiceResult(fallback);
+      } finally { run.disabled = false; }
+    });
+
+    byId('tb-service-batch-run').addEventListener('click', async function () {
+      var csv = byId('tb-service-csv').value.trim();
+      var tbody = byId('tb-service-table');
+      var wrap = byId('tb-service-table-wrap');
+      var exportBtn = byId('tb-service-batch-export');
+      tbody.innerHTML = ''; batchResults = []; exportBtn.disabled = true;
+      if (!csv) { wrap.style.display = 'none'; alert('请先粘贴 CSV 内容。'); return; }
+      var lines = csv.split(/\r?\n/).filter(Boolean);
+      if (!lines.length) return;
+      var header = parseCsvLine(lines[0]);
+      var col = header.indexOf('录音内容');
+      if (col < 0) col = header.length - 1;
+      wrap.style.display = 'block';
+      var config = getLLMConfig();
+      for (var i = 1; i < lines.length; i++) {
+        var cells = parseCsvLine(lines[i]);
+        var content = cells[col] || cells[cells.length - 1] || '';
+        var result;
+        try { result = config.apiKey ? await callLLM(content, config) : localServiceCheck(content); }
+        catch (err) { result = localServiceCheck(content); result.reason = 'LLM 失败后本地评估：' + result.reason; }
+        batchResults.push({ index: i, content: content, result: result });
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + i + '</td><td>' + escapeHtml(result.stage) + '</td><td>' + Math.round(result.confidence || 0) + '%</td><td>' + escapeHtml((result.points || []).join('、')) + '</td><td>' + escapeHtml(result.reason || '') + '</td><td>' + escapeHtml(content.slice(0, 80)) + '</td>';
+        tbody.appendChild(tr);
+      }
+      exportBtn.disabled = batchResults.length === 0;
+    });
+
+    byId('tb-service-batch-export').addEventListener('click', function () {
+      if (!batchResults.length) return;
+      var rows = [['序号','阶段','置信度','判断点','说明','录音内容']].concat(batchResults.map(function (r) {
+        return [r.index, r.result.stage, Math.round(r.result.confidence || 0), (r.result.points || []).join('、'), r.result.reason || '', r.content];
+      }));
+      downloadText('service-check-results.csv', rows.map(function (row) { return row.map(csvEscape).join(','); }).join('\n'), 'text/csv;charset=utf-8');
+    });
+  }
+
+  function boot() {
+    var root = byId('root');
     if (!root || document.querySelector('.tb-topbar')) return;
 
     var topbar = document.createElement('nav');
@@ -2265,58 +2615,24 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
           '<div class="tb-brand-logo">📊</div>',
           '<div>',
             '<div class="tb-brand-title">Excel 自动统计分析</div>',
-            '<div class="tb-brand-subtitle">数据清洗 · 指标洞察 · 智能解读</div>',
+            '<div class="tb-brand-subtitle">通用分析 · 专项运营 · 本地处理</div>',
           '</div>',
         '</div>',
         '<div class="tb-tabs" role="tablist" aria-label="页面导航">',
           '<button class="tb-tab active" data-tb-page="general" role="tab" aria-selected="true">通用分析</button>',
           '<button class="tb-tab" data-tb-page="special" role="tab" aria-selected="false">专项分析</button>',
         '</div>',
-        '<div class="tb-status-pill"><span class="tb-status-dot"></span>本地处理，安全分析</div>',
+        '<div class="tb-status-pill"><span class="tb-status-dot"></span>高级统计仅在通用分析</div>',
       '</div>'
     ].join('');
-    document.body.insertBefore(topbar, root);
+    document.body.insertBefore(topbar, document.body.firstChild);
 
-    var special = document.createElement('section');
-    special.id = 'special-analysis-page';
-    special.className = 'tb-page';
-    special.setAttribute('role', 'tabpanel');
-    special.innerHTML = [
-      '<div class="tb-special-hero">',
-        '<div class="tb-kicker">✨ 新增页面 · 专项分析</div>',
-        '<h1>面向业务场景的专项数据诊断</h1>',
-        '<p>在通用分析之外，专项分析用于沉淀固定业务模板、关键指标口径和专题结论输出。你可以围绕转化、质量、成本、效率等主题快速搭建专属分析流。</p>',
-      '</div>',
-      '<div class="tb-grid">',
-        '<article class="tb-card span-7">',
-          '<h2>专项分析工作台</h2>',
-          '<p>建议先在「通用分析」上传 Excel 完成基础统计，再回到这里选择专题模板，对重点字段做二次诊断和结论沉淀。</p>',
-          '<div class="tb-template-list">',
-            '<div class="tb-template"><div class="tb-template-icon">🎯</div><div><strong>转化漏斗分析</strong><span>按阶段拆解访问、咨询、下单、支付等链路，识别掉点环节。</span></div></div>',
-            '<div class="tb-template"><div class="tb-template-icon">🧭</div><div><strong>异常波动定位</strong><span>围绕时间、渠道、城市、产品等维度定位异常增长或下跌。</span></div></div>',
-            '<div class="tb-template"><div class="tb-template-icon">💎</div><div><strong>重点对象对比</strong><span>支持门店、供应商、活动、人群等对象的多指标横向对比。</span></div></div>',
-          '</div>',
-          '<div class="tb-action-row">',
-            '<button class="tb-primary-btn" data-tb-page="general">去通用分析上传数据</button>',
-            '<button class="tb-secondary-btn" onclick="window.scrollTo({top:0,behavior:&quot;smooth&quot;})">查看专题能力</button>',
-          '</div>',
-        '</article>',
-        '<aside class="tb-card span-5">',
-          '<h2>分析流程</h2>',
-          '<ul><li>确认专项主题与核心指标口径</li><li>上传或复用 Excel 数据</li><li>选择维度拆解并标记异常值</li><li>输出结论、建议与后续动作</li></ul>',
-          '<div class="tb-metric-row"><div class="tb-metric"><b>4</b><span>推荐步骤</span></div><div class="tb-metric"><b>3</b><span>内置模板</span></div><div class="tb-metric"><b>0</b><span>数据上传云端</span></div></div>',
-        '</aside>',
-        '<article class="tb-card span-4"><h3>① 指标定义</h3><p>统一指标名称、计算方式、时间范围和数据过滤条件，避免不同口径导致结论偏差。</p></article>',
-        '<article class="tb-card span-4"><h3>② 维度拆解</h3><p>按时间、区域、渠道、业务线、人群等维度交叉查看，找到贡献最大或波动最明显的因素。</p></article>',
-        '<article class="tb-card span-4"><h3>③ 结论复盘</h3><p>沉淀关键发现、影响评估和行动建议，便于后续复用为标准化专项报告。</p></article>',
-      '</div>'
-    ].join('');
-    root.insertAdjacentElement('afterend', special);
+    renderSpecialPage(root);
+    initServiceCheck();
 
     function switchPage(page) {
       var isSpecial = page === 'special';
       document.body.classList.toggle('tb-page-special', isSpecial);
-      special.classList.toggle('active', isSpecial);
       document.querySelectorAll('[data-tb-page]').forEach(function (el) {
         var active = el.getAttribute('data-tb-page') === page;
         if (el.classList.contains('tb-tab')) {
@@ -2329,14 +2645,32 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
     }
 
     document.addEventListener('click', function (event) {
-      var trigger = event.target.closest('[data-tb-page]');
-      if (!trigger) return;
-      event.preventDefault();
-      switchPage(trigger.getAttribute('data-tb-page'));
+      var pageTrigger = event.target.closest('[data-tb-page]');
+      if (pageTrigger) {
+        event.preventDefault();
+        switchPage(pageTrigger.getAttribute('data-tb-page'));
+        return;
+      }
+      var catTrigger = event.target.closest('[data-tb-special-category]');
+      if (catTrigger) {
+        event.preventDefault();
+        var cat = catTrigger.getAttribute('data-tb-special-category');
+        document.querySelectorAll('[data-tb-special-category]').forEach(function (el) {
+          var active = el.getAttribute('data-tb-special-category') === cat;
+          el.classList.toggle('active', active);
+          el.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        document.querySelectorAll('[data-tb-special-panel]').forEach(function (el) {
+          el.classList.toggle('active', el.getAttribute('data-tb-special-panel') === cat);
+        });
+      }
     });
     window.addEventListener('hashchange', function () { switchPage(location.hash === '#special' ? 'special' : 'general'); });
     switchPage(location.hash === '#special' ? 'special' : 'general');
-  });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
 </script>
 <!-- ===== TripBuddy UI upgrade: end ===== -->

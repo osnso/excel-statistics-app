@@ -2195,6 +2195,7 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
   body:not(.tb-page-special) #tb-special-page { display: none !important; }
 
   .app-shell, .adv-section, .panel, .scrape-section, .glossary-panel { position: relative; z-index: 1; }
+  .scrape-section, .tb-hidden-scrape-module { display: none !important; }
   .app-header {
     border: 1px solid rgba(255,255,255,.45) !important;
     background:
@@ -2472,23 +2473,22 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
           '<article class="tb-card span-12">',
             '<div class="tb-mini-label">内置技能 · service-check</div>',
             '<h2>客服质检评估：有效共情</h2>',
-            '<p>支持单条客服对话评分，也支持粘贴 CSV 批量评估。评分会输出阶段、判断点、置信度和一句说明。若你希望调用大模型，可先在下方填写 API Key / Token 并选择模型；不填写时使用本地规则引擎离线评估。</p>',
+            '<p>支持单条客服对话评分，也支持粘贴 CSV 批量评估。评分会输出阶段、判断点、置信度和一句说明。AI 能力统一读取「通用分析」里的「AI设置」：配置保存后全站可用；未配置时自动使用本地规则引擎离线评估。</p>',
             '<div class="tb-badge-row">',
               '<span class="tb-badge">双视角规则：话术质量 + 情绪轨迹</span>',
               '<span class="tb-badge">阶段一至阶段四</span>',
-              '<span class="tb-badge">可选 LLM 增强</span>',
+              '<span class="tb-badge">复用通用分析 AI 设置</span>',
               '<span class="tb-badge">浏览器本地处理</span>',
             '</div>',
           '</article>',
           '<article class="tb-card span-4">',
-            '<h3>大模型配置（可选）</h3>',
-            '<p>如需调用 OpenAI 兼容接口，请先填写 Token 和模型；Key 仅保存在当前浏览器内存，不会随页面上传。</p>',
-            '<div class="tb-form-grid" style="grid-template-columns:1fr">',
-              '<div class="tb-field"><label for="tb-llm-token">API Key / Token</label><input id="tb-llm-token" type="password" autocomplete="off" placeholder="sk-... 或你的网关 Token"><span class="hint">留空则使用内置规则，不发起网络请求。</span></div>',
-              '<div class="tb-field"><label for="tb-llm-model">模型</label><select id="tb-llm-model"><option value="gpt-4o-mini">gpt-4o-mini</option><option value="gpt-4o">gpt-4o</option><option value="deepseek-chat">deepseek-chat</option><option value="qwen-plus">qwen-plus</option><option value="custom">自定义模型</option></select></div>',
-              '<div class="tb-field"><label for="tb-llm-custom-model">自定义模型名</label><input id="tb-llm-custom-model" type="text" placeholder="例如 claude-3-5-sonnet / company-model"></div>',
-              '<div class="tb-field"><label for="tb-llm-endpoint">接口地址</label><input id="tb-llm-endpoint" type="url" placeholder="https://api.openai.com/v1/chat/completions"><span class="hint">默认使用 OpenAI Chat Completions 兼容格式。</span></div>',
+            '<h3>全局 AI 设置</h3>',
+            '<p>专项分析不再单独维护 Token。请在「通用分析」页面的「AI设置」中保存 API Key / Base URL / 模型后使用，配置会写入浏览器 localStorage，并被 service-check 等技能统一复用。</p>',
+            '<div class="tb-badge-row">',
+              '<span class="tb-badge" id="tb-ai-config-state">检测 AI 设置中...</span>',
+              '<span class="tb-badge">Anthropic Messages API 逻辑</span>',
             '</div>',
+            '<div class="tb-actions"><button class="tb-btn secondary" data-tb-page="general" type="button">去通用分析配置 AI</button></div>',
           '</article>',
           '<article class="tb-card span-8">',
             '<h3>单条对话评估</h3>',
@@ -2529,13 +2529,26 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
   }
 
   function getLLMConfig() {
-    var selected = byId('tb-llm-model') ? byId('tb-llm-model').value : '';
-    var custom = byId('tb-llm-custom-model') ? byId('tb-llm-custom-model').value.trim() : '';
-    return {
-      apiKey: byId('tb-llm-token') ? byId('tb-llm-token').value.trim() : '',
-      model: selected === 'custom' ? custom : selected,
-      endpoint: byId('tb-llm-endpoint') && byId('tb-llm-endpoint').value.trim() ? byId('tb-llm-endpoint').value.trim() : 'https://api.openai.com/v1/chat/completions'
-    };
+    try {
+      var saved = localStorage.getItem('excel-ai-config');
+      if (!saved) return { apiKey: '', baseUrl: 'https://api.anthropic.com', model: 'claude-sonnet-4-6', enabled: false };
+      var parsed = JSON.parse(saved) || {};
+      return {
+        apiKey: String(parsed.apiKey || '').trim(),
+        baseUrl: String(parsed.baseUrl || 'https://api.anthropic.com').trim(),
+        model: String(parsed.model || 'claude-sonnet-4-6').trim(),
+        enabled: !!parsed.enabled || !!parsed.apiKey
+      };
+    } catch (err) {
+      return { apiKey: '', baseUrl: 'https://api.anthropic.com', model: 'claude-sonnet-4-6', enabled: false };
+    }
+  }
+
+  function updateAiConfigState() {
+    var el = byId('tb-ai-config-state');
+    if (!el) return;
+    var cfg = getLLMConfig();
+    el.textContent = cfg.apiKey ? ('AI 已配置 · ' + (cfg.model || '默认模型')) : 'AI 未配置 · 使用本地规则';
   }
 
   function initServiceCheck() {
@@ -2603,6 +2616,71 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
     });
   }
 
+
+  function removeScrapeModule() {
+    var headers = Array.prototype.slice.call(document.querySelectorAll('.panel-header h2, h2, h3'));
+    headers.forEach(function (h) {
+      if ((h.textContent || '').indexOf('网页数据抓取') >= 0) {
+        var panel = h.closest('.panel') || h.closest('section') || h.parentElement;
+        if (panel) panel.classList.add('tb-hidden-scrape-module');
+      }
+    });
+  }
+
+  var SKILL_LIBRARY_ITEMS = [
+    { name: 'service-check 客服质检评估', icon: '🧑‍💼', category: '成本/用量运营', status: '已内置', tags: ['有效共情', 'CSV批量', 'AI增强'], desc: '评估客服对话中的有效共情表现，输出阶段、判断点、置信度与一句话原因。已放入「专项分析 → 成本/用量运营」。', usage: ['单条对话评估：粘贴客服/客人对话后点击开始评估。', '批量评估：粘贴包含「录音内容」列的 CSV，可导出结果。', 'AI 增强：复用通用分析的 AI 设置；未配置时使用本地规则。'] },
+    { name: '成本/用量健康度诊断', icon: '💰', category: '成本/用量运营', status: '规划中', tags: ['成本趋势', '用量异常'], desc: '用于识别成本突增、资源用量异常和消耗结构变化。', usage: ['规划能力：接入成本明细表后生成趋势、Top 消耗项和异常解释。'] },
+    { name: '人效运营分析', icon: '👥', category: '人效运营', status: '规划中', tags: ['人均产能', '排班'], desc: '分析团队人均产能、工时投入、排班负荷和效率波动。', usage: ['规划能力：上传人效明细后输出团队/个人维度对比。'] },
+    { name: '智能运营评估', icon: '🤖', category: '智能运营', status: '规划中', tags: ['自动化', '模型效果'], desc: '评估智能助手、自动化流程和模型应用效果。', usage: ['规划能力：接入调用日志、命中率、转人工率等指标。'] },
+    { name: '展演运营复盘', icon: '🎬', category: '展演运营', status: '规划中', tags: ['直播', '转化漏斗'], desc: '面向直播、展演和讲解活动进行场次复盘与转化归因。', usage: ['规划能力：接入场次、互动、成交、讲解质检等数据。'] }
+  ];
+
+  function renderSkillLibrary() {
+    if (byId('skilllibFab')) return;
+    var fab = document.createElement('button');
+    fab.className = 'skilllib-fab';
+    fab.id = 'skilllibFab';
+    fab.title = '技能库';
+    fab.setAttribute('aria-label', '打开技能库');
+    fab.innerHTML = '🧩<span class="badge">' + SKILL_LIBRARY_ITEMS.length + '</span>';
+    var overlay = document.createElement('div');
+    overlay.className = 'skilllib-overlay';
+    overlay.id = 'skilllibOverlay';
+    overlay.innerHTML = [
+      '<div class="skilllib-modal">',
+        '<div class="skilllib-modal-header"><h2><span>🧩</span> 技能库</h2><button class="skilllib-close" id="skilllibClose" aria-label="关闭">✕</button></div>',
+        '<div class="skilllib-search"><input type="text" id="skilllibSearch" placeholder="搜索技能名称、分类或标签..." autocomplete="off"></div>',
+        '<div class="skilllib-list" id="skilllibList"></div>',
+      '</div>'
+    ].join('');
+    document.body.appendChild(fab);
+    document.body.appendChild(overlay);
+
+    function paint(keyword) {
+      var q = String(keyword || '').trim().toLowerCase();
+      var list = byId('skilllibList');
+      var items = SKILL_LIBRARY_ITEMS.filter(function (item) {
+        var hay = [item.name, item.category, item.status, item.desc].concat(item.tags).join(' ').toLowerCase();
+        return !q || hay.indexOf(q) >= 0;
+      });
+      list.innerHTML = items.map(function (item, idx) {
+        return '<div class="skilllib-item" data-skilllib-item="' + idx + '">' +
+          '<div class="skilllib-item-header"><span class="skilllib-icon">' + item.icon + '</span><div><div class="skilllib-name">' + escapeHtml(item.name) + '</div><div class="skilllib-meta"><span class="skilllib-tag">' + escapeHtml(item.category) + '</span><span class="skilllib-tag">' + escapeHtml(item.status) + '</span>' + item.tags.map(function (tag) { return '<span>' + escapeHtml(tag) + '</span>'; }).join('') + '</div></div></div>' +
+          '<div class="skilllib-body"><p>' + escapeHtml(item.desc) + '</p><ul>' + item.usage.map(function (u) { return '<li>' + escapeHtml(u) + '</li>'; }).join('') + '</ul></div>' +
+        '</div>';
+      }).join('') || '<div class="skilllib-item"><div class="skilllib-item-header"><div><div class="skilllib-name">未找到匹配技能</div><div class="skilllib-meta">请换个关键词试试</div></div></div></div>';
+    }
+    paint('');
+    fab.addEventListener('click', function () { overlay.classList.add('open'); });
+    byId('skilllibClose').addEventListener('click', function () { overlay.classList.remove('open'); });
+    overlay.addEventListener('click', function (event) { if (event.target === overlay) overlay.classList.remove('open'); });
+    byId('skilllibSearch').addEventListener('input', function (event) { paint(event.target.value); });
+    byId('skilllibList').addEventListener('click', function (event) {
+      var item = event.target.closest('.skilllib-item');
+      if (item) item.classList.toggle('open');
+    });
+  }
+
   function boot() {
     var root = byId('root');
     if (!root || document.querySelector('.tb-topbar')) return;
@@ -2629,6 +2707,10 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
 
     renderSpecialPage(root);
     initServiceCheck();
+    updateAiConfigState();
+    renderSkillLibrary();
+    removeScrapeModule();
+    setTimeout(removeScrapeModule, 800);
 
     function switchPage(page) {
       var isSpecial = page === 'special';
@@ -2665,7 +2747,8 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
         });
       }
     });
-    window.addEventListener('hashchange', function () { switchPage(location.hash === '#special' ? 'special' : 'general'); });
+    window.addEventListener('storage', function (event) { if (event.key === 'excel-ai-config') updateAiConfigState(); });
+    window.addEventListener('hashchange', function () { switchPage(location.hash === '#special' ? 'special' : 'general'); updateAiConfigState(); removeScrapeModule(); });
     switchPage(location.hash === '#special' ? 'special' : 'general');
   }
 

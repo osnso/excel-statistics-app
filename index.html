@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Excel 自动统计分析</title>
+    <title>WFM数据分析助手</title>
     <style>:root{color-scheme:light;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;background:#f0f2f5;color:#1a1a2e;--primary: #4f46e5;--primary-hover: #4338ca;--primary-light: #eef2ff;--success: #059669;--success-light: #ecfdf5;--danger: #dc2626;--danger-light: #fef2f2;--warning: #d97706;--warning-light: #fffbeb;--gray-50: #f9fafb;--gray-100: #f3f4f6;--gray-200: #e5e7eb;--gray-300: #d1d5db;--gray-400: #9ca3af;--gray-500: #6b7280;--gray-600: #4b5563;--gray-700: #374151;--gray-800: #1f2937;--shadow-sm: 0 1px 2px rgba(0, 0, 0, .05);--shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .04);--shadow-md: 0 4px 6px rgba(0, 0, 0, .07), 0 2px 4px rgba(0, 0, 0, .04);--shadow-lg: 0 10px 15px rgba(0, 0, 0, .08), 0 4px 6px rgba(0, 0, 0, .04);--radius: 12px;--radius-sm: 8px;--transition: .2s ease}*{box-sizing:border-box}body{margin:0;min-height:100vh}.app-shell{max-width:1120px;margin:0 auto;padding:28px 24px 48px}.app-header{text-align:center;margin-bottom:32px;padding:32px 24px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:20px;color:#fff;box-shadow:var(--shadow-lg)}.app-header h1{margin:0 0 8px;font-size:1.75rem;font-weight:700;letter-spacing:-.02em}.app-header p{margin:0;font-size:.95rem;opacity:.9}.panel{background:#fff;border:1px solid var(--gray-200);border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:var(--shadow);transition:box-shadow var(--transition)}.panel:hover{box-shadow:var(--shadow-md)}.panel-header{display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-user-select:none;user-select:none}.panel-header h2{margin:0;font-size:1.05rem;font-weight:600;color:var(--gray-800);display:flex;align-items:center;gap:8px}.panel-header .step-badge{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--primary);color:#fff;font-size:.75rem;font-weight:700;flex-shrink:0}.panel-header .collapse-icon{color:var(--gray-400);font-size:1.2rem;transition:transform var(--transition)}.panel-header .collapse-icon.collapsed{transform:rotate(-90deg)}.panel-body{margin-top:16px}.upload-zone{border:2px dashed var(--gray-300);border-radius:var(--radius);padding:36px 24px;text-align:center;cursor:pointer;transition:all var(--transition);background:var(--gray-50)}.upload-zone:hover,.upload-zone.drag-over{border-color:var(--primary);background:var(--primary-light)}.upload-zone .upload-icon{font-size:2.5rem;margin-bottom:12px;color:var(--gray-400);line-height:1}.upload-zone:hover .upload-icon,.upload-zone.drag-over .upload-icon{color:var(--primary)}.upload-zone .upload-text{font-weight:600;color:var(--gray-700);margin-bottom:4px}.upload-zone .upload-hint{font-size:.85rem;color:var(--gray-400)}.upload-zone input[type=file]{display:none}.file-info{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--success-light);border:1px solid #a7f3d0;border-radius:var(--radius-sm);margin-bottom:16px}.file-info .file-icon{font-size:1.5rem;line-height:1}.file-info .file-name{font-weight:600;color:var(--gray-800);flex:1}.file-info .file-size{font-size:.85rem;color:var(--gray-500)}.file-info .file-remove{background:none;border:none;color:var(--gray-400);cursor:pointer;padding:4px 8px;border-radius:6px;font-size:1.1rem;transition:all var(--transition)}.file-info .file-remove:hover{background:var(--danger-light);color:var(--danger)}.sheet-tabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}.sheet-tab{padding:8px 16px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--gray-50);cursor:pointer;font-size:.85rem;font-weight:500;color:var(--gray-600);transition:all var(--transition)}.sheet-tab:hover{border-color:var(--primary);color:var(--primary)}.sheet-tab.active{background:var(--primary);color:#fff;border-color:var(--primary)}.table-wrapper{overflow-x:auto;border:1px solid var(--gray-200);border-radius:var(--radius-sm);max-height:400px;overflow-y:auto}.table-wrapper table{width:100%;border-collapse:collapse;font-size:.85rem}.table-wrapper thead{position:sticky;top:0;z-index:1}.table-wrapper th{background:var(--gray-100);color:var(--gray-700);font-weight:600;padding:10px 12px;text-align:left;border-bottom:2px solid var(--gray-200);white-space:nowrap}.table-wrapper td{padding:8px 12px;border-bottom:1px solid var(--gray-100);color:var(--gray-600);white-space:nowrap}.table-wrapper tbody tr:hover{background:var(--primary-light)}.table-wrapper tbody tr:nth-child(2n){background:var(--gray-50)}.table-wrapper tbody tr:nth-child(2n):hover{background:var(--primary-light)}.form-row{display:grid;gap:8px;margin-bottom:16px}.form-row label{font-weight:600;font-size:.9rem;color:var(--gray-700)}.form-row label .label-hint{font-weight:400;color:var(--gray-400);font-size:.8rem}input[type=text],input[type=number],select,textarea{width:100%;padding:10px 14px;border:1px solid var(--gray-300);border-radius:var(--radius-sm);font-size:.9rem;font-family:inherit;background:#fff;color:var(--gray-800);transition:border-color var(--transition),box-shadow var(--transition)}input[type=text]:focus,input[type=number]:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px #4f46e51f}textarea{resize:vertical;min-height:60px}select[multiple]{min-height:120px}.grid-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.grid-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.badge-list{display:flex;flex-wrap:wrap;gap:6px}.badge-list span{display:inline-flex;align-items:center;gap:4px;background:var(--primary-light);color:var(--primary);padding:4px 10px;border-radius:9999px;font-size:.8rem;font-weight:500}.badge-list span.badge-numeric:before{content:"#";font-weight:700;opacity:.6}.badge-list span.badge-categorical:before{content:"■";font-weight:700;opacity:.6}.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:var(--radius-sm);font-size:.9rem;font-weight:600;font-family:inherit;cursor:pointer;transition:all var(--transition);text-decoration:none}.btn:disabled{opacity:.5;cursor:not-allowed}.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover:not(:disabled){background:var(--primary-hover);transform:translateY(-1px);box-shadow:var(--shadow-md)}.btn-success{background:var(--success);color:#fff}.btn-success:hover:not(:disabled){background:#047857;transform:translateY(-1px);box-shadow:var(--shadow-md)}.btn-outline{background:transparent;color:var(--gray-600);border:1px solid var(--gray-300)}.btn-outline:hover:not(:disabled){background:var(--gray-50);border-color:var(--gray-400)}.btn-sm{padding:6px 14px;font-size:.8rem}.actions{display:flex;gap:12px;flex-wrap:wrap}.result-container pre{white-space:pre-wrap;word-break:break-word;background:#1e1e2e;color:#cdd6f4;border-radius:var(--radius-sm);padding:20px;min-height:160px;border:1px solid var(--gray-200);font-size:.85rem;line-height:1.6;margin:0;font-family:JetBrains Mono,Fira Code,Consolas,monospace}.result-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:160px;background:var(--gray-50);border:1px dashed var(--gray-300);border-radius:var(--radius-sm);color:var(--gray-400);gap:8px}.result-placeholder .placeholder-icon{font-size:2rem;opacity:.5}.result-placeholder .placeholder-text{font-size:.9rem}.result-copy-btn{position:absolute;top:8px;right:8px}.result-toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}.result-container{position:relative}.ai-config-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;justify-content:flex-end}.ai-status-ok{font-size:.8rem;color:var(--success);font-weight:500}.ai-config-panel{border:1px solid #c4b5fd;background:#f5f3ff}.ai-config-hint{font-size:.8rem;color:var(--gray-500);margin-top:8px;line-height:1.5}.ai-config-actions{display:flex;gap:8px;align-items:center;margin-top:4px}.btn-ai{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none}.btn-ai:hover:not(:disabled){background:linear-gradient(135deg,#4f46e5,#7c3aed);transform:translateY(-1px);box-shadow:var(--shadow-md)}.btn-ai-active{background:linear-gradient(135deg,#059669,#10b981);color:#fff}.btn-ai-active:hover:not(:disabled){background:linear-gradient(135deg,#047857,#059669);transform:translateY(-1px);box-shadow:var(--shadow-md)}.label-with-action{display:flex;align-items:center;justify-content:space-between;gap:8px}.label-with-action label{margin-bottom:0}.ai-interpretation{margin-top:20px;padding-top:20px;border-top:2px solid var(--gray-200)}.ai-interp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;font-weight:600;font-size:.95rem;color:var(--gray-700)}.ai-interp-content{white-space:pre-wrap;word-break:break-word;background:#1e1e2e;color:#a5f3fc;border-radius:var(--radius-sm);padding:20px;min-height:80px;border:1px solid var(--gray-200);font-size:.85rem;line-height:1.7;margin:0;font-family:JetBrains Mono,Fira Code,Consolas,monospace}.alert{padding:12px 16px;border-radius:var(--radius-sm);font-size:.88rem;display:flex;align-items:center;gap:10px;margin-top:12px;animation:slideIn .25s ease}.alert-error{background:var(--danger-light);color:var(--danger);border:1px solid #fecaca}.alert-success{background:var(--success-light);color:var(--success);border:1px solid #a7f3d0}.alert-warning{background:var(--warning-light);color:var(--warning);border:1px solid #fde68a}.alert .alert-close{margin-left:auto;background:none;border:none;cursor:pointer;color:inherit;opacity:.6;padding:2px 6px;border-radius:4px;font-size:1rem}.alert .alert-close:hover{opacity:1}.loading-overlay{position:fixed;top:0;right:0;bottom:0;left:0;background:#00000059;display:flex;align-items:center;justify-content:center;z-index:1000;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);animation:fadeIn .2s ease}.loading-card{background:#fff;border-radius:var(--radius);padding:32px 40px;text-align:center;box-shadow:var(--shadow-lg)}.spinner{width:40px;height:40px;border:3px solid var(--gray-200);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px}.loading-card .loading-text{font-weight:600;color:var(--gray-700);font-size:.95rem}.data-stats{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}.stat-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:9999px;font-size:.82rem;color:var(--gray-600)}.stat-chip strong{color:var(--gray-800)}.panel-body{overflow:hidden;transition:max-height .25s ease,opacity .2s ease;max-height:2000px;opacity:1}.panel-body.hidden{max-height:0;opacity:0;margin-top:0;padding-top:0}@keyframes spin{to{transform:rotate(360deg)}}@keyframes fadeIn{0%{opacity:0}to{opacity:1}}@keyframes slideIn{0%{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}.note{text-align:center;border:1px dashed var(--gray-300);background:var(--gray-50)}.note p{margin-top:8px;color:var(--gray-500);font-size:.88rem}@media (max-width: 768px){.app-shell{padding:16px 12px 32px}.app-header{padding:24px 16px}.app-header h1{font-size:1.35rem}.panel{padding:16px}.grid-two,.grid-three{grid-template-columns:1fr}.upload-zone{padding:28px 16px}.actions{flex-direction:column}.actions .btn{width:100%;justify-content:center}}.url-input-row{display:flex;gap:8px}.url-input-row input{flex:1}.url-input-row .btn{flex-shrink:0;white-space:nowrap}.scrape-result{margin-top:16px}.scrape-result-header{margin-bottom:12px;font-size:.9rem;color:var(--gray-600)}.scrape-result-header strong{color:var(--gray-800)}.scrape-table-list{display:grid;gap:16px}.scrape-table-card{border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:16px;background:var(--gray-50);transition:box-shadow var(--transition)}.scrape-table-card:hover{box-shadow:var(--shadow-md)}.scrape-table-name{font-weight:600;font-size:.9rem;color:var(--gray-800);margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.scrape-table-meta{font-weight:400;font-size:.8rem;color:var(--gray-500)}.scrape-table-preview{overflow-x:auto;margin-bottom:12px;border:1px solid var(--gray-200);border-radius:6px;max-height:220px;overflow-y:auto}.scrape-table-preview table{width:100%;border-collapse:collapse;font-size:.78rem}.scrape-table-preview th{background:var(--gray-100);padding:6px 8px;text-align:left;border-bottom:1px solid var(--gray-200);white-space:nowrap;font-weight:600}.scrape-table-preview td{padding:4px 8px;border-bottom:1px solid var(--gray-100);white-space:nowrap;color:var(--gray-600)}.scrape-table-preview tbody tr:hover{background:var(--primary-light)}@media (max-width: 768px){.url-input-row{flex-direction:column}}.scrape-advanced{margin-bottom:12px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:8px 12px;background:var(--gray-50)}.scrape-advanced summary{cursor:pointer;font-size:.85rem;font-weight:500;color:var(--gray-600);padding:4px 0;-webkit-user-select:none;user-select:none}.scrape-advanced summary:hover{color:var(--primary)}.scrape-advanced-body{margin-top:12px}.scrape-advanced-body .form-row{margin-bottom:10px}.scrape-advanced-body textarea{font-size:.82rem;font-family:Consolas,Courier New,monospace}.scrape-paste-toggle{margin-bottom:10px}.scrape-paste-area{border:1px dashed var(--gray-300);border-radius:var(--radius-sm);padding:16px;background:var(--gray-50);margin-bottom:12px}.scrape-paste-area textarea{font-size:.82rem;font-family:Consolas,Courier New,monospace}
 </style>
   </head>
@@ -217,7 +217,7 @@ ${e.map(t=>`  - "${t.name}" (${t.type==="numeric"?"数值":"分类"})`).join(`
 ${xe.explanation}
 
 参数已自动配置，请检查下方字段后点击"运行分析"。`)}}catch(Q){q(`AI 解析失败: ${Q.message||"请检查 API 配置和网络连接"}`)}finally{te(!1)}},he=async()=>{var O;if(!A.enabled||!A.apiKey){q('请先启用 AI 并配置 API Key（点击页面顶部"⚙ AI 设置"）');return}if(!F){q("请先运行分析，获得结果后再进行 AI 解读");return}te(!0),q(""),Ar("");try{const re=["## 数据信息",`数据列: ${[...Ea.map(Fe=>`${Fe}(数值)`),...Sa.map(Fe=>`${Fe}(分类)`)].join("、")}`,`数据行数: ${h.length}`,`分析类型: ${((O=ol.find(Fe=>Fe.value===p))==null?void 0:O.label)||p}`,"","## 分析结果",F].join(`
-`),_e=w6();await Ld(A,_e,re,Fe=>Ar(Fe))}catch(Q){q(`AI 解读失败: ${Q.message||"请检查 API 配置和网络连接"}`)}finally{te(!1)}};return R.jsxs("div",{className:"app-shell",children:[R.jsxs("header",{className:"app-header",children:[R.jsx("h1",{children:"Excel 自动统计分析工具"}),R.jsx("p",{children:"上传 Excel 文件，在浏览器中完成统计分析"})]}),R.jsxs("div",{className:"ai-config-bar",children:[R.jsx("button",{className:`btn ${A.enabled?"btn-ai-active":"btn-outline"} btn-sm`,onClick:()=>We(!Le),children:A.enabled?"🤖 AI 已就绪":"⚙ AI 设置"}),A.enabled&&A.apiKey&&R.jsx("span",{className:"ai-status-ok",children:"API 已连接"})]}),Le&&R.jsxs("section",{className:"panel ai-config-panel",children:[R.jsx("h2",{style:{margin:"0 0 16px",fontSize:"1rem"},children:"🤖 AI 配置"}),R.jsx("div",{className:"form-row",children:R.jsxs("label",{children:[R.jsx("input",{type:"checkbox",checked:A.enabled,onChange:O=>D({enabled:O.target.checked}),style:{width:"auto",marginRight:8}}),"启用 AI 功能"]})}),R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["API Key / Token ",R.jsx("span",{className:"label-hint",children:"(必填)"})]}),R.jsx("input",{type:"password",value:A.apiKey,onChange:O=>D({apiKey:O.target.value}),placeholder:"输入你的 API Key 或 Coding Plan Token"})]}),R.jsxs("div",{className:"grid-two",children:[R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["API Base URL ",R.jsx("span",{className:"label-hint",children:"(必填)"})]}),R.jsx("input",{type:"text",value:A.baseUrl,onChange:O=>D({baseUrl:O.target.value}),placeholder:"https://api.anthropic.com"})]}),R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"模型"}),R.jsx("select",{value:Ie?"__custom__":A.model,onChange:O=>{const Q=O.target.value;Q==="__custom__"?pe(!0):(pe(!1),D({model:Q}))},children:S6.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))}),Ie&&R.jsx("input",{type:"text",value:A.model,onChange:O=>D({model:O.target.value}),placeholder:"输入任意模型名称（如 claude-sonnet-4-7）",style:{marginTop:8}})]})]}),R.jsxs("div",{className:"ai-config-actions",children:[R.jsx("button",{className:"btn btn-primary btn-sm",onClick:V,disabled:!A.apiKey,children:tr?"✅ 已保存":"💾 保存配置"}),tr&&R.jsx("button",{className:"btn btn-outline btn-sm",onClick:J,children:"🗑 清除已保存配置"})]}),R.jsx("div",{className:"ai-config-hint",children:"支持任意兼容 Anthropic Messages API 格式的服务（如 one-api、自定义代理等）。 Coding Plan 用户可使用自己的 Token 和 API 地址。"})]}),R.jsxs(hs,{step:0,title:"网页数据抓取",defaultOpen:!1,children:[R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"网页 URL"}),R.jsxs("div",{className:"url-input-row",children:[R.jsx("input",{type:"text",value:Wr,onChange:O=>Hr(O.target.value),placeholder:"https://example.com/page-with-table",onKeyDown:O=>O.key==="Enter"&&z()}),R.jsx("button",{className:"btn btn-primary",onClick:z,disabled:rt,children:rt?"抓取中...":"🌐 抓取"})]})]}),R.jsxs("details",{className:"scrape-advanced",children:[R.jsx("summary",{children:"高级选项（Cookie / 代理 / 自定义 Header）"}),R.jsxs("div",{className:"scrape-advanced-body",children:[R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["Cookie ",R.jsx("span",{className:"label-hint",children:"(登录态，从浏览器 DevTools 复制)"})]}),R.jsx("textarea",{rows:2,value:qi,onChange:O=>Ro(O.target.value),placeholder:"从浏览器 F12 → Network → 请求头中复制 Cookie 值"})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["自定义 Header ",R.jsx("span",{className:"label-hint",children:"(每行一个, Key: Value)"})]}),R.jsx("textarea",{rows:2,value:A0,onChange:O=>N0(O.target.value),placeholder:`Authorization: Bearer xxx
+`),_e=w6();await Ld(A,_e,re,Fe=>Ar(Fe))}catch(Q){q(`AI 解读失败: ${Q.message||"请检查 API 配置和网络连接"}`)}finally{te(!1)}};return R.jsxs("div",{className:"app-shell",children:[R.jsxs("header",{className:"app-header",children:[R.jsx("h1",{children:"WFM数据分析助手"}),R.jsx("p",{children:"上传 Excel 文件，在浏览器中完成统计分析"})]}),R.jsxs("div",{className:"ai-config-bar",children:[R.jsx("button",{className:`btn ${A.enabled?"btn-ai-active":"btn-outline"} btn-sm`,onClick:()=>We(!Le),children:A.enabled?"🤖 AI 已就绪":"⚙ AI 设置"}),A.enabled&&A.apiKey&&R.jsx("span",{className:"ai-status-ok",children:"API 已连接"})]}),Le&&R.jsxs("section",{className:"panel ai-config-panel",children:[R.jsx("h2",{style:{margin:"0 0 16px",fontSize:"1rem"},children:"🤖 AI 配置"}),R.jsx("div",{className:"form-row",children:R.jsxs("label",{children:[R.jsx("input",{type:"checkbox",checked:A.enabled,onChange:O=>D({enabled:O.target.checked}),style:{width:"auto",marginRight:8}}),"启用 AI 功能"]})}),R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["API Key / Token ",R.jsx("span",{className:"label-hint",children:"(必填)"})]}),R.jsx("input",{type:"password",value:A.apiKey,onChange:O=>D({apiKey:O.target.value}),placeholder:"输入你的 API Key 或 Coding Plan Token"})]}),R.jsxs("div",{className:"grid-two",children:[R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["API Base URL ",R.jsx("span",{className:"label-hint",children:"(必填)"})]}),R.jsx("input",{type:"text",value:A.baseUrl,onChange:O=>D({baseUrl:O.target.value}),placeholder:"https://api.anthropic.com"})]}),R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"模型"}),R.jsx("select",{value:Ie?"__custom__":A.model,onChange:O=>{const Q=O.target.value;Q==="__custom__"?pe(!0):(pe(!1),D({model:Q}))},children:S6.map(O=>R.jsx("option",{value:O.value,children:O.label},O.value))}),Ie&&R.jsx("input",{type:"text",value:A.model,onChange:O=>D({model:O.target.value}),placeholder:"输入任意模型名称（如 claude-sonnet-4-7）",style:{marginTop:8}})]})]}),R.jsxs("div",{className:"ai-config-actions",children:[R.jsx("button",{className:"btn btn-primary btn-sm",onClick:V,disabled:!A.apiKey,children:tr?"✅ 已保存":"💾 保存配置"}),tr&&R.jsx("button",{className:"btn btn-outline btn-sm",onClick:J,children:"🗑 清除已保存配置"})]}),R.jsx("div",{className:"ai-config-hint",children:"支持任意兼容 Anthropic Messages API 格式的服务（如 one-api、自定义代理等）。 Coding Plan 用户可使用自己的 Token 和 API 地址。"})]}),R.jsxs(hs,{step:0,title:"网页数据抓取",defaultOpen:!1,children:[R.jsxs("div",{className:"form-row",children:[R.jsx("label",{children:"网页 URL"}),R.jsxs("div",{className:"url-input-row",children:[R.jsx("input",{type:"text",value:Wr,onChange:O=>Hr(O.target.value),placeholder:"https://example.com/page-with-table",onKeyDown:O=>O.key==="Enter"&&z()}),R.jsx("button",{className:"btn btn-primary",onClick:z,disabled:rt,children:rt?"抓取中...":"🌐 抓取"})]})]}),R.jsxs("details",{className:"scrape-advanced",children:[R.jsx("summary",{children:"高级选项（Cookie / 代理 / 自定义 Header）"}),R.jsxs("div",{className:"scrape-advanced-body",children:[R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["Cookie ",R.jsx("span",{className:"label-hint",children:"(登录态，从浏览器 DevTools 复制)"})]}),R.jsx("textarea",{rows:2,value:qi,onChange:O=>Ro(O.target.value),placeholder:"从浏览器 F12 → Network → 请求头中复制 Cookie 值"})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["自定义 Header ",R.jsx("span",{className:"label-hint",children:"(每行一个, Key: Value)"})]}),R.jsx("textarea",{rows:2,value:A0,onChange:O=>N0(O.target.value),placeholder:`Authorization: Bearer xxx
 Referer: https://...`})]}),R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["代理 URL（可选，绕过 CORS）"," ",R.jsxs("span",{className:"label-hint",children:["使用 ","{url}"," 表示目标地址"]})]}),R.jsx("input",{type:"text",value:ht,onChange:O=>un(O.target.value),placeholder:"如 https://cors.example.com/?url={url}"})]})]})]}),R.jsx("div",{className:"scrape-paste-toggle",children:R.jsx("button",{className:"btn btn-outline btn-sm",onClick:()=>D0(!es),children:es?"收起":"📋 手动粘贴数据（抓取失败时备用）"})}),es&&R.jsxs("div",{className:"scrape-paste-area",children:[R.jsxs("div",{className:"form-row",children:[R.jsxs("label",{children:["粘贴 CSV / TSV 数据 ",R.jsx("span",{className:"label-hint",children:"(第一行为表头，支持逗号、制表符、竖线分隔)"})]}),R.jsx("textarea",{rows:6,value:ka,onChange:O=>Zi(O.target.value),placeholder:`姓名	年龄	城市
 张三	28	北京
 李四	35	上海`})]}),R.jsx("button",{className:"btn btn-primary btn-sm",onClick:G,disabled:!ka.trim(),children:"📥 导入粘贴数据"})]}),nr&&R.jsxs("div",{className:"alert alert-warning",style:{whiteSpace:"pre-wrap"},children:[R.jsx("span",{children:"⚠️"}),R.jsx("span",{children:nr}),R.jsx("button",{className:"alert-close",onClick:()=>Ye(""),children:"✕"})]}),En.length>0&&R.jsxs("div",{className:"scrape-result",children:[R.jsxs("div",{className:"scrape-result-header",children:["找到 ",R.jsx("strong",{children:En.length})," 个表格，选择要导入的表格："]}),R.jsx("div",{className:"scrape-table-list",children:En.map((O,Q)=>R.jsxs("div",{className:"scrape-table-card",children:[R.jsxs("div",{className:"scrape-table-name",children:["📊 ",O.info.name,R.jsxs("span",{className:"scrape-table-meta",children:[O.info.rowCount," 行 × ",O.info.colCount," 列"]})]}),R.jsx("div",{className:"scrape-table-preview",children:R.jsxs("table",{children:[R.jsx("thead",{children:R.jsx("tr",{children:O.info.headers.map((re,_e)=>R.jsx("th",{children:re},_e))})}),R.jsxs("tbody",{children:[O.records.slice(0,5).map((re,_e)=>R.jsx("tr",{children:O.info.headers.map((Fe,xe)=>R.jsx("td",{children:String(re[Fe]??"")},xe))},_e)),O.records.length>5&&R.jsx("tr",{children:R.jsxs("td",{colSpan:O.info.headers.length,style:{textAlign:"center",color:"var(--gray-400)"},children:["... 还有 ",O.records.length-5," 行"]})})]})]})}),R.jsx("button",{className:"btn btn-primary btn-sm",onClick:()=>X(O.records,O.info),children:"📥 导入此表格用于分析"})]},Q))})]})]}),(M||K||rt)&&R.jsx("div",{className:"loading-overlay",children:R.jsxs("div",{className:"loading-card",children:[R.jsx("div",{className:"spinner"}),R.jsx("div",{className:"loading-text",children:rt?"正在抓取网页数据...":K?"AI 处理中...":"正在处理，请稍候..."})]})}),R.jsxs(hs,{step:1,title:"上传 Excel 文件",children:[e?R.jsxs(R.Fragment,{children:[R.jsxs("div",{className:"file-info",children:[R.jsx("span",{className:"file-icon",children:"📊"}),R.jsx("span",{className:"file-name",children:e}),R.jsx("span",{className:"file-size",children:F6(t)}),R.jsx("button",{className:"file-remove",onClick:I0,title:"移除文件",children:"✕"})]}),a.length>1&&R.jsx("div",{className:"sheet-tabs",children:a.map(O=>R.jsx("button",{className:`sheet-tab ${O===c?"active":""}`,onClick:()=>w(O),children:O},O))})]}):R.jsxs("div",{className:`upload-zone ${ne?"drag-over":""}`,onDrop:rs,onDragOver:Lo,onDragLeave:Mo,onClick:()=>{var O;return(O=document.getElementById("file-input"))==null?void 0:O.click()},children:[R.jsx("div",{className:"upload-icon",children:"📂"}),R.jsx("div",{className:"upload-text",children:"点击选择文件，或将 Excel 文件拖拽到此处"}),R.jsx("div",{className:"upload-hint",children:"支持 .xlsx 和 .xls 格式"}),R.jsx("input",{id:"file-input",type:"file",accept:".xlsx,.xls",onChange:Po})]}),oe&&R.jsxs("div",{className:"alert alert-error",children:[R.jsx("span",{children:"⚠️"}),R.jsx("span",{children:oe}),R.jsx("button",{className:"alert-close",onClick:()=>q(""),children:"✕"})]})]}),si.length>0&&R.jsxs(hs,{step:2,title:"数据预览",children:[R.jsxs("div",{className:"data-stats",children:[R.jsxs("span",{className:"stat-chip",children:[R.jsx("strong",{children:h.length})," 行数据"]}),R.jsxs("span",{className:"stat-chip",children:[R.jsx("strong",{children:tt.length})," 列"]}),R.jsxs("span",{className:"stat-chip",children:["数值列: ",R.jsx("strong",{children:Ea.length})]}),R.jsxs("span",{className:"stat-chip",children:["分类列: ",R.jsx("strong",{children:Sa.length})]})]}),R.jsx("div",{className:"table-wrapper",children:R.jsxs("table",{children:[R.jsx("thead",{children:R.jsx("tr",{children:Object.keys(si[0]).map(O=>R.jsx("th",{children:O},O))})}),R.jsx("tbody",{children:si.map((O,Q)=>R.jsx("tr",{children:Object.keys(si[0]).map(re=>R.jsx("td",{children:String(O[re]??"")},re))},Q))})]})})]}),Ta&&R.jsxs(hs,{step:3,title:"选择分析类型",children:[R.jsxs("div",{className:"form-row",children:[R.jsxs("div",{className:"label-with-action",children:[R.jsx("label",{children:"分析提示词"}),A.enabled&&A.apiKey&&R.jsx("button",{className:"btn btn-ai btn-sm",onClick:ie,disabled:K||!v.trim(),children:"🤖 AI 解析提示词"})]}),R.jsx("textarea",{rows:2,value:v,onChange:O=>T(O.target.value),placeholder:`例如：描述性统计、相关性分析、逻辑回归、ANOVA
@@ -2346,6 +2346,53 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
     .tb-category-tabs { grid-template-columns: 1fr; }
     .tb-hero { padding: 24px; border-radius: 24px; }
   }
+
+
+  /* ===== WFM UI polish & page visibility ===== */
+  :root {
+    --tb-bg: #f4f8fb;
+    --tb-card: rgba(255, 255, 255, .96);
+    --tb-line: rgba(14, 116, 144, .16);
+    --tb-primary: #0f766e;
+    --tb-primary-2: #2563eb;
+    --tb-accent: #06b6d4;
+    --tb-text: #102033;
+    --tb-muted: #64748b;
+    --tb-shadow: 0 18px 55px rgba(15, 23, 42, .10);
+  }
+  body {
+    background:
+      radial-gradient(circle at 10% 6%, rgba(20, 184, 166, .18), transparent 30%),
+      radial-gradient(circle at 90% 4%, rgba(37, 99, 235, .16), transparent 32%),
+      linear-gradient(180deg, #f5fbff 0%, #eef7f8 46%, #f8fafc 100%) !important;
+  }
+  body::before {
+    background-image:
+      linear-gradient(rgba(15, 118, 110, .04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(37, 99, 235, .04) 1px, transparent 1px) !important;
+  }
+  .tb-topbar { background: rgba(245, 251, 255, .84) !important; border-bottom-color: rgba(14, 116, 144, .14) !important; }
+  .tb-brand-logo, .tb-tab.active, .app-header, .tb-hero, .glossary-fab[data-kind="skill"] {
+    background: linear-gradient(135deg, #0f766e, #2563eb) !important;
+  }
+  .tb-brand-title { font-size: 16px; }
+  .app-header h1 { font-size: clamp(28px, 4vw, 42px) !important; }
+  .app-header p { max-width: 760px; margin-left: auto !important; margin-right: auto !important; }
+  .panel, .adv-section, .tb-card, .glossary-modal { border-color: rgba(14, 116, 144, .13) !important; }
+  .panel:hover, .tb-card:hover, .adv-section:hover { transform: translateY(-1px); box-shadow: 0 18px 44px rgba(15, 23, 42, .10) !important; }
+  body.tb-page-special .adv-section,
+  body.tb-page-special [id*="adv"],
+  body.tb-page-special [class*="advanced"],
+  body.tb-page-special [class*="adv-"] {
+    display: none !important;
+  }
+  .glossary-fab[data-kind="skill"] { right: 92px; box-shadow: 0 4px 16px rgba(15,118,110,0.35); }
+  .skill-summary { margin: 0 0 12px; padding: 12px 14px; border-radius: 10px; background: #ecfeff; border: 1px solid rgba(6,182,212,.22); color: #164e63; line-height: 1.65; }
+  .skill-usage-list { margin: 8px 0 0; padding-left: 18px; color: #334155; line-height: 1.75; }
+  .skill-meta-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .skill-chip { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px; background: #f1f5f9; color: #475569; font-size: 12px; font-weight: 600; }
+  @media (max-width: 640px) { .glossary-fab[data-kind="skill"] { right: 24px; bottom: 92px; } }
+
 </style>
 <script id="tripbuddy-ui-upgrade-script">
 (function () {
@@ -2459,7 +2506,7 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
       '<section class="tb-hero">',
         '<div class="tb-hero-kicker">✨ 专项分析工作台</div>',
         '<h1>面向运营场景的专项分析</h1>',
-        '<p>通用分析继续承载 Excel 清洗、统计描述和高级统计分析；专项分析聚焦垂直运营场景，并将 service-check 客服质检能力内置在「成本/用量运营」中。</p>',
+        '<p>专项分析聚焦 WFM 运营场景，按成本/用量、人效、智能、展演四类沉淀可直接使用的运营技能；当前已内置 service-check 客服质检能力。</p>',
       '</section>',
       '<section class="tb-category-tabs" role="tablist" aria-label="专项分析分类">',
         '<button class="tb-category-tab active" data-tb-special-category="cost" role="tab" aria-selected="true"><span class="tb-category-icon">💰</span><span class="tb-category-name">成本/用量运营</span><span class="tb-category-desc">成本、消耗、质检、用量健康度</span></button>',
@@ -2626,70 +2673,6 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
       }
     });
   }
-
-  var SKILL_LIBRARY_ITEMS = [
-    {
-      name: 'service-check 客服质检评估',
-      icon: '🧑‍💼',
-      category: '专项分析 / 成本/用量运营',
-      status: '已实现',
-      tags: ['专项分析', '成本/用量运营', '有效共情', '规则评估', 'CSV批量', 'AI增强'],
-      desc: '功能总结：这是当前「专项分析」中真正已实现并可直接使用的技能。用于对客服对话/录音转写内容进行 service-check 质检，重点识别“有效共情”相关表现，并输出质检阶段、置信度、判断点和原因说明；支持单条评估、CSV 批量评估和结果导出。',
-      usage: [
-        '所在位置：专项分析 → 成本/用量运营 → service-check 客服质检评估。',
-        '单条评估：粘贴客服与客人对话文本，点击开始评估，页面会返回阶段、置信度、判断点与原因。',
-        '批量评估：粘贴包含「录音内容」列的 CSV 数据，批量生成每条记录的评估结果，并可导出 CSV。',
-        'AI 增强：复用「通用分析 → AI设置」的全局配置；未配置 AI 或调用失败时，会自动回退到本地规则引擎。'
-      ]
-    }
-  ];
-
-  function renderSkillLibrary() {
-    if (byId('skilllibFab')) return;
-    var fab = document.createElement('button');
-    fab.className = 'skilllib-fab';
-    fab.id = 'skilllibFab';
-    fab.title = '技能库';
-    fab.setAttribute('aria-label', '打开技能库');
-    fab.innerHTML = '🧩<span class="badge">' + SKILL_LIBRARY_ITEMS.length + '</span>';
-    var overlay = document.createElement('div');
-    overlay.className = 'skilllib-overlay';
-    overlay.id = 'skilllibOverlay';
-    overlay.innerHTML = [
-      '<div class="skilllib-modal">',
-        '<div class="skilllib-modal-header"><h2><span>🧩</span> 技能库</h2><button class="skilllib-close" id="skilllibClose" aria-label="关闭">✕</button></div>',
-        '<div class="skilllib-search"><input type="text" id="skilllibSearch" placeholder="搜索技能名称、分类或标签..." autocomplete="off"></div>',
-        '<div class="skilllib-list" id="skilllibList"></div>',
-      '</div>'
-    ].join('');
-    document.body.appendChild(fab);
-    document.body.appendChild(overlay);
-
-    function paint(keyword) {
-      var q = String(keyword || '').trim().toLowerCase();
-      var list = byId('skilllibList');
-      var items = SKILL_LIBRARY_ITEMS.filter(function (item) {
-        var hay = [item.name, item.category, item.status, item.desc].concat(item.tags).join(' ').toLowerCase();
-        return !q || hay.indexOf(q) >= 0;
-      });
-      list.innerHTML = items.map(function (item, idx) {
-        return '<div class="skilllib-item" data-skilllib-item="' + idx + '">' +
-          '<div class="skilllib-item-header"><span class="skilllib-icon">' + item.icon + '</span><div><div class="skilllib-name">' + escapeHtml(item.name) + '</div><div class="skilllib-meta"><span class="skilllib-tag">' + escapeHtml(item.category) + '</span><span class="skilllib-tag">' + escapeHtml(item.status) + '</span>' + item.tags.map(function (tag) { return '<span>' + escapeHtml(tag) + '</span>'; }).join('') + '</div></div></div>' +
-          '<div class="skilllib-body"><p>' + escapeHtml(item.desc) + '</p><ul>' + item.usage.map(function (u) { return '<li>' + escapeHtml(u) + '</li>'; }).join('') + '</ul></div>' +
-        '</div>';
-      }).join('') || '<div class="skilllib-item"><div class="skilllib-item-header"><div><div class="skilllib-name">未找到匹配技能</div><div class="skilllib-meta">请换个关键词试试</div></div></div></div>';
-    }
-    paint('');
-    fab.addEventListener('click', function () { overlay.classList.add('open'); });
-    byId('skilllibClose').addEventListener('click', function () { overlay.classList.remove('open'); });
-    overlay.addEventListener('click', function (event) { if (event.target === overlay) overlay.classList.remove('open'); });
-    byId('skilllibSearch').addEventListener('input', function (event) { paint(event.target.value); });
-    byId('skilllibList').addEventListener('click', function (event) {
-      var item = event.target.closest('.skilllib-item');
-      if (item) item.classList.toggle('open');
-    });
-  }
-
   function boot() {
     var root = byId('root');
     if (!root || document.querySelector('.tb-topbar')) return;
@@ -2698,18 +2681,18 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
     topbar.className = 'tb-topbar';
     topbar.innerHTML = [
       '<div class="tb-topbar-inner">',
-        '<div class="tb-brand" aria-label="Excel 自动统计分析">',
+        '<div class="tb-brand" aria-label="WFM数据分析助手">',
           '<div class="tb-brand-logo">📊</div>',
           '<div>',
-            '<div class="tb-brand-title">Excel 自动统计分析</div>',
-            '<div class="tb-brand-subtitle">通用分析 · 专项运营 · 本地处理</div>',
+            '<div class="tb-brand-title">WFM数据分析助手</div>',
+            '<div class="tb-brand-subtitle">通用分析 · 专项运营 · AI增强</div>',
           '</div>',
         '</div>',
         '<div class="tb-tabs" role="tablist" aria-label="页面导航">',
           '<button class="tb-tab active" data-tb-page="general" role="tab" aria-selected="true">通用分析</button>',
           '<button class="tb-tab" data-tb-page="special" role="tab" aria-selected="false">专项分析</button>',
         '</div>',
-        '<div class="tb-status-pill"><span class="tb-status-dot"></span>高级统计仅在通用分析</div>',
+        '<div class="tb-status-pill"><span class="tb-status-dot"></span>AI 设置全局可用</div>',
       '</div>'
     ].join('');
     document.body.insertBefore(topbar, document.body.firstChild);
@@ -2717,7 +2700,6 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
     renderSpecialPage(root);
     initServiceCheck();
     updateAiConfigState();
-    renderSkillLibrary();
     removeScrapeModule();
     setTimeout(removeScrapeModule, 800);
 
@@ -2765,6 +2747,111 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
   else boot();
 })();
 </script>
+
+<!-- ===== 技能库（复用统计学术语库同款实现） ===== -->
+<button class="glossary-fab" id="skillLibraryFab" data-kind="skill" title="技能库" aria-label="打开技能库">
+  🧩
+  <span class="badge">1</span>
+</button>
+
+<div class="glossary-overlay" id="skillLibraryOverlay">
+  <div class="glossary-modal">
+    <div class="glossary-modal-header">
+      <h2><span>🧩</span> 技能库</h2>
+      <button class="glossary-close" id="skillLibraryClose" aria-label="关闭">✕</button>
+    </div>
+    <div class="glossary-search">
+      <input type="text" id="skillLibrarySearch" placeholder="搜索技能名称、分类或标签..." autocomplete="off">
+    </div>
+    <div class="glossary-list" id="skillLibraryList"></div>
+  </div>
+</div>
+<script>
+(function () {
+  if (window.__wfmSkillLibraryInited) return;
+  window.__wfmSkillLibraryInited = true;
+
+  var SKILL_ITEMS = [
+    {
+      id: 'service-check',
+      name: 'service-check 客服质检评估',
+      icon: '🧑‍💼',
+      category: '专项分析 / 成本/用量运营',
+      status: '已实现',
+      tags: ['有效共情', 'CSV批量', '结果导出', 'AI增强', '本地规则兜底'],
+      summary: '这是当前「专项分析」里真正已经实现、可直接使用的技能。用于对客服对话或录音转写内容进行 service-check 质检，重点识别“有效共情”表现，输出质检阶段、置信度、判断点和原因说明；支持单条评估、CSV 批量评估、结果 CSV 导出，并复用「通用分析 → AI设置」中的全局模型配置。',
+      usage: [
+        '入口：专项分析 → 成本/用量运营 → service-check 客服质检评估。',
+        '单条评估：粘贴客服与客人对话文本，点击开始评估，返回阶段、置信度、判断点与原因。',
+        '批量评估：粘贴包含「录音内容」列的 CSV 数据，批量生成每条记录的评估结果，并可导出 CSV。',
+        'AI 增强：统一读取「通用分析 → AI设置」的 API Key / Base URL / 模型；未配置 AI 或调用失败时自动回退本地规则引擎。'
+      ]
+    }
+  ];
+
+  function esc(text) {
+    return String(text == null ? '' : text).replace(/[&<>"']/g, function (ch) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
+    });
+  }
+  function byId(id) { return document.getElementById(id); }
+
+  function renderSkillLibrary(keyword) {
+    var q = String(keyword || '').trim().toLowerCase();
+    var list = byId('skillLibraryList');
+    if (!list) return;
+    var items = SKILL_ITEMS.filter(function (item) {
+      return !q || [item.name, item.category, item.status, item.summary].concat(item.tags).join(' ').toLowerCase().indexOf(q) >= 0;
+    });
+    list.innerHTML = items.map(function (item) {
+      return '<div class="glossary-item">' +
+        '<div class="glossary-item-header">' +
+          '<span class="icon">' + item.icon + '</span>' +
+          '<span class="name">' + esc(item.name) + '</span>' +
+          '<span class="arrow">▼</span>' +
+        '</div>' +
+        '<div class="glossary-item-body">' +
+          '<h4>功能总结</h4>' +
+          '<p class="skill-summary">' + esc(item.summary) + '</p>' +
+          '<h4>所属位置</h4>' +
+          '<p>' + esc(item.category) + ' · ' + esc(item.status) + '</p>' +
+          '<div class="skill-meta-row">' + item.tags.map(function (tag) { return '<span class="skill-chip">' + esc(tag) + '</span>'; }).join('') + '</div>' +
+          '<h4 style="margin-top:14px;">使用方式</h4>' +
+          '<ul class="skill-usage-list">' + item.usage.map(function (u) { return '<li>' + esc(u) + '</li>'; }).join('') + '</ul>' +
+        '</div>' +
+      '</div>';
+    }).join('') || '<div class="glossary-item"><div class="glossary-item-header"><span class="icon">🔎</span><span class="name">未找到匹配技能</span></div></div>';
+  }
+
+  function bootSkillLibrary() {
+    var fab = byId('skillLibraryFab');
+    var overlay = byId('skillLibraryOverlay');
+    var closeBtn = byId('skillLibraryClose');
+    var search = byId('skillLibrarySearch');
+    var list = byId('skillLibraryList');
+    if (!fab || !overlay || !closeBtn || !search || !list) return;
+    renderSkillLibrary('');
+    fab.addEventListener('click', function () { overlay.classList.add('open'); setTimeout(function () { search.focus(); }, 60); });
+    closeBtn.addEventListener('click', function () { overlay.classList.remove('open'); });
+    overlay.addEventListener('click', function (event) { if (event.target === overlay) overlay.classList.remove('open'); });
+    search.addEventListener('input', function (event) { renderSkillLibrary(event.target.value); });
+    list.addEventListener('click', function (event) {
+      var header = event.target.closest('.glossary-item-header');
+      if (!header) return;
+      var item = header.closest('.glossary-item');
+      var body = item && item.querySelector('.glossary-item-body');
+      var arrow = item && item.querySelector('.arrow');
+      if (body) body.classList.toggle('open');
+      if (arrow) arrow.classList.toggle('open');
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootSkillLibrary);
+  else bootSkillLibrary();
+})();
+</script>
+<!-- ===== End 技能库 ===== -->
+
 <!-- ===== TripBuddy UI upgrade: end ===== -->
 
 </body>

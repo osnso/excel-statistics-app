@@ -161,7 +161,7 @@ Error generating stack: `+i.message+`
 `)}}case"regression":{if(!n||!a)return{result:"请先选择回归分析的 X 和 Y 列。"};const p=x.map(v=>{const g=pt(v[n]),_=pt(v[a]);return g!=null&&_!=null?{x:g,y:_}:null}).filter(v=>v!==null);if(p.length<2)return{result:"至少需要两个有效点才能进行线性回归。"};const d=z8(p.map(v=>[(v==null?void 0:v.x)??0,(v==null?void 0:v.y)??0]));return{result:[`X 列：${n}`,`Y 列：${a}`,`模型：y = ${Ke(d.m)} x + ${Ke(d.b)}`,`样本数：${p.length}`].join(`
 `)}}case"clustering":{if(!n||!a)return{result:"请先选择两个数值列用于聚类分析。"};const p=x.map(k=>{const I=pt(k[n]),N=pt(k[a]);return I!=null&&N!=null?[I,N]:null}).filter(k=>k!==null);if(p.length<h)return{result:`可用点数量不足，至少需要 ${h} 个点。`};const d=[],v=[];let _=p.slice(0,h).map(k=>[...k]);for(let k=0;k<50;k+=1){let I=!1;if(v.length!==p.length&&(v.length=p.length),p.forEach((N,y)=>{let L=0,P=1/0;_.forEach((W,H)=>{const j=N.reduce((Z,me,fe)=>Z+(me-W[fe])**2,0);j<P&&(P=j,L=H)}),v[y]!==L&&(v[y]=L,I=!0)}),!I)break;_=_.map((N,y)=>{const L=p.filter((P,W)=>v[W]===y);return L.length===0?_[y]:L[0].map((P,W)=>vt(L.map(H=>H[W])))})}d.push(..._);const m=d.map((k,I)=>`簇 ${I+1} 中心：(${k.map(N=>Ke(N)).join(", ")})`);return{result:[`聚类数：${h}`,`样本数：${p.length}`,...m].join(`
 `)}}case"correlation":{if(!Array.isArray(c)||c.length<2)return{result:"请选择至少两个数值列进行相关性分析。"};const p={};if(c.forEach(d=>{p[d]=x.map(v=>pt(v[d])).filter(v=>v!=null)}),c.length===2){const[d,v]=c,g=p[d],_=p[v];return g.length===0||_.length===0?{result:"所选列中包含无效数值，请检查并过滤缺失或文本数据。"}:{result:`Pearson 相关系数：${Ke(K8(g,_))}`}}return{result:o6(p)}}case"anova":return!f||!o?{result:"请选择分组列和数值型目标列进行 ANOVA。"}:h6(x,f,o);case"multipleRegression":return!Array.isArray(l)||l.length===0||!o?{result:"请选择一个目标列和一个或多个预测列进行多元回归。"}:f6(x,l,o);case"logisticRegression":return!Array.isArray(l)||l.length===0||!o?{result:"请选择一个目标列和一个或多个特征列进行逻辑回归。"}:u6(x,l,o);default:return{result:"未知分析类型，请选择有效分析类别。"}}}function p6(e,r,t="原始数据"){const n=yl.book_new();return Array.isArray(e)&&e.length>0&&(n.SheetNames.push(t),n.Sheets[t]=yl.json_to_sheet(e)),n.SheetNames.push("分析结果"),n.Sheets.分析结果=yl.aoa_to_sheet(r.split(`
-`).map(a=>[a])),n}const Pd={apiKey:"",baseUrl:"https://api.anthropic.com",model:"claude-sonnet-4-6",enabled:!1};function x6(){try{const e=localStorage.getItem("excel-ai-config");if(e)return{...Pd,...JSON.parse(e)}}catch{}return Pd}function m6(e){try{const r={...e};localStorage.setItem("excel-ai-config",JSON.stringify(r))}catch{}}function v6(){try{localStorage.removeItem("excel-ai-config")}catch{}}function g6(){try{return localStorage.getItem("excel-ai-config")!==null}catch{return!1}}async function Ld(e,r,t,n){var f,c;if(!e.apiKey)throw new Error("请先配置 API Key");const a=`${e.baseUrl.replace(/\/+$/,"")}/v1/messages`,i=JSON.stringify({model:e.model,max_tokens:4096,system:[{type:"text",text:r}],messages:[{role:"user",content:t}],stream:!!n}),s=await fetch(a,{method:"POST",headers:{"Content-Type":"application/json","x-api-key":e.apiKey,"anthropic-version":"2023-06-01"},body:i});if(!s.ok){const u=await s.text().catch(()=>"");throw new Error(`API 请求失败 (${s.status}): ${u||s.statusText}`)}if(n&&s.body){const u=s.body.getReader(),h=new TextDecoder;let x="";for(;;){const{done:p,value:d}=await u.read();if(p)break;const g=h.decode(d,{stream:!0}).split(`
+`).map(a=>[a])),n}const Pd={apiKey:"",baseUrl:"https://api.anthropic.com",model:"claude-sonnet-4-6",enabled:!1};function x6(){try{const e=localStorage.getItem("excel-ai-config");if(e)return{...Pd,...JSON.parse(e)}}catch{}return Pd}function m6(e){try{const r={...e};localStorage.setItem("excel-ai-config",JSON.stringify(r))}catch{}}function v6(){try{localStorage.removeItem("excel-ai-config")}catch{}}function g6(){try{return localStorage.getItem("excel-ai-config")!==null}catch{return!1}}async function Ld(e,r,t,n){var f,c;if(!e.apiKey)throw new Error("请先配置 API Key");const a=`${e.baseUrl.replace(/\/+$/,"")}/v1/messages`,i=JSON.stringify({model:e.model,max_tokens:4096,system:[{type:"text",text:r}],messages:[{role:"user",content:t}],stream:!!n}),s=await fetch(a,{method:"POST",headers:{"Content-Type":"application/json","x-api-key":e.apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:i});if(!s.ok){const u=await s.text().catch(()=>"");throw new Error(`API 请求失败 (${s.status}): ${u||s.statusText}`)}if(n&&s.body){const u=s.body.getReader(),h=new TextDecoder;let x="";for(;;){const{done:p,value:d}=await u.read();if(p)break;const g=h.decode(d,{stream:!0}).split(`
 `).filter(_=>_.startsWith("data: "));for(const _ of g)try{const m=JSON.parse(_.slice(6));m.type==="content_block_delta"&&((f=m.delta)!=null&&f.text)&&(x+=m.delta.text,n(x))}catch{}}return x}return((c=(await s.json()).content)==null?void 0:c.map(u=>u.type==="text"?u.text:"").join("").trim())||""}function _6(e){return`你是一个数据分析助手。用户会输入自然语言描述，你需要根据可用的数据列，判断最合适的分析类型和对应的字段配置。
 
 可用的分析类型：
@@ -2472,21 +2472,56 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
   }
 
   async function callLLM(text, config) {
-    if (!config.apiKey) return null;
-    var endpoint = config.endpoint || 'https://api.openai.com/v1/chat/completions';
-    var model = config.model || 'gpt-4o-mini';
+    if (!config || !config.apiKey) return null;
+    var baseUrl = String(config.baseUrl || config.endpoint || 'https://api.anthropic.com').replace(/\/+$/, '');
+    var model = config.model || 'claude-sonnet-4-6';
     var prompt = '你是客服质检评估助手，只评估「有效共情」。请根据以下规则输出严格 JSON：{"stage":"阶段一/阶段二/阶段三/阶段四/不涉及","confidence":0-100,"points":[数字],"reason":"一句话"}。判断点：1机械模板；2反问推诿否定；3打断抢话；4情绪爆点未承接；5情绪缓和；6主动致歉并处理；7红线话术；8礼貌语；9差评补救。对话：\n' + text;
-    var resp = await fetch(endpoint, {
+    var isAnthropic = /anthropic/i.test(baseUrl) || /^claude/i.test(model);
+    var resp;
+    if (isAnthropic) {
+      var anthropicUrl = /\/v1\/messages$/.test(baseUrl) ? baseUrl : baseUrl + '/v1/messages';
+      resp = await fetch(anthropicUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': config.apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: model,
+          max_tokens: 1024,
+          temperature: 0.1,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      if (!resp.ok) {
+        var anthropicErr = await resp.text().catch(function () { return ''; });
+        throw new Error('Anthropic API 请求失败：HTTP ' + resp.status + (anthropicErr ? ' · ' + anthropicErr.slice(0, 300) : ''));
+      }
+      var adata = await resp.json();
+      var acontent = adata && adata.content && adata.content.map(function (item) { return item.type === 'text' ? item.text : ''; }).join('');
+      if (!acontent) throw new Error('Anthropic API 未返回有效内容');
+      var ajson = acontent.match(/\{[\s\S]*\}/);
+      if (!ajson) throw new Error('Anthropic API 返回不是 JSON：' + acontent.slice(0, 200));
+      return JSON.parse(ajson[0]);
+    }
+
+    var openaiUrl = config.endpoint || (/\/chat\/completions$/.test(baseUrl) ? baseUrl : (baseUrl.replace(/\/v1$/, '') + '/v1/chat/completions'));
+    resp = await fetch(openaiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + config.apiKey },
       body: JSON.stringify({ model: model, messages: [{ role: 'user', content: prompt }], temperature: 0.1 })
     });
-    if (!resp.ok) throw new Error('LLM 请求失败：HTTP ' + resp.status);
+    if (!resp.ok) {
+      var openaiErr = await resp.text().catch(function () { return ''; });
+      throw new Error('OpenAI 兼容 API 请求失败：HTTP ' + resp.status + (openaiErr ? ' · ' + openaiErr.slice(0, 300) : ''));
+    }
     var data = await resp.json();
     var content = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
-    if (!content) throw new Error('LLM 未返回有效内容');
+    if (!content) throw new Error('OpenAI 兼容 API 未返回有效内容');
     var jsonText = content.match(/\{[\s\S]*\}/);
-    if (!jsonText) throw new Error('LLM 返回不是 JSON');
+    if (!jsonText) throw new Error('OpenAI 兼容 API 返回不是 JSON：' + content.slice(0, 200));
     return JSON.parse(jsonText[0]);
   }
 
@@ -2530,12 +2565,13 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
           '</article>',
           '<article class="tb-card span-4">',
             '<h3>全局 AI 设置</h3>',
-            '<p>专项分析不再单独维护 Token。请在「通用分析」页面的「AI设置」中保存 API Key / Base URL / 模型后使用，配置会写入浏览器 localStorage，并被 service-check 等技能统一复用。</p>',
+            '<p id="tb-ai-config-desc">如需启用大模型增强，请先在「通用分析」页面的「AI设置」中保存 API Key / Base URL / 模型。未配置时会使用本地规则引擎。</p>',
+            '<p id="tb-ai-config-meta" class="tb-mini-note">配置仅保存在当前用户当前浏览器 localStorage，不上传服务器；不同用户、不同浏览器可分别保存自己的 API，互不影响。</p>',
             '<div class="tb-badge-row">',
               '<span class="tb-badge" id="tb-ai-config-state">检测 AI 设置中...</span>',
-              '<span class="tb-badge">Anthropic Messages API 逻辑</span>',
+              '<span class="tb-badge">自动识别 Anthropic / OpenAI 兼容接口</span>',
             '</div>',
-            '<div class="tb-actions"><button class="tb-btn secondary" data-tb-page="general" type="button">去通用分析配置 AI</button></div>',
+            '<div class="tb-actions"><button class="tb-btn secondary" id="tb-ai-config-action" data-tb-page="general" type="button">去通用分析配置 AI</button></div>',
           '</article>',
           '<article class="tb-card span-8">',
             '<h3>单条对话评估</h3>',
@@ -2544,10 +2580,14 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
             '<div class="tb-result-box" id="tb-service-result">等待输入对话内容后开始评估...</div>',
           '</article>',
           '<article class="tb-card span-12">',
-            '<h3>批量评估（CSV 粘贴）</h3>',
-            '<p>请粘贴包含「录音内容」列的 CSV 数据；如果没有该列，将默认使用最后一列作为对话内容。评估结果可导出 CSV。</p>',
-            '<div class="tb-field" style="margin-top:12px"><label for="tb-service-csv">CSV 内容</label><textarea id="tb-service-csv" style="min-height:150px" placeholder="录音内容,订单号\n客服：您好，非常抱歉... 客人：我很着急...,12345"></textarea></div>',
-            '<div class="tb-actions"><button class="tb-btn primary" id="tb-service-batch-run">批量评估</button><button class="tb-btn secondary" id="tb-service-batch-export" disabled>导出结果 CSV</button></div>',
+            '<h3>批量评估（上传 Excel 文档）</h3>',
+            '<p>请上传 .xlsx / .xls Excel 文档，系统会优先读取「录音内容 / 对话内容 / 客服对话 / content / text」列；如果未找到匹配列，将默认使用最后一列作为对话内容。</p>',
+            '<div class="tb-upload-card" id="tb-service-upload-card">',
+              '<input id="tb-service-excel" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" />',
+              '<div class="tb-upload-icon">📄</div>',
+              '<div><strong>点击选择 Excel 文件</strong><p id="tb-service-file-status">未选择文件</p></div>',
+            '</div>',
+            '<div class="tb-actions"><button class="tb-btn primary" id="tb-service-batch-run">批量评估</button><button class="tb-btn secondary" id="tb-service-batch-export" disabled>导出结果 Excel</button></div>',
             '<div class="tb-table-wrap" id="tb-service-table-wrap" style="display:none"><table class="tb-table"><thead><tr><th>#</th><th>阶段</th><th>置信度</th><th>判断点</th><th>说明</th><th>内容预览</th></tr></thead><tbody id="tb-service-table"></tbody></table></div>',
           '</article>',
           '<article class="tb-card span-4"><h3>成本口径</h3><p>后续可接入用量账单、Token 消耗、人工复核成本等指标，形成质检成本看板。</p></article>',
@@ -2580,11 +2620,15 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
       var saved = localStorage.getItem('excel-ai-config');
       if (!saved) return { apiKey: '', baseUrl: 'https://api.anthropic.com', model: 'claude-sonnet-4-6', enabled: false };
       var parsed = JSON.parse(saved) || {};
+      var apiKey = String(parsed.apiKey || parsed.token || '').trim();
+      var baseUrl = String(parsed.baseUrl || parsed.endpoint || 'https://api.anthropic.com').trim().replace(/\/+$/, '');
+      var model = String(parsed.model || 'claude-sonnet-4-6').trim();
       return {
-        apiKey: String(parsed.apiKey || '').trim(),
-        baseUrl: String(parsed.baseUrl || 'https://api.anthropic.com').trim(),
-        model: String(parsed.model || 'claude-sonnet-4-6').trim(),
-        enabled: !!parsed.enabled || !!parsed.apiKey
+        apiKey: apiKey,
+        baseUrl: baseUrl,
+        endpoint: String(parsed.endpoint || '').trim(),
+        model: model,
+        enabled: !!parsed.enabled || !!apiKey
       };
     } catch (err) {
       return { apiKey: '', baseUrl: 'https://api.anthropic.com', model: 'claude-sonnet-4-6', enabled: false };
@@ -2595,7 +2639,91 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
     var el = byId('tb-ai-config-state');
     if (!el) return;
     var cfg = getLLMConfig();
-    el.textContent = cfg.apiKey ? ('AI 已配置 · ' + (cfg.model || '默认模型')) : 'AI 未配置 · 使用本地规则';
+    var btn = byId('tb-ai-config-action');
+    var desc = byId('tb-ai-config-desc');
+    var meta = byId('tb-ai-config-meta');
+    if (cfg.apiKey) {
+      el.textContent = 'AI 已配置 · ' + (cfg.model || '默认模型');
+      el.classList.add('tb-badge-success');
+      if (btn) btn.style.display = 'none';
+      if (desc) desc.textContent = '已读取「通用分析 → AI设置」中的全局配置，service-check 将直接复用当前浏览器保存的 API Key / Base URL / 模型。';
+      if (meta) meta.textContent = '配置仅保存在当前用户当前浏览器 localStorage，不上传服务器；不同用户、不同浏览器可分别保存自己的 API，互不影响。';
+    } else {
+      el.textContent = 'AI 未配置 · 使用本地规则';
+      el.classList.remove('tb-badge-success');
+      if (btn) btn.style.display = '';
+      if (desc) desc.textContent = '如需启用大模型增强，请先在「通用分析」页面的「AI设置」中保存 API Key / Base URL / 模型。未配置时会使用本地规则引擎。';
+      if (meta) meta.textContent = '配置仅保存在当前用户当前浏览器 localStorage，不上传服务器；不同用户、不同浏览器可分别保存自己的 API，互不影响。';
+    }
+  }
+
+  function loadSheetJS() {
+    if (window.XLSX) return Promise.resolve(window.XLSX);
+    if (window.__wfmSheetJsPromise) return window.__wfmSheetJsPromise;
+    window.__wfmSheetJsPromise = new Promise(function (resolve, reject) {
+      var urls = [
+        'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
+      ];
+      var idx = 0;
+      function next() {
+        if (idx >= urls.length) { reject(new Error('Excel 解析库加载失败，请检查网络后重试。')); return; }
+        var script = document.createElement('script');
+        script.src = urls[idx++];
+        script.onload = function () { window.XLSX ? resolve(window.XLSX) : next(); };
+        script.onerror = next;
+        document.head.appendChild(script);
+      }
+      next();
+    });
+    return window.__wfmSheetJsPromise;
+  }
+
+  function parseCsvText(text) {
+    var lines = String(text || '').split(/\r?\n/).filter(Boolean);
+    if (!lines.length) return [];
+    var header = parseCsvLine(lines[0]);
+    return lines.slice(1).map(function (line) {
+      var cells = parseCsvLine(line);
+      var obj = {};
+      header.forEach(function (h, i) { obj[h || ('列' + (i + 1))] = cells[i] || ''; });
+      return obj;
+    });
+  }
+
+  async function parseServiceExcelFile(file) {
+    var name = (file && file.name || '').toLowerCase();
+    if (/\.csv$/.test(name)) {
+      var text = await file.text();
+      return parseCsvText(text);
+    }
+    var XLSX = await loadSheetJS();
+    var buf = await file.arrayBuffer();
+    var wb = XLSX.read(buf, { type: 'array' });
+    var sheetName = wb.SheetNames && wb.SheetNames[0];
+    if (!sheetName) return [];
+    return XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { defval: '', raw: false });
+  }
+
+  function detectServiceContentColumn(rows) {
+    var first = rows && rows[0] ? rows[0] : {};
+    var keys = Object.keys(first);
+    if (!keys.length) return '';
+    var candidates = ['录音内容', '对话内容', '客服对话', '会话内容', '聊天内容', '通话内容', '转写内容', 'transcript', 'content', 'text'];
+    for (var i = 0; i < candidates.length; i++) {
+      var hit = keys.find(function (k) { return String(k).toLowerCase().trim() === candidates[i].toLowerCase(); });
+      if (hit) return hit;
+    }
+    var fuzzy = keys.find(function (k) { return /录音|对话|会话|聊天|通话|转写|content|text|transcript/i.test(String(k)); });
+    return fuzzy || keys[keys.length - 1];
+  }
+
+  async function exportServiceResultsExcel(rows) {
+    var XLSX = await loadSheetJS();
+    var wb = XLSX.utils.book_new();
+    var ws = XLSX.utils.json_to_sheet(rows);
+    XLSX.utils.book_append_sheet(wb, ws, 'service-check结果');
+    XLSX.writeFile(wb, 'service-check-results.xlsx');
   }
 
   function initServiceCheck() {
@@ -2603,6 +2731,12 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
     if (!run || run.dataset.bound) return;
     run.dataset.bound = '1';
     var batchResults = [];
+    var selectedFile = null;
+
+    function setFileStatus(text) {
+      var status = byId('tb-service-file-status');
+      if (status) status.textContent = text;
+    }
 
     byId('tb-service-sample').addEventListener('click', function () {
       byId('tb-service-text').value = '客人：我已经等了半小时了，真的很着急，酒店还说查不到订单。\n客服：您好，非常抱歉给您带来不便，我理解您现在入住受阻会非常着急。我马上帮您核实订单并同步联系酒店前台，预计 5 分钟内给您明确回复。如果确实影响入住，我会继续帮您申请补偿方案。';
@@ -2622,44 +2756,76 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
         resultBox.textContent = formatServiceResult(result);
       } catch (err) {
         var fallback = localServiceCheck(text);
-        resultBox.textContent = '大模型调用失败，已回退到本地规则评估。\n错误：' + (err && err.message ? err.message : err) + '\n\n' + formatServiceResult(fallback);
-      } finally { run.disabled = false; }
+        resultBox.textContent = '大模型调用失败，已回退到本地规则评估。\n排查信息：已按通用 AI 设置自动识别 Anthropic / OpenAI 兼容协议；请检查 Base URL、模型名、Token 权限，以及浏览器是否允许跨域直连。\n错误：' + (err && err.message ? err.message : err) + '\n\n' + formatServiceResult(fallback);
+      } finally { run.disabled = false; updateAiConfigState(); }
     });
 
+    var uploadCard = byId('tb-service-upload-card');
+    var fileInput = byId('tb-service-excel');
+    if (uploadCard && fileInput) {
+      uploadCard.addEventListener('click', function () { fileInput.click(); });
+      fileInput.addEventListener('change', function () {
+        selectedFile = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+        setFileStatus(selectedFile ? ('已选择：' + selectedFile.name) : '未选择文件');
+      });
+    }
+
     byId('tb-service-batch-run').addEventListener('click', async function () {
-      var csv = byId('tb-service-csv').value.trim();
+      var btn = byId('tb-service-batch-run');
       var tbody = byId('tb-service-table');
       var wrap = byId('tb-service-table-wrap');
       var exportBtn = byId('tb-service-batch-export');
       tbody.innerHTML = ''; batchResults = []; exportBtn.disabled = true;
-      if (!csv) { wrap.style.display = 'none'; alert('请先粘贴 CSV 内容。'); return; }
-      var lines = csv.split(/\r?\n/).filter(Boolean);
-      if (!lines.length) return;
-      var header = parseCsvLine(lines[0]);
-      var col = header.indexOf('录音内容');
-      if (col < 0) col = header.length - 1;
-      wrap.style.display = 'block';
-      var config = getLLMConfig();
-      for (var i = 1; i < lines.length; i++) {
-        var cells = parseCsvLine(lines[i]);
-        var content = cells[col] || cells[cells.length - 1] || '';
-        var result;
-        try { result = config.apiKey ? await callLLM(content, config) : localServiceCheck(content); }
-        catch (err) { result = localServiceCheck(content); result.reason = 'LLM 失败后本地评估：' + result.reason; }
-        batchResults.push({ index: i, content: content, result: result });
-        var tr = document.createElement('tr');
-        tr.innerHTML = '<td>' + i + '</td><td>' + escapeHtml(result.stage) + '</td><td>' + Math.round(result.confidence || 0) + '%</td><td>' + escapeHtml((result.points || []).join('、')) + '</td><td>' + escapeHtml(result.reason || '') + '</td><td>' + escapeHtml(content.slice(0, 80)) + '</td>';
-        tbody.appendChild(tr);
+      if (!selectedFile) { wrap.style.display = 'none'; alert('请先上传 Excel 文档。'); return; }
+      btn.disabled = true; btn.textContent = '批量评估中...';
+      try {
+        setFileStatus('正在解析文件：' + selectedFile.name);
+        var rows = await parseServiceExcelFile(selectedFile);
+        if (!rows.length) { wrap.style.display = 'none'; alert('Excel 中未解析到有效数据。'); return; }
+        var contentCol = detectServiceContentColumn(rows);
+        wrap.style.display = 'block';
+        var config = getLLMConfig();
+        for (var i = 0; i < rows.length; i++) {
+          var row = rows[i] || {};
+          var content = String(row[contentCol] || '').trim();
+          if (!content) continue;
+          var result;
+          try { result = config.apiKey ? await callLLM(content, config) : localServiceCheck(content); }
+          catch (err) { result = localServiceCheck(content); result.reason = 'LLM 失败后本地评估：' + result.reason + '；错误：' + (err && err.message ? err.message : err); }
+          batchResults.push({ index: batchResults.length + 1, content: content, result: result, source: row });
+          var tr = document.createElement('tr');
+          tr.innerHTML = '<td>' + batchResults.length + '</td><td>' + escapeHtml(result.stage) + '</td><td>' + Math.round(result.confidence || 0) + '%</td><td>' + escapeHtml((result.points || []).join('、')) + '</td><td>' + escapeHtml(result.reason || '') + '</td><td>' + escapeHtml(content.slice(0, 80)) + '</td>';
+          tbody.appendChild(tr);
+          setFileStatus('已评估 ' + batchResults.length + ' / ' + rows.length + ' 条');
+        }
+        exportBtn.disabled = batchResults.length === 0;
+        setFileStatus('完成：共评估 ' + batchResults.length + ' 条，' + (config.apiKey ? '已尝试使用 AI 增强' : '使用本地规则'));
+      } catch (err) {
+        wrap.style.display = 'none';
+        setFileStatus('解析或评估失败：' + (err && err.message ? err.message : err));
+        alert('批量评估失败：' + (err && err.message ? err.message : err));
+      } finally {
+        btn.disabled = false; btn.textContent = '批量评估'; updateAiConfigState();
       }
-      exportBtn.disabled = batchResults.length === 0;
     });
 
-    byId('tb-service-batch-export').addEventListener('click', function () {
+    byId('tb-service-batch-export').addEventListener('click', async function () {
       if (!batchResults.length) return;
-      var rows = [['序号','阶段','置信度','判断点','说明','录音内容']].concat(batchResults.map(function (r) {
-        return [r.index, r.result.stage, Math.round(r.result.confidence || 0), (r.result.points || []).join('、'), r.result.reason || '', r.content];
-      }));
-      downloadText('service-check-results.csv', rows.map(function (row) { return row.map(csvEscape).join(','); }).join('\n'), 'text/csv;charset=utf-8');
+      var rows = batchResults.map(function (r) {
+        var out = Object.assign({}, r.source || {});
+        out['质检阶段'] = r.result.stage;
+        out['置信度'] = Math.round(r.result.confidence || 0);
+        out['判断点'] = (r.result.points || []).join('、');
+        out['说明'] = r.result.reason || '';
+        out['录音内容'] = r.content;
+        return out;
+      });
+      try {
+        await exportServiceResultsExcel(rows);
+      } catch (err) {
+        var csvRows = [Object.keys(rows[0])].concat(rows.map(function (row) { return Object.keys(rows[0]).map(function (k) { return row[k]; }); }));
+        downloadText('service-check-results.csv', csvRows.map(function (row) { return row.map(csvEscape).join(','); }).join('\n'), 'text/csv;charset=utf-8');
+      }
     });
   }
 
@@ -2778,12 +2944,12 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
       icon: '🧑‍💼',
       category: '专项分析 / 成本/用量运营',
       status: '已实现',
-      tags: ['有效共情', 'CSV批量', '结果导出', 'AI增强', '本地规则兜底'],
-      summary: '这是当前「专项分析」里真正已经实现、可直接使用的技能。用于对客服对话或录音转写内容进行 service-check 质检，重点识别“有效共情”表现，输出质检阶段、置信度、判断点和原因说明；支持单条评估、CSV 批量评估、结果 CSV 导出，并复用「通用分析 → AI设置」中的全局模型配置。',
+      tags: ['有效共情', 'Excel批量', '结果导出', 'AI增强', '本地规则兜底'],
+      summary: '这是当前「专项分析」里真正已经实现、可直接使用的技能。用于对客服对话或录音转写内容进行 service-check 质检，重点识别“有效共情”表现，输出质检阶段、置信度、判断点和原因说明；支持单条评估、Excel 批量评估、结果 Excel 导出，并复用「通用分析 → AI设置」中的全局模型配置。',
       usage: [
         '入口：专项分析 → 成本/用量运营 → service-check 客服质检评估。',
         '单条评估：粘贴客服与客人对话文本，点击开始评估，返回阶段、置信度、判断点与原因。',
-        '批量评估：粘贴包含「录音内容」列的 CSV 数据，批量生成每条记录的评估结果，并可导出 CSV。',
+        '批量评估：上传包含「录音内容 / 对话内容」等字段的 Excel 文档，批量生成每条记录的评估结果，并可导出 Excel。',
         'AI 增强：统一读取「通用分析 → AI设置」的 API Key / Base URL / 模型；未配置 AI 或调用失败时自动回退本地规则引擎。'
       ]
     }

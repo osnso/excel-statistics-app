@@ -2471,27 +2471,53 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
     setTimeout(function () { URL.revokeObjectURL(url); }, 1200);
   }
 
+  function normalizeServiceLLMResult(value) {
+    var obj = value || {};
+    var stage = String(obj.stage || obj.result || obj.level || '阶段二').trim();
+    if (!/^(阶段一|阶段二|阶段三|阶段四|不涉及)$/.test(stage)) {
+      var m = stage.match(/阶段[一二三四]|不涉及/);
+      stage = m ? m[0] : '阶段二';
+    }
+    var confidence = Number(obj.confidence == null ? obj.score : obj.confidence);
+    if (!isFinite(confidence)) confidence = 75;
+    confidence = Math.max(0, Math.min(100, confidence));
+    var points = Array.isArray(obj.points) ? obj.points : [];
+    points = points.map(function (p) { return Number(String(p).replace(/[^0-9]/g, '')); }).filter(function (p) { return p >= 1 && p <= 9; });
+    var reason = String(obj.reason || obj.explanation || obj.summary || 'LLM 已完成评估。').trim();
+    return { stage: stage, confidence: confidence, points: points, reason: reason, source: 'llm' };
+  }
+
+  function extractJsonObject(text) {
+    var raw = String(text || '').trim();
+    raw = raw.replace(/^```(?:json)?/i, '').replace(/```$/i, '').trim();
+    try { return JSON.parse(raw); } catch (e) {}
+    var match = raw.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('LLM 返回不是 JSON：' + raw.slice(0, 200));
+    return JSON.parse(match[0]);
+  }
+
   async function callLLM(text, config) {
     if (!config || !config.apiKey) return null;
-    var baseUrl = String(config.baseUrl || config.endpoint || 'https://api.anthropic.com').replace(/\/+$/, '');
-    var model = config.model || 'claude-sonnet-4-6';
-    var prompt = '你是客服质检评估助手，只评估「有效共情」。请根据以下规则输出严格 JSON：{"stage":"阶段一/阶段二/阶段三/阶段四/不涉及","confidence":0-100,"points":[数字],"reason":"一句话"}。判断点：1机械模板；2反问推诿否定；3打断抢话；4情绪爆点未承接；5情绪缓和；6主动致歉并处理；7红线话术；8礼貌语；9差评补救。对话：\n' + text;
+    var baseUrl = String(config.baseUrl || config.endpoint || 'https://api.anthropic.com').trim().replace(/\/+$/, '');
+    var model = String(config.model || 'claude-sonnet-4-6').trim();
+    var apiKey = String(config.apiKey || config.token || '').trim();
+    var prompt = '你是客服质检评估助手，只评估「有效共情」。请只返回严格 JSON，不要 Markdown，不要解释。格式：{"stage":"阶段一/阶段二/阶段三/阶段四/不涉及","confidence":0-100,"points":[数字],"reason":"一句话"}。判断点：1机械模板；2反问推诿否定；3打断抢话；4情绪爆点未承接；5情绪缓和；6主动致歉并处理；7红线话术；8礼貌语；9差评补救。对话：\n' + String(text || '').slice(0, 12000);
     var isAnthropic = /anthropic/i.test(baseUrl) || /^claude/i.test(model);
-    var resp;
     if (isAnthropic) {
       var anthropicUrl = /\/v1\/messages$/.test(baseUrl) ? baseUrl : baseUrl + '/v1/messages';
-      resp = await fetch(anthropicUrl, {
+      var resp = await fetch(anthropicUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': config.apiKey,
+          'x-api-key': apiKey,
           'anthropic-version': '2023-06-01',
           'anthropic-dangerous-direct-browser-access': 'true'
         },
         body: JSON.stringify({
           model: model,
           max_tokens: 1024,
-          temperature: 0.1,
+          temperature: 0,
+          system: '你只输出一个 JSON 对象。',
           messages: [{ role: 'user', content: prompt }]
         })
       });
@@ -2502,27 +2528,31 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
       var adata = await resp.json();
       var acontent = adata && adata.content && adata.content.map(function (item) { return item.type === 'text' ? item.text : ''; }).join('');
       if (!acontent) throw new Error('Anthropic API 未返回有效内容');
-      var ajson = acontent.match(/\{[\s\S]*\}/);
-      if (!ajson) throw new Error('Anthropic API 返回不是 JSON：' + acontent.slice(0, 200));
-      return JSON.parse(ajson[0]);
+      return normalizeServiceLLMResult(extractJsonObject(acontent));
     }
 
-    var openaiUrl = config.endpoint || (/\/chat\/completions$/.test(baseUrl) ? baseUrl : (baseUrl.replace(/\/v1$/, '') + '/v1/chat/completions'));
-    resp = await fetch(openaiUrl, {
+    var openaiUrl = /\/chat\/completions$/.test(baseUrl) ? baseUrl : (baseUrl.replace(/\/v1$/, '') + '/v1/chat/completions');
+    var resp2 = await fetch(openaiUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + config.apiKey },
-      body: JSON.stringify({ model: model, messages: [{ role: 'user', content: prompt }], temperature: 0.1 })
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+      body: JSON.stringify({
+        model: model,
+        temperature: 0,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: '你只输出一个 JSON 对象。' },
+          { role: 'user', content: prompt }
+        ]
+      })
     });
-    if (!resp.ok) {
-      var openaiErr = await resp.text().catch(function () { return ''; });
-      throw new Error('OpenAI 兼容 API 请求失败：HTTP ' + resp.status + (openaiErr ? ' · ' + openaiErr.slice(0, 300) : ''));
+    if (!resp2.ok) {
+      var openaiErr = await resp2.text().catch(function () { return ''; });
+      throw new Error('OpenAI 兼容 API 请求失败：HTTP ' + resp2.status + (openaiErr ? ' · ' + openaiErr.slice(0, 300) : ''));
     }
-    var data = await resp.json();
+    var data = await resp2.json();
     var content = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
     if (!content) throw new Error('OpenAI 兼容 API 未返回有效内容');
-    var jsonText = content.match(/\{[\s\S]*\}/);
-    if (!jsonText) throw new Error('OpenAI 兼容 API 返回不是 JSON：' + content.slice(0, 200));
-    return JSON.parse(jsonText[0]);
+    return normalizeServiceLLMResult(extractJsonObject(content));
   }
 
   function formatServiceResult(result) {
@@ -2541,13 +2571,13 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
       '<section class="tb-hero">',
         '<div class="tb-hero-kicker">✨ 专项分析工作台</div>',
         '<h1>面向运营场景的专项分析</h1>',
-        '<p>专项分析聚焦 WFM 运营场景，按成本/用量、人效、智能、展演四类沉淀可直接使用的运营技能；当前已内置 service-check 客服质检能力。</p>',
+        '<p>聚焦 WFM 专项运营技能。</p>',
       '</section>',
       '<section class="tb-category-tabs" role="tablist" aria-label="专项分析分类">',
-        '<button class="tb-category-tab active" data-tb-special-category="cost" role="tab" aria-selected="true"><span class="tb-category-icon">💰</span><span class="tb-category-name">成本/用量运营</span><span class="tb-category-desc">成本、消耗、质检、用量健康度</span></button>',
-        '<button class="tb-category-tab" data-tb-special-category="efficiency" role="tab" aria-selected="false"><span class="tb-category-icon">👥</span><span class="tb-category-name">人效运营</span><span class="tb-category-desc">人均产能、排班、团队效能</span></button>',
-        '<button class="tb-category-tab" data-tb-special-category="intelligent" role="tab" aria-selected="false"><span class="tb-category-icon">🤖</span><span class="tb-category-name">智能运营</span><span class="tb-category-desc">自动化、模型效果、智能助手</span></button>',
-        '<button class="tb-category-tab" data-tb-special-category="show" role="tab" aria-selected="false"><span class="tb-category-icon">🎬</span><span class="tb-category-name">展演运营</span><span class="tb-category-desc">直播、会场、讲解与转化</span></button>',
+        '<button class="tb-category-tab active" data-tb-special-category="cost" role="tab" aria-selected="true"><span class="tb-category-icon">💰</span><span class="tb-category-name">成本/用量运营</span><span class="tb-category-desc">质检与用量</span></button>',
+        '<button class="tb-category-tab" data-tb-special-category="efficiency" role="tab" aria-selected="false"><span class="tb-category-icon">👥</span><span class="tb-category-name">人效运营</span><span class="tb-category-desc">人效指标</span></button>',
+        '<button class="tb-category-tab" data-tb-special-category="intelligent" role="tab" aria-selected="false"><span class="tb-category-icon">🤖</span><span class="tb-category-name">智能运营</span><span class="tb-category-desc">智能应用</span></button>',
+        '<button class="tb-category-tab" data-tb-special-category="show" role="tab" aria-selected="false"><span class="tb-category-icon">🎬</span><span class="tb-category-name">展演运营</span><span class="tb-category-desc">展演复盘</span></button>',
       '</section>',
 
       '<section class="tb-category-panel active" data-tb-special-panel="cost">',
@@ -2555,17 +2585,16 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
           '<article class="tb-card span-12">',
             '<div class="tb-mini-label">内置技能 · service-check</div>',
             '<h2>客服质检评估：有效共情</h2>',
-            '<p>支持单条客服对话评分，也支持粘贴 CSV 批量评估。评分会输出阶段、判断点、置信度和一句说明。AI 能力统一读取「通用分析」里的「AI设置」：配置保存后全站可用；未配置时自动使用本地规则引擎离线评估。</p>',
+            '<p>使用 LLM 或本地规则完成客服有效共情质检，支持单条与 Excel 批量评估。</p>',
             '<div class="tb-badge-row">',
-              '<span class="tb-badge">双视角规则：话术质量 + 情绪轨迹</span>',
-              '<span class="tb-badge">阶段一至阶段四</span>',
-              '<span class="tb-badge">复用通用分析 AI 设置</span>',
-              '<span class="tb-badge">浏览器本地处理</span>',
+              '<span class="tb-badge">LLM 优先</span>',
+              '<span class="tb-badge">Excel 批量</span>',
+              '<span class="tb-badge">本地兜底</span>',
             '</div>',
           '</article>',
           '<article class="tb-card span-4">',
-            '<h3>全局 AI 设置</h3>',
-            '<p id="tb-ai-config-desc">如需启用大模型增强，请先在「通用分析」页面的「AI设置」中保存 API Key / Base URL / 模型。未配置时会使用本地规则引擎。</p>',
+            '<h3>AI 设置</h3>',
+            '<p id="tb-ai-config-desc">已复用通用分析中的 AI 设置；未配置时使用本地规则。</p>',
             '<p id="tb-ai-config-meta" class="tb-mini-note">配置仅保存在当前用户当前浏览器 localStorage，不上传服务器；不同用户、不同浏览器可分别保存自己的 API，互不影响。</p>',
             '<div class="tb-badge-row">',
               '<span class="tb-badge" id="tb-ai-config-state">检测 AI 设置中...</span>',
@@ -2581,7 +2610,7 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
           '</article>',
           '<article class="tb-card span-12">',
             '<h3>批量评估（上传 Excel 文档）</h3>',
-            '<p>请上传 .xlsx / .xls Excel 文档，系统会优先读取「录音内容 / 对话内容 / 客服对话 / content / text」列；如果未找到匹配列，将默认使用最后一列作为对话内容。</p>',
+            '<p>上传 .xlsx / .xls，自动识别对话内容列并批量质检。</p>',
             '<div class="tb-upload-card" id="tb-service-upload-card">',
               '<input id="tb-service-excel" type="file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv" />',
               '<div class="tb-upload-icon">📄</div>',
@@ -2590,25 +2619,25 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
             '<div class="tb-actions"><button class="tb-btn primary" id="tb-service-batch-run">批量评估</button><button class="tb-btn secondary" id="tb-service-batch-export" disabled>导出结果 Excel</button></div>',
             '<div class="tb-table-wrap" id="tb-service-table-wrap" style="display:none"><table class="tb-table"><thead><tr><th>#</th><th>阶段</th><th>置信度</th><th>判断点</th><th>说明</th><th>内容预览</th></tr></thead><tbody id="tb-service-table"></tbody></table></div>',
           '</article>',
-          '<article class="tb-card span-4"><h3>成本口径</h3><p>后续可接入用量账单、Token 消耗、人工复核成本等指标，形成质检成本看板。</p></article>',
-          '<article class="tb-card span-4"><h3>用量健康度</h3><p>按团队、业务线、时间段拆解评估量、异常量和模型调用量，定位波动来源。</p></article>',
-          '<article class="tb-card span-4"><h3>复核闭环</h3><p>低置信度样本自动进入人工复核池，沉淀新的判断样例和运营规则。</p></article>',
+          '<article class="tb-card span-4"><h3>成本口径</h3><p>预留用量与成本看板。</p></article>',
+          '<article class="tb-card span-4"><h3>用量健康度</h3><p>预留用量波动分析。</p></article>',
+          '<article class="tb-card span-4"><h3>复核闭环</h3><p>预留人工复核流程。</p></article>',
         '</div>',
       '</section>',
 
       '<section class="tb-category-panel" data-tb-special-panel="efficiency">',
         '<div class="tb-grid">',
-          '<article class="tb-card span-12 tb-empty-card"><div><span class="emoji">👥</span><h2>人效运营</h2><p>规划中：人均处理量、响应时长、排班饱和度、团队产能对比、质检通过率与人效联动。</p></div></article>',
+          '<article class="tb-card span-12 tb-empty-card"><div><span class="emoji">👥</span><h2>人效运营</h2><p>待接入。</p></div></article>',
         '</div>',
       '</section>',
       '<section class="tb-category-panel" data-tb-special-panel="intelligent">',
         '<div class="tb-grid">',
-          '<article class="tb-card span-12 tb-empty-card"><div><span class="emoji">🤖</span><h2>智能运营</h2><p>规划中：智能助手使用率、自动化解决率、模型命中率、知识库覆盖率、低置信度问题聚类。</p></div></article>',
+          '<article class="tb-card span-12 tb-empty-card"><div><span class="emoji">🤖</span><h2>智能运营</h2><p>待接入。</p></div></article>',
         '</div>',
       '</section>',
       '<section class="tb-category-panel" data-tb-special-panel="show">',
         '<div class="tb-grid">',
-          '<article class="tb-card span-12 tb-empty-card"><div><span class="emoji">🎬</span><h2>展演运营</h2><p>规划中：展演场次、直播互动、讲解质量、转化漏斗、重点活动复盘与异常波动归因。</p></div></article>',
+          '<article class="tb-card span-12 tb-empty-card"><div><span class="emoji">🎬</span><h2>展演运营</h2><p>待接入。</p></div></article>',
         '</div>',
       '</section>'
     ].join('');
@@ -2753,7 +2782,7 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
       try {
         var config = getLLMConfig();
         var result = config.apiKey ? await callLLM(text, config) : localServiceCheck(text);
-        resultBox.textContent = formatServiceResult(result);
+        resultBox.textContent = (result && result.source === 'llm' ? '【LLM 评估】\n' : '') + formatServiceResult(result);
       } catch (err) {
         var fallback = localServiceCheck(text);
         resultBox.textContent = '大模型调用失败，已回退到本地规则评估。\n排查信息：已按通用 AI 设置自动识别 Anthropic / OpenAI 兼容协议；请检查 Base URL、模型名、Token 权限，以及浏览器是否允许跨域直连。\n错误：' + (err && err.message ? err.message : err) + '\n\n' + formatServiceResult(fallback);

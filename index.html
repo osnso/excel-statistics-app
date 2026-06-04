@@ -2097,5 +2097,249 @@ ADV._runTimeSeries = function(subType, headers, data, params) {
 })();
 </script>
 <!-- ===== End 统计学术语库 ===== -->
+
+<!-- ===== TripBuddy UI upgrade: start ===== -->
+<style id="tripbuddy-ui-upgrade">
+  :root {
+    --tb-bg: #f6f8ff;
+    --tb-card: rgba(255, 255, 255, .92);
+    --tb-line: rgba(99, 102, 241, .16);
+    --tb-primary: #4f46e5;
+    --tb-primary-2: #7c3aed;
+    --tb-accent: #06b6d4;
+    --tb-text: #172033;
+    --tb-muted: #667085;
+    --tb-shadow: 0 18px 55px rgba(30, 41, 59, .10);
+    --tb-radius: 22px;
+  }
+
+  body {
+    background:
+      radial-gradient(circle at 12% 8%, rgba(124, 58, 237, .16), transparent 28%),
+      radial-gradient(circle at 88% 3%, rgba(6, 182, 212, .14), transparent 30%),
+      linear-gradient(180deg, #f7f8ff 0%, #eef4ff 48%, #f8fafc 100%) !important;
+    color: var(--tb-text) !important;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(rgba(79, 70, 229, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(79, 70, 229, .045) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,.75), transparent 70%);
+    z-index: -1;
+  }
+
+  .tb-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    background: rgba(246, 248, 255, .80);
+    border-bottom: 1px solid rgba(79, 70, 229, .10);
+  }
+
+  .tb-topbar-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .tb-brand { display: flex; align-items: center; gap: 12px; min-width: 220px; }
+  .tb-brand-logo {
+    width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center; color: #fff;
+    background: linear-gradient(135deg, var(--tb-primary), var(--tb-primary-2));
+    box-shadow: 0 12px 28px rgba(79, 70, 229, .28); font-size: 20px;
+  }
+  .tb-brand-title { font-weight: 800; letter-spacing: -.03em; color: #111827; line-height: 1.15; }
+  .tb-brand-subtitle { font-size: 12px; color: var(--tb-muted); margin-top: 2px; }
+
+  .tb-tabs {
+    display: inline-flex; padding: 5px; border-radius: 999px; background: rgba(255, 255, 255, .74);
+    border: 1px solid rgba(79, 70, 229, .12); box-shadow: 0 8px 26px rgba(30, 41, 59, .06);
+  }
+  .tb-tab {
+    border: 0; background: transparent; color: #475467; padding: 10px 18px; border-radius: 999px;
+    cursor: pointer; font-weight: 700; transition: all .22s ease; white-space: nowrap; font-size: 14px;
+  }
+  .tb-tab:hover { color: var(--tb-primary); background: rgba(79, 70, 229, .06); }
+  .tb-tab.active { color: #fff; background: linear-gradient(135deg, var(--tb-primary), var(--tb-primary-2)); box-shadow: 0 10px 22px rgba(79, 70, 229, .23); }
+
+  .tb-status-pill {
+    display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px;
+    background: rgba(16, 185, 129, .10); border: 1px solid rgba(16, 185, 129, .16);
+    color: #047857; font-size: 12px; font-weight: 700; white-space: nowrap;
+  }
+  .tb-status-dot { width: 8px; height: 8px; border-radius: 999px; background: #10b981; box-shadow: 0 0 0 4px rgba(16, 185, 129, .14); }
+
+  .app-shell { max-width: 1180px !important; padding: 28px 24px 64px !important; }
+  .app-header {
+    position: relative; overflow: hidden; text-align: left !important; padding: 42px 40px !important;
+    border-radius: 28px !important;
+    background: linear-gradient(135deg, rgba(79,70,229,.96), rgba(124,58,237,.92)), radial-gradient(circle at 86% 12%, rgba(255,255,255,.28), transparent 28%) !important;
+    box-shadow: 0 24px 70px rgba(79, 70, 229, .26) !important;
+  }
+  .app-header::after { content: ""; position: absolute; right: -70px; top: -70px; width: 240px; height: 240px; border-radius: 50%; background: rgba(255, 255, 255, .13); }
+  .app-header h1 { font-size: clamp(28px, 4vw, 44px) !important; line-height: 1.08 !important; }
+  .app-header p { max-width: 720px; font-size: 16px !important; line-height: 1.7 !important; opacity: .92 !important; }
+
+  .panel, .config-card, .summary-card, .chart-card, .analysis-section, .settings-card {
+    border-radius: var(--tb-radius) !important; border: 1px solid rgba(79, 70, 229, .10) !important;
+    background: var(--tb-card) !important; box-shadow: var(--tb-shadow) !important;
+  }
+  .panel { padding: 26px !important; }
+  .panel:hover, .config-card:hover, .summary-card:hover, .chart-card:hover { transform: translateY(-2px); transition: transform .2s ease, box-shadow .2s ease; box-shadow: 0 22px 65px rgba(30, 41, 59, .13) !important; }
+  .panel-header h2 { font-size: 18px !important; color: #111827 !important; }
+  .panel-header .step-badge { background: linear-gradient(135deg, var(--tb-primary), var(--tb-primary-2)) !important; box-shadow: 0 8px 18px rgba(79, 70, 229, .24); }
+  .upload-zone { border-radius: 24px !important; border-color: rgba(79, 70, 229, .24) !important; background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(238,242,255,.66)) !important; min-height: 168px; }
+  .upload-zone:hover, .upload-zone.drag-over { transform: translateY(-2px); border-color: var(--tb-primary) !important; box-shadow: 0 18px 45px rgba(79, 70, 229, .14); }
+  button, .btn, .button, input[type="button"], input[type="submit"] { border-radius: 12px !important; }
+  button:not(:disabled), .btn:not(:disabled) { transition: transform .18s ease, box-shadow .18s ease, background .18s ease; }
+  button:not(:disabled):hover, .btn:not(:disabled):hover { transform: translateY(-1px); }
+  input, select, textarea { border-radius: 12px !important; border-color: rgba(79, 70, 229, .16) !important; }
+
+  .tb-page { max-width: 1180px; margin: 0 auto; padding: 28px 24px 64px; display: none; }
+  .tb-page.active { display: block; }
+  body.tb-page-special #root { display: none !important; }
+
+  .tb-special-hero {
+    position: relative; overflow: hidden; border-radius: 30px; padding: 42px 40px; color: #fff;
+    background: linear-gradient(135deg, #0f172a, #4338ca 48%, #06b6d4); box-shadow: 0 28px 70px rgba(15, 23, 42, .22); margin-bottom: 22px;
+  }
+  .tb-special-hero::after { content: ""; position: absolute; width: 280px; height: 280px; right: -80px; top: -90px; border-radius: 999px; background: rgba(255,255,255,.14); }
+  .tb-kicker { display:inline-flex; align-items:center; gap:8px; padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.16); font-size:13px; font-weight:700; margin-bottom:14px; }
+  .tb-special-hero h1 { margin: 0 0 12px; font-size: clamp(30px, 5vw, 50px); line-height: 1.06; letter-spacing: -.04em; }
+  .tb-special-hero p { margin: 0; max-width: 760px; line-height: 1.75; opacity: .92; font-size: 16px; }
+  .tb-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+  .tb-card { border-radius: 24px; border: 1px solid rgba(79, 70, 229, .10); background: rgba(255,255,255,.92); box-shadow: var(--tb-shadow); padding: 24px; }
+  .tb-card.span-7 { grid-column: span 7; } .tb-card.span-5 { grid-column: span 5; } .tb-card.span-4 { grid-column: span 4; }
+  .tb-card h2, .tb-card h3 { margin: 0 0 10px; color: #111827; letter-spacing: -.02em; }
+  .tb-card p { color: var(--tb-muted); line-height: 1.7; margin: 0 0 16px; }
+  .tb-card ul { margin: 0; padding-left: 18px; color: #475467; line-height: 1.9; }
+  .tb-template-list { display:grid; gap: 12px; }
+  .tb-template { display:flex; align-items:flex-start; gap: 12px; padding: 14px; border-radius: 16px; background: linear-gradient(180deg, #fff, #f8fafc); border: 1px solid rgba(79,70,229,.10); }
+  .tb-template-icon { width: 38px; height:38px; border-radius: 13px; display:grid; place-items:center; background:#eef2ff; color:#4f46e5; flex-shrink:0; }
+  .tb-template strong { display:block; color:#111827; margin-bottom:3px; }
+  .tb-template span { color:var(--tb-muted); font-size:13px; line-height:1.55; }
+  .tb-action-row { display:flex; flex-wrap:wrap; gap: 12px; margin-top: 18px; }
+  .tb-primary-btn, .tb-secondary-btn { appearance:none; border:0; cursor:pointer; font-weight:800; padding: 12px 18px; border-radius: 14px; }
+  .tb-primary-btn { color:#fff; background:linear-gradient(135deg, var(--tb-primary), var(--tb-primary-2)); box-shadow:0 12px 26px rgba(79,70,229,.24); }
+  .tb-secondary-btn { color:#334155; background:#fff; border:1px solid rgba(79,70,229,.14); }
+  .tb-metric-row { display:grid; grid-template-columns:repeat(3,1fr); gap: 12px; margin-top:16px; }
+  .tb-metric { border-radius:18px; padding:16px; background:#f8fafc; border:1px solid rgba(99,102,241,.10); }
+  .tb-metric b { display:block; color:#111827; font-size:24px; margin-bottom:4px; }
+  .tb-metric span { color:var(--tb-muted); font-size:12px; font-weight:700; }
+
+  @media (max-width: 840px) {
+    .tb-topbar-inner { align-items:flex-start; flex-direction:column; }
+    .tb-tabs { width: 100%; display:grid; grid-template-columns:1fr 1fr; }
+    .tb-status-pill { display:none; }
+    .app-header, .tb-special-hero { padding: 30px 24px !important; }
+    .tb-card.span-7, .tb-card.span-5, .tb-card.span-4 { grid-column: 1 / -1; }
+    .tb-metric-row { grid-template-columns:1fr; }
+  }
+</style>
+<script id="tripbuddy-page-upgrade">
+(function () {
+  function ready(fn) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
+
+  ready(function () {
+    var root = document.getElementById('root');
+    if (!root || document.querySelector('.tb-topbar')) return;
+
+    var topbar = document.createElement('nav');
+    topbar.className = 'tb-topbar';
+    topbar.innerHTML = [
+      '<div class="tb-topbar-inner">',
+        '<div class="tb-brand" aria-label="Excel 自动统计分析">',
+          '<div class="tb-brand-logo">📊</div>',
+          '<div>',
+            '<div class="tb-brand-title">Excel 自动统计分析</div>',
+            '<div class="tb-brand-subtitle">数据清洗 · 指标洞察 · 智能解读</div>',
+          '</div>',
+        '</div>',
+        '<div class="tb-tabs" role="tablist" aria-label="页面导航">',
+          '<button class="tb-tab active" data-tb-page="general" role="tab" aria-selected="true">通用分析</button>',
+          '<button class="tb-tab" data-tb-page="special" role="tab" aria-selected="false">专项分析</button>',
+        '</div>',
+        '<div class="tb-status-pill"><span class="tb-status-dot"></span>本地处理，安全分析</div>',
+      '</div>'
+    ].join('');
+    document.body.insertBefore(topbar, root);
+
+    var special = document.createElement('section');
+    special.id = 'special-analysis-page';
+    special.className = 'tb-page';
+    special.setAttribute('role', 'tabpanel');
+    special.innerHTML = [
+      '<div class="tb-special-hero">',
+        '<div class="tb-kicker">✨ 新增页面 · 专项分析</div>',
+        '<h1>面向业务场景的专项数据诊断</h1>',
+        '<p>在通用分析之外，专项分析用于沉淀固定业务模板、关键指标口径和专题结论输出。你可以围绕转化、质量、成本、效率等主题快速搭建专属分析流。</p>',
+      '</div>',
+      '<div class="tb-grid">',
+        '<article class="tb-card span-7">',
+          '<h2>专项分析工作台</h2>',
+          '<p>建议先在「通用分析」上传 Excel 完成基础统计，再回到这里选择专题模板，对重点字段做二次诊断和结论沉淀。</p>',
+          '<div class="tb-template-list">',
+            '<div class="tb-template"><div class="tb-template-icon">🎯</div><div><strong>转化漏斗分析</strong><span>按阶段拆解访问、咨询、下单、支付等链路，识别掉点环节。</span></div></div>',
+            '<div class="tb-template"><div class="tb-template-icon">🧭</div><div><strong>异常波动定位</strong><span>围绕时间、渠道、城市、产品等维度定位异常增长或下跌。</span></div></div>',
+            '<div class="tb-template"><div class="tb-template-icon">💎</div><div><strong>重点对象对比</strong><span>支持门店、供应商、活动、人群等对象的多指标横向对比。</span></div></div>',
+          '</div>',
+          '<div class="tb-action-row">',
+            '<button class="tb-primary-btn" data-tb-page="general">去通用分析上传数据</button>',
+            '<button class="tb-secondary-btn" onclick="window.scrollTo({top:0,behavior:&quot;smooth&quot;})">查看专题能力</button>',
+          '</div>',
+        '</article>',
+        '<aside class="tb-card span-5">',
+          '<h2>分析流程</h2>',
+          '<ul><li>确认专项主题与核心指标口径</li><li>上传或复用 Excel 数据</li><li>选择维度拆解并标记异常值</li><li>输出结论、建议与后续动作</li></ul>',
+          '<div class="tb-metric-row"><div class="tb-metric"><b>4</b><span>推荐步骤</span></div><div class="tb-metric"><b>3</b><span>内置模板</span></div><div class="tb-metric"><b>0</b><span>数据上传云端</span></div></div>',
+        '</aside>',
+        '<article class="tb-card span-4"><h3>① 指标定义</h3><p>统一指标名称、计算方式、时间范围和数据过滤条件，避免不同口径导致结论偏差。</p></article>',
+        '<article class="tb-card span-4"><h3>② 维度拆解</h3><p>按时间、区域、渠道、业务线、人群等维度交叉查看，找到贡献最大或波动最明显的因素。</p></article>',
+        '<article class="tb-card span-4"><h3>③ 结论复盘</h3><p>沉淀关键发现、影响评估和行动建议，便于后续复用为标准化专项报告。</p></article>',
+      '</div>'
+    ].join('');
+    root.insertAdjacentElement('afterend', special);
+
+    function switchPage(page) {
+      var isSpecial = page === 'special';
+      document.body.classList.toggle('tb-page-special', isSpecial);
+      special.classList.toggle('active', isSpecial);
+      document.querySelectorAll('[data-tb-page]').forEach(function (el) {
+        var active = el.getAttribute('data-tb-page') === page;
+        if (el.classList.contains('tb-tab')) {
+          el.classList.toggle('active', active);
+          el.setAttribute('aria-selected', active ? 'true' : 'false');
+        }
+      });
+      if (location.hash !== '#' + page) history.replaceState(null, '', '#' + page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.addEventListener('click', function (event) {
+      var trigger = event.target.closest('[data-tb-page]');
+      if (!trigger) return;
+      event.preventDefault();
+      switchPage(trigger.getAttribute('data-tb-page'));
+    });
+    window.addEventListener('hashchange', function () { switchPage(location.hash === '#special' ? 'special' : 'general'); });
+    switchPage(location.hash === '#special' ? 'special' : 'general');
+  });
+})();
+</script>
+<!-- ===== TripBuddy UI upgrade: end ===== -->
+
 </body>
 </html>

@@ -28,6 +28,35 @@
 
   var DEFAULT_BACKEND_SERVICE_CHECK_URL = '/api/service-check';
   var DEFAULT_BACKEND_HEALTH_URL = '/api/health';
+  var THEME_STORAGE_KEY = 'tb-ui-theme';
+
+  function getSavedTheme() {
+    try {
+      var saved = localStorage.getItem(THEME_STORAGE_KEY);
+      if (saved === 'light' || saved === 'dark') return saved;
+    } catch (e) {}
+    return 'dark';
+  }
+
+  function applyTheme(theme) {
+    theme = theme === 'light' ? 'light' : 'dark';
+    document.documentElement.classList.toggle('tb-theme-light', theme === 'light');
+    document.documentElement.classList.toggle('tb-theme-dark', theme === 'dark');
+    document.documentElement.classList.toggle('tb-dark-premium', theme === 'dark');
+    var toggle = byId('tb-theme-toggle');
+    if (toggle) {
+      toggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+      toggle.innerHTML = theme === 'dark'
+        ? '<span class="tb-theme-icon">🌙</span><span>暗色</span>'
+        : '<span class="tb-theme-icon">☀️</span><span>亮色</span>';
+    }
+  }
+
+  function setTheme(theme) {
+    theme = theme === 'light' ? 'light' : 'dark';
+    try { localStorage.setItem(THEME_STORAGE_KEY, theme); } catch (e) {}
+    applyTheme(theme);
+  }
 
   function isLegacyLocalhostBackendUrl(url) {
     return /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?\/api\/service-check\/?$/i.test(String(url || '').trim());
@@ -836,7 +865,7 @@ function getBackendConfig() {
     });
   }
   function boot() {
-    document.documentElement.classList.add('tb-dark-premium');
+    applyTheme(getSavedTheme());
     var root = byId('root');
     if (!root || document.querySelector('.tb-topbar')) return;
 
@@ -855,10 +884,20 @@ function getBackendConfig() {
           '<button class="tb-tab active" data-tb-page="general" role="tab" aria-selected="true">通用分析</button>',
           '<button class="tb-tab" data-tb-page="special" role="tab" aria-selected="false">专项分析</button>',
         '</div>',
-        '<div class="tb-status-pill"><span class="tb-status-dot"></span>AI 设置全局可用</div>',
+        '<div class="tb-topbar-actions">',
+          '<button class="tb-theme-toggle" id="tb-theme-toggle" type="button" aria-pressed="true" title="切换亮色/暗色模式"><span class="tb-theme-icon">🌙</span><span>暗色</span></button>',
+          '<div class="tb-status-pill"><span class="tb-status-dot"></span>AI 设置全局可用</div>',
+        '</div>',
       '</div>'
     ].join('');
     document.body.insertBefore(topbar, document.body.firstChild);
+    applyTheme(getSavedTheme());
+    var themeToggle = byId('tb-theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', function () {
+        setTheme(getSavedTheme() === 'dark' ? 'light' : 'dark');
+      });
+    }
 
     renderSpecialPage(root);
     initServiceCheck();
@@ -965,8 +1004,11 @@ function getBackendConfig() {
         });
       }
     });
-    window.addEventListener('storage', function (event) { if (event.key === 'excel-ai-config') updateAiConfigState();
-    updateBackendConfigState(); });
+    window.addEventListener('storage', function (event) {
+      if (event.key === 'excel-ai-config') updateAiConfigState();
+      if (event.key === THEME_STORAGE_KEY) applyTheme(getSavedTheme());
+      updateBackendConfigState();
+    });
     window.addEventListener('hashchange', function () { switchPage((location.hash === '#general') ? 'general' : 'special'); updateAiConfigState();
     updateBackendConfigState(); removeScrapeModule(); });
     switchPage((location.hash === '#general') ? 'general' : 'special');

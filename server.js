@@ -19,7 +19,8 @@
  *   WFM_LLM_PROVIDER=openai|anthropic，默认 openai
  *   WFM_LLM_BASE_URL=https://...，OpenAI 兼容接口可填到 /v1 或域名根路径
  *   WFM_LLM_API_KEY=模型 API Key
- *   WFM_LLM_MODEL=模型名称
+ *   WFM_LLM_MODEL=默认模型名称
+ *   WFM_LLM_MODELS=可选模型列表，英文逗号分隔，例如 gpt-4o-mini,gpt-4o
  *   WFM_LLM_TIMEOUT_MS=60000
  *   SKILLS_DIR=本地 skills 根目录，默认当前项目 .skills
  */
@@ -37,6 +38,12 @@ const PROVIDER = String(process.env.WFM_LLM_PROVIDER || 'openai').trim().toLower
 const BASE_URL = String(process.env.WFM_LLM_BASE_URL || process.env.OPENAI_BASE_URL || process.env.LLM_BASE_URL || '').trim().replace(/\/+$/, '');
 const API_KEY = String(process.env.WFM_LLM_API_KEY || process.env.OPENAI_API_KEY || process.env.LLM_API_KEY || '').trim();
 const MODEL = String(process.env.WFM_LLM_MODEL || process.env.OPENAI_MODEL || process.env.LLM_MODEL || (PROVIDER === 'anthropic' ? 'claude-sonnet-4-6' : 'gpt-4o-mini')).trim();
+const AVAILABLE_MODELS = Array.from(new Set(
+  String(process.env.WFM_LLM_MODELS || process.env.OPENAI_MODELS || process.env.LLM_MODELS || MODEL)
+    .split(',')
+    .map(item => item.trim())
+    .filter(Boolean)
+));
 const TIMEOUT_MS = Number(process.env.WFM_LLM_TIMEOUT_MS || 60000);
 const SKILLS_DIR = path.resolve(process.env.SKILLS_DIR || path.join(ROOT, '.skills'));
 
@@ -110,13 +117,14 @@ function extractJsonObject(text) {
 }
 
 async function callOpenAICompatibleMessages(messages, options = {}) {
+  const selectedModel = String(options.model || MODEL).trim() || MODEL;
   if (!BASE_URL || !API_KEY) {
     return {
       mock: true,
       content: [
         '【模拟模式】后端尚未配置大模型网关。',
         '',
-        `模型：${MODEL}`,
+        `模型：${selectedModel}`,
         `Provider：${PROVIDER}`,
         '',
         '请配置 WFM_LLM_BASE_URL / WFM_LLM_API_KEY / WFM_LLM_MODEL，或 OPENAI_BASE_URL / OPENAI_API_KEY / OPENAI_MODEL。',
@@ -140,7 +148,7 @@ async function callOpenAICompatibleMessages(messages, options = {}) {
       Authorization: `Bearer ${API_KEY}`
     },
     body: JSON.stringify({
-      model: MODEL,
+      model: selectedModel,
       temperature: options.temperature ?? 0.2,
       messages
     })
@@ -154,6 +162,7 @@ async function callOpenAICompatibleMessages(messages, options = {}) {
 }
 
 async function callAnthropicMessages(messages, options = {}) {
+  const selectedModel = String(options.model || MODEL).trim() || MODEL;
   if (!BASE_URL || !API_KEY) return callOpenAICompatibleMessages(messages, options);
   const endpoint = /\/v1\/messages$/.test(BASE_URL) ? BASE_URL : `${BASE_URL}/v1/messages`;
   const system = messages.find(m => m.role === 'system')?.content || '你是严谨的数据分析助手。';
@@ -166,7 +175,7 @@ async function callAnthropicMessages(messages, options = {}) {
       'anthropic-version': '2023-06-01'
     },
     body: JSON.stringify({
-      model: MODEL,
+      model: selectedModel,
       max_tokens: options.maxTokens || 3000,
       temperature: options.temperature ?? 0.2,
       system,
@@ -354,13 +363,14 @@ async function handleRunSkill(req, res, id) {
   const body = await readJson(req);
   const skill = await readSkill(id);
   const task = String(body.task || body.question || body.prompt || '请分析这份表格并输出结论。').trim();
+  const selectedModel = String(body.model || MODEL).trim() || MODEL;
   const tableContext = tableToMarkdown(body.table || body.data || body.dataset);
   const messages = [
     { role: 'system', content: `你是 WFM 数据分析助手。请严格遵循以下本地 Skill 文档执行任务。\n\n${skill.markdown}` },
     { role: 'user', content: [`【用户任务】`, task, '', '【表格数据/上下文】', tableContext || '用户未提供表格数据。', '', '请使用中文 Markdown 输出，优先给出核心结论、关键指标、异常点和建议。不要编造输入中不存在的数据。'].join('\n') }
   ];
-  const llm = await callLLMMessages(messages, { temperature: 0.2 });
-  return sendJson(res, 200, { success: true, skill: { id: skill.id, title: skill.title }, result: llm.content, mock: Boolean(llm.mock), rawModelOutput: llm.raw || null });
+  const llm = await callLLMMessages(messages, { temperature: 0.2, model: selectedModel });
+  return sendJson(res, 200, { success: true, skill: { id: skill.id, title: skill.title }, model: selectedModel, result: llm.content, mock: Boolean(llm.mock), rawModelOutput: llm.raw || null });
 }
 
 async function handleLLMChat(req, res) {
@@ -368,13 +378,14 @@ async function handleLLMChat(req, res) {
   const body = await readJson(req);
   const message = String(body.message || body.prompt || body.task || '').trim();
   if (!message) return sendJson(res, 400, { success: false, error: 'message 不能为空' });
+  const selectedModel = String(body.model || MODEL).trim() || MODEL;
   const tableContext = tableToMarkdown(body.table || body.data || body.dataset);
   const messages = [
     { role: 'system', content: '你是 WFM 数据分析助手，擅长 Excel/CSV 数据分析。请用中文 Markdown 输出。' },
     { role: 'user', content: [message, '', tableContext ? `【表格数据】\n${tableContext}` : ''].join('\n') }
   ];
-  const llm = await callLLMMessages(messages, { temperature: 0.2 });
-  return sendJson(res, 200, { success: true, result: llm.content, mock: Boolean(llm.mock), rawModelOutput: llm.raw || null });
+  const llm = await callLLMMessages(messages, { temperature: 0.2, model: selectedModel });
+  return sendJson(res, 200, { success: true, model: selectedModel, result: llm.content, mock: Boolean(llm.mock), rawModelOutput: llm.raw || null });
 }
 
 function serveStatic(req, res, pathname) {
@@ -403,6 +414,7 @@ const server = http.createServer(async (req, res) => {
         service: 'wfm-excel-statistics-backend',
         provider: PROVIDER,
         model: MODEL,
+        availableModels: AVAILABLE_MODELS,
         llmConfigured: Boolean(BASE_URL && API_KEY),
         skillsDir: SKILLS_DIR,
         endpoints: ['/api/service-check', '/api/chaping-check', '/api/skills', '/api/skills/:id/run', '/api/llm/chat']

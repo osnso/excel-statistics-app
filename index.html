@@ -93,18 +93,6 @@
     </div>
   </div>
 
-  <div class="skill-llm-panel full">
-    <h3>后端连接配置</h3>
-    <div id="skillLlmHealth" class="muted">正在检查后端...</div>
-    <div class="skill-llm-config">
-      <div class="skill-llm-row">
-        <input class="skill-llm-input" id="skillLlmApiBase" placeholder="API Base URL，留空表示当前域名；例如 http://127.0.0.1:8787 或 https://your-api.com" />
-        <input class="skill-llm-input" id="skillLlmToken" placeholder="可选：WFM_BACKEND_TOKEN" />
-      </div>
-      <button class="skill-llm-btn primary" id="skillLlmSaveConfig">保存配置</button>
-    </div>
-  </div>
-
   <div class="skill-llm-grid">
     <section class="skill-llm-panel">
       <h3>1. 数据输入</h3>
@@ -129,6 +117,11 @@
 
     <section class="skill-llm-panel">
       <h3>4. 分析任务</h3>
+      <div class="skill-llm-modelbar">
+        <label for="skillLlmModel">模型</label>
+        <select class="skill-llm-select" id="skillLlmModel"></select>
+        <span id="skillLlmHealth" class="muted">正在检查模型...</span>
+      </div>
       <textarea class="skill-llm-textarea skill-llm-task" id="skillLlmTask" placeholder="例如：分析各团队工单量和满意度差异，指出异常点并给出改进建议。"></textarea>
       <div class="skill-llm-row" style="margin-top:10px">
         <button class="skill-llm-btn success" id="skillLlmRunSkill">运行 Skill + LLM</button>

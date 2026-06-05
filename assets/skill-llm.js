@@ -1,7 +1,10 @@
 (() => {
   const state = {
+    // 高级用法：仍支持通过 localStorage 手动设置后端地址和 Token；页面不再展示配置区。
     apiBase: localStorage.getItem('WFM_SKILL_API_BASE') || '',
     token: localStorage.getItem('WFM_BACKEND_TOKEN') || '',
+    availableModels: [],
+    selectedModel: localStorage.getItem('WFM_SELECTED_LLM_MODEL') || '',
     skills: [],
     selectedSkillId: '',
     table: null
@@ -105,14 +108,28 @@
     });
   }
 
+  function renderModels(models, currentModel) {
+    const select = $('#skillLlmModel');
+    if (!select) return;
+    state.availableModels = Array.isArray(models) && models.length ? models : (currentModel ? [currentModel] : []);
+    if (!state.selectedModel || !state.availableModels.includes(state.selectedModel)) {
+      state.selectedModel = currentModel || state.availableModels[0] || '';
+    }
+    select.innerHTML = state.availableModels.map(model => `
+      <option value="${escapeHtml(model)}" ${model === state.selectedModel ? 'selected' : ''}>${escapeHtml(model)}</option>
+    `).join('');
+  }
+
   async function loadHealth() {
     const data = await api('/api/health');
-    $('#skillLlmHealth').innerHTML = `
-      <strong>后端：</strong>已连接　
-      <strong>模型：</strong>${escapeHtml(data.model || '-')}　
-      <strong>LLM：</strong>${data.llmConfigured ? '已配置' : '未配置，模拟模式'}　
-      <strong>Skills：</strong>${escapeHtml(data.skillsDir || '-')}
-    `;
+    renderModels(data.availableModels || data.models || [], data.model || '');
+    const health = $('#skillLlmHealth');
+    if (health) {
+      health.innerHTML = `
+        <strong>${data.llmConfigured ? 'LLM 已配置' : '模拟模式'}</strong>　
+        <span>Provider：${escapeHtml(data.provider || '-')}</span>
+      `;
+    }
     return data;
   }
 
@@ -125,14 +142,6 @@
     setStatus(`已加载 ${state.skills.length} 个 Skills`, 'success');
   }
 
-  function saveConfig() {
-    state.apiBase = $('#skillLlmApiBase').value.trim();
-    state.token = $('#skillLlmToken').value.trim();
-    localStorage.setItem('WFM_SKILL_API_BASE', state.apiBase);
-    localStorage.setItem('WFM_BACKEND_TOKEN', state.token);
-    setStatus('配置已保存', 'success');
-  }
-
   async function runSkill() {
     if (!state.selectedSkillId) throw new Error('请先选择一个 Skill');
     const task = $('#skillLlmTask').value.trim() || '请分析这份表格，并给出核心结论、异常点和建议。';
@@ -140,10 +149,10 @@
     $('#skillLlmResult').textContent = '分析中...';
     const data = await api(`/api/skills/${encodeURIComponent(state.selectedSkillId)}/run`, {
       method: 'POST',
-      body: JSON.stringify({ task, table: state.table })
+      body: JSON.stringify({ task, table: state.table, model: state.selectedModel })
     });
     $('#skillLlmResult').textContent = data.result || JSON.stringify(data, null, 2);
-    setStatus(data.mock ? '已返回模拟结果：请配置大模型环境变量后获得真实结果' : '分析完成', data.mock ? 'info' : 'success');
+    setStatus(data.mock ? '已返回模拟结果：请配置大模型环境变量后获得真实结果' : `分析完成（${data.model || state.selectedModel || '默认模型'}）`, data.mock ? 'info' : 'success');
   }
 
   async function runChat() {
@@ -152,10 +161,10 @@
     $('#skillLlmResult').textContent = '分析中...';
     const data = await api('/api/llm/chat', {
       method: 'POST',
-      body: JSON.stringify({ message, table: state.table })
+      body: JSON.stringify({ message, table: state.table, model: state.selectedModel })
     });
     $('#skillLlmResult').textContent = data.result || JSON.stringify(data, null, 2);
-    setStatus(data.mock ? '已返回模拟结果：请配置大模型环境变量后获得真实结果' : '分析完成', data.mock ? 'info' : 'success');
+    setStatus(data.mock ? '已返回模拟结果：请配置大模型环境变量后获得真实结果' : `分析完成（${data.model || state.selectedModel || '默认模型'}）`, data.mock ? 'info' : 'success');
   }
 
   function loadDemo() {
@@ -167,11 +176,14 @@
   }
 
   function bindEvents() {
-    $('#skillLlmApiBase').value = state.apiBase;
-    $('#skillLlmToken').value = state.token;
-    $('#skillLlmSaveConfig').addEventListener('click', async () => {
-      try { saveConfig(); await loadHealth(); await loadSkills(); } catch (err) { setStatus(err.message, 'error'); }
-    });
+    const modelSelect = $('#skillLlmModel');
+    if (modelSelect) {
+      modelSelect.addEventListener('change', () => {
+        state.selectedModel = modelSelect.value;
+        localStorage.setItem('WFM_SELECTED_LLM_MODEL', state.selectedModel);
+        setStatus(`已选择模型：${state.selectedModel}`, 'success');
+      });
+    }
     $('#skillLlmRefresh').addEventListener('click', async () => {
       try { await loadHealth(); await loadSkills(); } catch (err) { setStatus(err.message, 'error'); }
     });
@@ -197,7 +209,6 @@
   function syncHashVisibility() {
     const section = $('#localSkillLlmWorkbench');
     if (!section) return;
-    // 原页面 #special 是技能/专项区域；没有 hash 时也保留入口，但 #special 时滚动到工作台。
     if (location.hash === '#special') {
       setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
     }

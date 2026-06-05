@@ -58,6 +58,35 @@
     applyTheme(theme);
   }
 
+  function ensureThemeToggle() {
+    var topbar = document.querySelector('.tb-topbar');
+    if (!topbar) return null;
+    var actions = topbar.querySelector('.tb-topbar-actions');
+    if (!actions) {
+      actions = document.createElement('div');
+      actions.className = 'tb-topbar-actions';
+      var inner = topbar.querySelector('.tb-topbar-inner') || topbar;
+      inner.appendChild(actions);
+    }
+    var toggle = byId('tb-theme-toggle');
+    if (!toggle) {
+      toggle = document.createElement('button');
+      toggle.className = 'tb-theme-toggle';
+      toggle.id = 'tb-theme-toggle';
+      toggle.type = 'button';
+      toggle.title = '切换亮色/暗色模式';
+      actions.insertBefore(toggle, actions.firstChild);
+    }
+    if (!toggle.__tbThemeBound) {
+      toggle.__tbThemeBound = true;
+      toggle.addEventListener('click', function () {
+        setTheme(getSavedTheme() === 'dark' ? 'light' : 'dark');
+      });
+    }
+    applyTheme(getSavedTheme());
+    return toggle;
+  }
+
   function isLegacyLocalhostBackendUrl(url) {
     return /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?\/api\/service-check\/?$/i.test(String(url || '').trim());
   }
@@ -867,7 +896,8 @@ function getBackendConfig() {
   function boot() {
     applyTheme(getSavedTheme());
     var root = byId('root');
-    if (!root || document.querySelector('.tb-topbar')) return;
+    if (!root) return;
+    if (document.querySelector('.tb-topbar')) { ensureThemeToggle(); renderSpecialPage(root); initServiceCheck(); return; }
 
     var topbar = document.createElement('nav');
     topbar.className = 'tb-topbar';
@@ -891,13 +921,7 @@ function getBackendConfig() {
       '</div>'
     ].join('');
     document.body.insertBefore(topbar, document.body.firstChild);
-    applyTheme(getSavedTheme());
-    var themeToggle = byId('tb-theme-toggle');
-    if (themeToggle) {
-      themeToggle.addEventListener('click', function () {
-        setTheme(getSavedTheme() === 'dark' ? 'light' : 'dark');
-      });
-    }
+    ensureThemeToggle();
 
     renderSpecialPage(root);
     initServiceCheck();

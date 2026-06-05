@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "check": "node -c server.js && node -c assets/tripbuddy-ui-upgrade-script-e8dfb227ac.js"
+    "check": "node -c server.js && node -c assets/skill-llm.js && node -c assets/tripbuddy-ui-upgrade-script-e8dfb227ac.js"
   },
   "engines": {
     "node": ">=18"
